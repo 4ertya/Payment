@@ -1,0 +1,171 @@
+@font-face {
+    font-family: "AudioWide";
+    src: url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+}
+
+
+/*---------------body------------*/
+
+body {
+    padding: 0;
+    margin: 0;
+    background: url(https://wallpaperplay.com/walls/full/9/c/b/227936.jpg);
+    background-size: cover;
+}
+
+
+/*---------------header------------*/
+
+header {
+    height: 50px;
+    background: linear-gradient(to bottom, #9B111E 0%, #8C020F 100%);
+}
+
+.navbar {
+    width: 960px;
+    margin: 0 auto;
+    height: 50px;
+}
+
+.navbar-menu {
+    float: left;
+    font-family: 'Times New Roman', Times, serif;
+    color: #fff;
+    font-size: 20px;
+    padding-left: 30px;
+}
+
+.navbar-menu > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 500px;
+}
+
+.navbar-menu > ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.navbar-menu > ul li {
+    margin-left: 5px;
+    padding: 15px;
+    float: left;
+}
+
+.logo {
+    float: left;
+    width: 200px;
+    padding: 5px;
+}
+
+.logo > a {
+    text-decoration: none;
+    color: #fff;
+    font-family: "AudioWide";
+    font-size: 32px;
+}
+
+.authorization {
+    float: right;
+    font-family: 'Times New Roman', Times, serif;
+    color: #fff;
+    font-size: 20px;
+}
+
+.authorization > ul {
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+}
+
+.authorization > ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.authorization > ul li {
+    margin-left: 5px;
+    padding: 15px;
+    float: left;
+}
+
+
+/*---------------authorization------------*/
+
+.authorization-block {
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+}
+
+.authorization-form {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    width: 250px;
+}
+
+.authorization-form a {
+    text-decoration: none;
+    transition: .2s;
+    color: #298cad;
+}
+
+.authorization-form a:hover {
+    color: #36d2ff;
+}
+
+.authorization-form input {
+    display: block;
+    width: 100%;
+}
+
+.tab-form {
+    background-color: #fff;
+    display: none;
+    padding: 30px 30px 20px;
+}
+
+.tab-form.active {
+    display: block;
+}
+
+label.tab {
+    color: #fff;
+    font-weight: 600;
+    padding: 15px;
+    display: inline-block;
+    border-radius: 3px 3px 0 0;
+    margin-bottom: -1px;
+    cursor: pointer;
+}
+
+label.tab.active {
+    background-color: #fff;
+    color: #9B111E;
+}
+
+.input {
+    font-size: 16px;
+    border: 2px solid #e9eaea;
+    padding: 12px 14px;
+    box-sizing: border-box;
+    margin-bottom: 22px;
+    color: #9B111E;
+    outline: none;
+}
+
+.button {
+    background: #9B111E;
+    color: #fff;
+    font-size: 18px;
+    text-transform: uppercase;
+    display: block;
+    text-align: center;
+    line-height: 30px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
