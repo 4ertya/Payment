@@ -6,14 +6,19 @@
     <filter>
         <filter-name>CharsetFilter</filter-name>
         <filter-class>by.epamtc.payment.controller.filter.CharsetFilter</filter-class>
+        <init-param>
+            <param-name>characterEncoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>CharsetFilter</filter-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/*</url-pattern>
     </filter-mapping>
 
     <servlet>
         <servlet-name>Controller</servlet-name>
+
         <servlet-class>by.epamtc.payment.controller.Controller</servlet-class>
     </servlet>
     <servlet-mapping>

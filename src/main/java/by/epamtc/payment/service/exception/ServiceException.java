@@ -1,4 +1,4 @@
-package by.epamtc.payment.service;
+package by.epamtc.payment.service.exception;
 
 public class ServiceException extends Exception {
 

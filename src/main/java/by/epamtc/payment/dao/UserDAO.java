@@ -1,15 +1,13 @@
 package by.epamtc.payment.dao;
 
-import by.epamtc.payment.entity.Role;
+import by.epamtc.payment.dao.exception.DAOException;
+import by.epamtc.payment.dao.exception.DAOUserExistException;
+import by.epamtc.payment.dao.exception.DAOUserNotFoundException;
 import by.epamtc.payment.entity.User;
-
-import java.util.List;
 
 public interface UserDAO {
 
-    void registration(User user) throws DAOException;
+    void registration(User user) throws DAOException, DAOUserExistException;
 
-    boolean isUserExist(String login) throws DAOException;
-
-    User login(String login, String password) throws DAOException;
+    User login(String login, String password) throws DAOException, DAOUserNotFoundException;
 }

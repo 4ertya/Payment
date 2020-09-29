@@ -1,4 +1,4 @@
-package by.epamtc.payment.dao;
+package by.epamtc.payment.dao.exception;
 
 public class DAOException extends Exception {
 
