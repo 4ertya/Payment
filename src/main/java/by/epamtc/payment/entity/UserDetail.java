@@ -10,7 +10,11 @@ package by.epamtc.payment.entity;
  * <b>phone number</b>,
  * <b>location</b>.
  *
+<<<<<<< HEAD
  * @author Dmitry Palchynski
+=======
+ * @author Dmitry Palchunski
+>>>>>>> origin/master
  * @version 1.0 25 Sep 2020
  */
 
