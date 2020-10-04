@@ -1,6 +1,7 @@
 package by.epamtc.payment.service.exception;
 
-public class ServiceUserExistException extends Exception{
+public class ServiceUserExistException extends ServiceException {
+
     public ServiceUserExistException() {
         super();
     }

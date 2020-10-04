@@ -24,7 +24,7 @@
 </head>
 <body>
 <%@include file="header.jsp" %>
-<div class="auth-form">
+<div class="form auth">
 
     <div class="block-text">${message}</div>
 

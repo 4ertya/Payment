@@ -8,8 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToMainPageCommand implements Command {
+
+    private final static String MAIN_PAGE = "WEB-INF/jsp/mainPage.jsp";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/jsp/mainPage.jsp").forward(request, response);
+        request.getRequestDispatcher(MAIN_PAGE)
+                .forward(request, response);
     }
 }

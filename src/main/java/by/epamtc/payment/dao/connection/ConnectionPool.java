@@ -1,5 +1,8 @@
 package by.epamtc.payment.dao.connection;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
@@ -9,15 +12,17 @@ import java.util.concurrent.Executor;
 
 public final class ConnectionPool {
 
-    private final static ConnectionPool instance = new ConnectionPool();
-
     public static ConnectionPool getInstance() {
         return instance;
     }
 
+    private final static Logger log = LogManager.getLogger();
+    private final static ConnectionPool instance = new ConnectionPool();
+
+    private final static String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
+
     private BlockingQueue<Connection> connectionQueue;
     private BlockingQueue<Connection> givenAwayConnectionQueue;
-
 
     private final String url;
     private final String user;
@@ -29,10 +34,12 @@ public final class ConnectionPool {
         this.url = dbResourceManager.getValue(DBParameter.DB_URL);
         this.user = dbResourceManager.getValue(DBParameter.DB_USER);
         this.password = dbResourceManager.getValue(DBParameter.DB_PASSWORD);
+
         try {
             this.poolSize = Integer.parseInt(dbResourceManager.getValue(
                     DBParameter.DB_POOL_SIZE));
         } catch (NumberFormatException e) {
+            log.info("Connection pool size: 5");
             poolSize = 5;
         }
         initPoolData();
@@ -40,7 +47,7 @@ public final class ConnectionPool {
 
     public void initPoolData() throws ConnectionPoolException {
         try {
-Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(DB_DRIVER);
             givenAwayConnectionQueue = new ArrayBlockingQueue<>(poolSize);
             connectionQueue = new ArrayBlockingQueue<>(poolSize);
 
@@ -50,6 +57,7 @@ Class.forName("com.mysql.cj.jdbc.Driver");
                 connectionQueue.add(pooledConnection);
             }
         } catch (SQLException | ClassNotFoundException e) {
+            log.error("Exception in ConnectionPool", e);
             throw new ConnectionPoolException("SQLException in ConnectionPool", e);
         }
     }
@@ -63,16 +71,17 @@ Class.forName("com.mysql.cj.jdbc.Driver");
             closeConnectionsQueue(givenAwayConnectionQueue);
             closeConnectionsQueue(connectionQueue);
         } catch (SQLException e) {
-            // logger.log(Level.ERROR, "Error closing the connection.", e);
+            log.error("Error closing the connection.", e);
         }
     }
 
     public Connection takeConnection() throws ConnectionPoolException {
-        Connection connection = null;
+        Connection connection;
         try {
             connection = connectionQueue.take();
             givenAwayConnectionQueue.add(connection);
         } catch (InterruptedException e) {
+            log.error("Error connecting to the data source.", e);
             throw new ConnectionPoolException("Error connecting to the data source.", e);
         }
         return connection;
@@ -82,17 +91,17 @@ Class.forName("com.mysql.cj.jdbc.Driver");
         try {
             con.close();
         } catch (SQLException e) {
-            // logger.log(Level.ERROR, "Connection isn't return to the pool.");
+            log.error("Connection isn't return to the pool.");
         }
         try {
             rs.close();
         } catch (SQLException e) {
-            // logger.log(Level.ERROR, "ResultSet isn't closed.");
+            log.error("ResultSet isn't closed.");
         }
         try {
             st.close();
         } catch (SQLException e) {
-            // logger.log(Level.ERROR, "Statement isn't closed.");
+            log.error("Statement isn't closed.");
         }
     }
 
@@ -100,28 +109,31 @@ Class.forName("com.mysql.cj.jdbc.Driver");
         try {
             con.close();
         } catch (SQLException e) {
-            // logger.log(Level.ERROR, "Connection isn't return to the pool.");
+            log.error("Connection isn't return to the pool.");
         }
         try {
             st.close();
         } catch (SQLException e) {
-            // logger.log(Level.ERROR, "Statement isn't closed.");
+            log.error("Statement isn't closed.");
         }
     }
 
     private void closeConnectionsQueue(BlockingQueue<Connection> queue) throws SQLException {
         Connection connection;
+
         while ((connection = queue.poll()) != null) {
+
             if (!connection.getAutoCommit()) {
                 connection.commit();
             }
+
             ((PooledConnection) connection).reallyClose();
         }
     }
 
 
     private class PooledConnection implements Connection {
-        private Connection connection;
+        private final Connection connection;
 
         public PooledConnection(Connection c) throws SQLException {
             this.connection = c;
@@ -194,7 +206,8 @@ Class.forName("com.mysql.cj.jdbc.Driver");
         }
 
         @Override
-        public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+        public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)
+                throws SQLException {
             return connection.createStatement(resultSetType, resultSetConcurrency, resultSetHoldability);
         }
 
@@ -274,12 +287,14 @@ Class.forName("com.mysql.cj.jdbc.Driver");
         }
 
         @Override
-        public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+        public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)
+                throws SQLException {
             return connection.prepareCall(sql, resultSetType, resultSetConcurrency);
         }
 
         @Override
-        public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+        public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency,
+                                             int resultSetHoldability) throws SQLException {
             return connection.prepareCall(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
         }
 
@@ -304,12 +319,14 @@ Class.forName("com.mysql.cj.jdbc.Driver");
         }
 
         @Override
-        public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+        public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)
+                throws SQLException {
             return connection.prepareStatement(sql, resultSetType, resultSetConcurrency);
         }
 
         @Override
-        public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException {
+        public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency,
+                                                  int resultSetHoldability) throws SQLException {
             return connection.prepareStatement(sql, resultSetType, resultSetConcurrency, resultSetHoldability);
         }
 
