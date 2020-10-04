@@ -13,7 +13,7 @@
 </head>
 <body>
 <%@include file="header.jsp" %>
-<div class="auth-form">
+<div class="form auth">
     <div class="block-text">Registration</div>
     <form action="Controller" method="post">
         <input class="input" type="text" name="login" placeholder="Login" autofocus required>

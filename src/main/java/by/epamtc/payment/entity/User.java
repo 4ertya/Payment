@@ -2,7 +2,11 @@ package by.epamtc.payment.entity;
 
 /**
  * This class describes users with properties
- * <b>login</b>, <b>password</b>, <b>email</b>
+ * <b>id</b>
+ * <b>login</b>,
+ * <b>password</b>,
+ * <b>email</b>,
+ * <b>role</b>
  *
  * @author Dmitry Palchunski
  * @version 1.0 16 Sep 2020
@@ -18,22 +22,6 @@ public class User {
 
 
     public User() {
-    }
-
-    public User(String login, String password, String email, Role role) {
-
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-    }
-
-    public User(long id, String login, String password, String email, Role role) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.role = role;
     }
 
     public long getId() {

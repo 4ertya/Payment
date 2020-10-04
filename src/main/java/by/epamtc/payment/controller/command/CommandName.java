@@ -7,5 +7,7 @@ public enum CommandName {
     TO_LOGIN_PAGE,
     TO_REGISTRATION_PAGE,
     LOGOUT,
-    CHANGE_LANGUAGE;
+    CHANGE_LANGUAGE,
+    TO_SETTING_PAGE,
+    TO_USER_PAGE
 }

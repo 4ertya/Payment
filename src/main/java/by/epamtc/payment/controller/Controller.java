@@ -7,12 +7,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class Controller extends HttpServlet {
 
-    private static final String COMMAND_NAME = "command";
+    private final static String COMMAND_NAME = "command";
     private final CommandProvider provider = CommandProvider.getInstance();
 
     public Controller() {

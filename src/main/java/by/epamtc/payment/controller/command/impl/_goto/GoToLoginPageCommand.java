@@ -9,8 +9,11 @@ import java.io.IOException;
 
 public class GoToLoginPageCommand implements Command {
 
+    private final static String LOGIN_PAGE = "/WEB-INF/jsp/loginPage.jsp";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/jsp/loginPage.jsp").forward(request, response);
+        request.getRequestDispatcher(LOGIN_PAGE)
+                .forward(request, response);
     }
 }

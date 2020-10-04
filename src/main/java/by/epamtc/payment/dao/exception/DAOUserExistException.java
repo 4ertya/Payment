@@ -1,6 +1,7 @@
 package by.epamtc.payment.dao.exception;
 
-public class DAOUserExistException extends Exception {
+public class DAOUserExistException extends DAOException {
+
     public DAOUserExistException() {
         super();
     }

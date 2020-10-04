@@ -34,17 +34,17 @@
             <form action="Controller">
                 <input type="hidden" name="command" value="change_language">
                 <input type="hidden" name="local" value="ru">
-                <input type="hidden" name="page" value="${pageContext.request.requestURI}">
+                <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
                 <input type="image" src="../../img/ru.png">
             </form>
             <form>
                 <input type="hidden" name="command" value="change_language">
                 <input type="hidden" name="local" value="uk">
-                <input type="hidden" name="page" value="${pageContext.request.requestURI}">
+                <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
                 <input type="image" src="../../img/uk.png">
             </form>
-
         </div>
+
         <c:if test="${sessionScope.user == null}">
             <div class="authorization">
                 <ul>
@@ -53,13 +53,14 @@
                 </ul>
             </div>
         </c:if>
+
         <c:if test="${sessionScope.user != null}">
             <div class="login">
                 <ul id="nav">
                     <li>
-                        <a href="">${sessionScope.user.login}</a>
+                        <a href="Controller?command=to_user_page">${sessionScope.user.login}</a>
                         <ul>
-                            <li><a href="">Личный кабинет</a></li>
+                            <li><a href="Controller?command=to_setting_page">Настройки</a></li>
                             <li><a href="Controller?command=logout">${logout}</a></li>
                         </ul>
                     </li>
