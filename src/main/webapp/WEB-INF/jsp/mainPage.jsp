@@ -14,13 +14,9 @@
 </head>
 <body>
 <%@include file="header.jsp" %>
-<c:if test="${sessionScope.user != null}">
-    <ul>
-        <li> ${sessionScope.user.login}</li>
-        <li>${sessionScope.user.email}</li>
-        <li>${sessionScope.user.role}</li>
-    </ul>
-</c:if>
+
+
+
 <%@include file="footer.jsp"%>
 </body>
 </html>

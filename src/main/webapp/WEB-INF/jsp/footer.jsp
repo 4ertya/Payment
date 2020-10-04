@@ -9,29 +9,17 @@
 
 <footer>
     <div class="navbar">
-        <div class="footer-info clear">
-            <div class="footer-block rowing-left">
-                <ul>
-                    <li><a href="someLink">Some link №1</a></li>
-                    <li><a href="someLink">Some link №2</a></li>
-                    <li><a href="someLink">Some link №3</a></li>
-                </ul>
+        <div class="footer-info">
+            <div class="footer-block">
+                <a href="#">О проекте</a>
             </div>
 
-            <div class="footer-block rowing-left">
-                <ul>
-                    <li><a href="mainController?command=go_to_contact_page">rjynfrns</a></li>
-                    <li><a href="mainController?command=go_to_news">yjdjcnb</a></li>
-                    <li><a href="mainController?command=go_to_rules">ghfdbkf</a></li>
-                </ul>
+            <div class="footer-block">
+                <a href="#">Контакты</a>
             </div>
 
-            <div class="footer-block rowing-left">
-                <ul>
-                    <li><a href="someLink">Some info №1</a></li>
-                    <li><a href="someLink">Some info №2</a></li>
-                    <li><a href="someLink">Some info №3</a></li>
-                </ul>
+            <div class="footer-block">
+                <a href="#">Польтика конфиденциальности</a>
             </div>
         </div>
     </div>

@@ -9,15 +9,15 @@
 body {
     padding: 0;
     margin: 0;
-    background-size: cover ;
+    background-size: cover;
     height: 100%;
     background-image: url(https://wallpaperplay.com/walls/full/9/c/b/227936.jpg);
     background-attachment: fixed;
 }
 
-.content{
+.content {
     padding-top: 50px;
-    padding-bottom: 80px;
+    padding-bottom: 50px;
 }
 
 
@@ -25,9 +25,9 @@ body {
 
 header {
     height: 50px;
-    background: linear-gradient(to bottom, #9B111E 0%, #8C020F 100%);
     width: 100%;
     position: fixed;
+    background: linear-gradient(to bottom, #9B111E 0%, #8C020F 100%);
 }
 
 .navbar {
@@ -105,7 +105,7 @@ header {
     float: left;
 }
 
-.login{
+.login {
     height: 50px;
     float: right;
     margin-left: auto;
@@ -113,67 +113,69 @@ header {
     color: #fff;
     font-size: 16px;
 }
-#nav li{
-    float:left; /* все ссылки идут слева на право */
-    position:relative;
-    list-style:none; /* убираем точки */
+
+#nav li {
+    float: left; /* все ссылки идут слева на право */
+    position: relative;
+    list-style: none; /* убираем точки */
     width: 150px;
 }
 
-#nav a{
-    text-decoration:none;
-    display:block; /* делаем блочным элементов тег "a" */
+#nav a {
+    text-decoration: none;
+    display: block; /* делаем блочным элементов тег "a" */
     /*padding:35px 65px;*/
-    color:#ffffff;
+    color: #ffffff;
 }
 
 #nav ul {
-    visibility:hidden; /* скрываем выпадающее меню */
-    padding:0;
-    position:absolute;
+    visibility: hidden; /* скрываем выпадающее меню */
+    padding: 0;
+    position: absolute;
 }
 
-#nav li:hover > ul{
-    visibility:visible; /* показываем выпадающее меню при наведении */
+#nav li:hover > ul {
+    visibility: visible; /* показываем выпадающее меню при наведении */
     position: relative;
     left: -2px;
     top: 17px;
     /* смещаем выпадающее меню слева от размера рамки*/
 }
 
-#nav ul a{
+#nav ul a {
     color: #fff;
     padding-top: 10px;
     background: linear-gradient(to bottom, #9B111E 0%, #8C020F 100%);
-  /*  padding:18.5px 65px; /* делаем отступы выпадающего меню меньше от основного */
+    /*  padding:18.5px 65px; /* делаем отступы выпадающего меню меньше от основного */
 }
 
-#nav ul li:hover{
+#nav ul li:hover {
     border: 1px solid #fff;
 }
 
-#nav li:first-child:hover > ul{
+#nav li:first-child:hover > ul {
     left: 0px; /* при наведении на первый элемент чтобы не съежало выпадающее меню */
 }
 
-#nav > li{
+#nav > li {
     border-right: 2px solid #fff; /* добавляем рамку к основному меню справа */
 }
 
-#nav > li:last-child{
+#nav > li:last-child {
     border-right: none; /* убираем рамку справа основного меню */
 }
 
-#nav > li ul li{
+#nav > li ul li {
     border-left: 2px solid #d92a2a; /* добавляем рамку к выпадающему меню слева */
-    border-right:2px solid #d92a2a; /* добавляем рамку к выпадающему меню справа */
+    border-right: 2px solid #d92a2a; /* добавляем рамку к выпадающему меню справа */
 }
 
-#nav li:first-child ul li,#nav li:first-child ul{
-    border-left:none; /* убираем рамку у выпадающего меню слева */
+#nav li:first-child ul li, #nav li:first-child ul {
+    border-left: none; /* убираем рамку у выпадающего меню слева */
 }
-#nav li:last-child ul li,#nav li:last-child ul{
-    border-right:none; /* убираем рамку у выпадающего меню справа */
+
+#nav li:last-child ul li, #nav li:last-child ul {
+    border-right: none; /* убираем рамку у выпадающего меню справа */
 }
 
 
@@ -211,7 +213,8 @@ header {
     display: block;
     width: 100%;
 }
-.auth{
+
+.auth {
     width: 250px;
     position: absolute;
     top: 50%;
@@ -256,7 +259,7 @@ header {
     color: red;
 }
 
-.detail{
+.detail {
     top: 100px;
     width: 500px;
     overflow-scrolling: auto;
@@ -284,36 +287,34 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 80px;
+    height: 50px;
 }
 
-footer ul {
-    list-style: none;
-    padding-inline-start: inherit;
-}
-footer a{
+footer a {
     color: white;
     text-decoration: none;
+    padding-top: 10px;
 }
 
 .footer-block {
-    width: 200px;
+    width: 300px;
     float: left;
 }
 
 .footer-info {
-    height: 180px;
+    margin-top: 15px;
 }
 
 .footer-info a {
+    padding-top: 10px;
     line-height: 20px;
 }
 
-.main{
+.main {
     top: 100px;
     width: 960px;
-    min-height:-webkit-calc(100vh - 150px);
-    min-height:calc(100vh - 150px);
+    min-height: -webkit-calc(100vh - 130px);
+    min-height: calc(100vh - 130px);
     overflow-scrolling: auto;
     margin: 0 auto;
     font-family: "Times New Roman", serif;
@@ -321,15 +322,33 @@ footer a{
     color: #9B111E;
 }
 
-.nav-menu{
-    width: 200px;
-    height: 200px;
+.nav-menu {
+    /*  width: 200px;
+      height: 200px;
+      float: left;*/
     float: left;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    padding-left: 50px;
 }
 
-.nav-menu ul{
+
+.nav-menu ul {
+    width: 930px;
     list-style: none;
-    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu > ul li {
+    margin-left: 15px;
+    padding: 15px;
     float: left;
-    font-size: 16px;
+    background: linear-gradient(to bottom, #9B111E 0%, #8C020F 100%);
+}
+
+.nav-menu > ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 20px;
 }

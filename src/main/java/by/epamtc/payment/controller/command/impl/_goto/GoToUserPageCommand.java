@@ -36,6 +36,7 @@ public class GoToUserPageCommand implements Command {
         try {
             userDetail = userService.getUserDetail(id);
             request.setAttribute(ATTRIBUTE_USER_DETAIL, userDetail);
+            request.setAttribute(ATTRIBUTE_USER, user);
             request.getRequestDispatcher(USER_PAGE)
                     .forward(request, response);
         } catch (ServiceException e) {

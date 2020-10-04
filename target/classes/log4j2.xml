@@ -7,16 +7,19 @@
         <Console name="STDOUT">
             <Layout type="PatternLayout" pattern="%m %n" />
         </Console>
+
         <RollingFile name="rollingFile"
-                     fileName="logs/log4j2.log"
+                     fileName="../webapps/Payment_war/logs/log4j2.log"
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
+
             <Policies>
                 <TimeBasedTriggeringPolicy interval = "1" />
                 <SizeBasedTriggeringPolicy
-                        size="250 MB" />
+                        size="50 MB" />
             </Policies>
         </RollingFile>
     </Appenders>
