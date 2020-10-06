@@ -1,5 +1,6 @@
 package by.epamtc.payment.dao;
 
+import by.epamtc.payment.dao.impl.SQLCardDAO;
 import by.epamtc.payment.dao.impl.SQLUserDAO;
 
 public class DAOFactory {
@@ -7,6 +8,7 @@ public class DAOFactory {
     private static final DAOFactory instance = new DAOFactory();
 
     private static final SQLUserDAO sqlUserDAO = new SQLUserDAO();
+    private static final SQLCardDAO sqlCardDAO = new SQLCardDAO();
 
     public static DAOFactory getInstance() {
         return instance;
@@ -14,6 +16,10 @@ public class DAOFactory {
 
     public SQLUserDAO getUserDAO() {
         return sqlUserDAO;
+    }
+
+    public SQLCardDAO getCardDAO() {
+        return sqlCardDAO;
     }
 
 

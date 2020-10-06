@@ -24,13 +24,11 @@
         <i>${userDetail.phone_number}</i>
         <hr>
         <div class="nav-menu">
-            <ul>
-                <li><a href="#">cards</a></li>
-                <li><a href="#">accounts</a></li>
-                <li><a href="#">payments</a></li>
+            <div class="link"><a href="Controller?command=to_cards_page">cards</a></div>
+            <div class="link"><a href="#">accounts</a></div>
+            <div class="link"><a href="#">payments</a></div>
             </ul>
         </div>
-        <hr>
 
     </div>
     <%@include file="footer.jsp" %>

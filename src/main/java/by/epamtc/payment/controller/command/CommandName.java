@@ -9,5 +9,6 @@ public enum CommandName {
     LOGOUT,
     CHANGE_LANGUAGE,
     TO_SETTING_PAGE,
-    TO_USER_PAGE
+    TO_USER_PAGE,
+    TO_CARDS_PAGE
 }

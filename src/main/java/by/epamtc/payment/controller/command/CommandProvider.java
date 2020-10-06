@@ -17,6 +17,7 @@ public class CommandProvider {
         commands.put(CommandName.TO_REGISTRATION_PAGE, new GoToRegistrationPageCommand());
         commands.put(CommandName.TO_SETTING_PAGE, new GoToSettingPageCommand());
         commands.put(CommandName.TO_USER_PAGE, new GoToUserPageCommand());
+        commands.put(CommandName.TO_CARDS_PAGE, new GoToCardsPageCommand());
 
         commands.put(CommandName.LOGIN, new LoginCommand());
         commands.put(CommandName.REGISTRATION, new RegistrationCommand());
