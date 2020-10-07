@@ -74,7 +74,7 @@ header {
 .logo > a {
     text-decoration: none;
     color: #fff;
-    font-family: "AudioWide";
+    font-family: "AudioWide", serif;
     font-size: 32px;
 }
 
@@ -154,7 +154,7 @@ header {
 }
 
 #nav li:first-child:hover > ul {
-    left: 0px; /* при наведении на первый элемент чтобы не съежало выпадающее меню */
+    left: 0; /* при наведении на первый элемент чтобы не съежало выпадающее меню */
 }
 
 #nav > li {
