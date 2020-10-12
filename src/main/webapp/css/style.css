@@ -385,7 +385,7 @@ footer a {
 
 #slides .image { /*устанавливает общий размер блока с изображениями*/
     width: 500%;
-    height: 300px;
+    height: 250px;
 }
 
 #overflow { /*сркывает все, что находится за пределами этого блока*/
@@ -402,6 +402,25 @@ footer a {
     width: 100%;
     position: relative;
 }
+/*.image a{ !*размер изображений слайдера*!*/
+/*    width: 250px;*/
+/*    height: 150px;*/
+/*    position: absolute;*/
+/*}*/
+
+.select_card{ /*размер изображений слайдера*/
+    width: 250px;
+    height: 150px;
+    position: absolute;
+    left: 355px;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    z-index: 10;
+}
 
 .empty_card{
     width: 100%;
@@ -417,7 +436,7 @@ footer a {
     -webkit-text-fill-color: transparent; /* Прозрачный текст */
     font-family: "Credit Card", serif;
     left: 0;
-    bottom: 40px;
+    bottom: 35px;
     font-size: 12px;
     letter-spacing: 1px;
 }
@@ -457,7 +476,7 @@ footer a {
     font-family: "Credit Card", serif;
     float: left;
     left: -50px;
-    bottom: 8px;
+    bottom: 3px;
     font-size: 10px;
     letter-spacing: 1px;
 }
@@ -471,7 +490,7 @@ footer a {
     font-family: "Credit Card", serif;
     float: left;
     left: -50px;
-    bottom: 4px;
+    bottom: 3px;
     font-size: 10px;
     letter-spacing: 1px;
 }
@@ -598,8 +617,21 @@ label, a { /*при наведении на стрелки или переклю
     transition: opacity 0.2s ease-out;
 }
 
-#form{
+.blocked {
     position: absolute;
     width: 100%;
+    color: red;
+    font-weight: bold;
+    font-size: 30px;
+    transform: rotate(-35deg);
     bottom: 40px;
+    z-index: 1;
+}
+
+.card_info table{
+    margin-top: 20px;
+}
+
+.card_info table > td{
+    margin-top: 20px;
 }

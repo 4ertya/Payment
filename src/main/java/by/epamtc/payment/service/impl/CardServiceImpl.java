@@ -4,6 +4,8 @@ import by.epamtc.payment.dao.CardDAO;
 import by.epamtc.payment.dao.DAOFactory;
 import by.epamtc.payment.dao.exception.DAOException;
 import by.epamtc.payment.entity.Card;
+import by.epamtc.payment.entity.CardInfo;
+import by.epamtc.payment.entity.Status;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.exception.ServiceException;
@@ -20,20 +22,40 @@ public class CardServiceImpl implements CardService {
         try {
             cards = cardDAO.getAllCards(user);
 
-            for (Card card : cards) {
-                String temp = card.getNumber();
-                StringBuilder stringBuilder=new StringBuilder();
-                for (int i = 0; i < temp.length(); i++) {
-                    if (i %4== 0) {
-                        stringBuilder.append(" ");
-                    }
-                    stringBuilder.append(temp.charAt(i));
-                }
-                card.setNumber(stringBuilder.toString().trim());
-            }
+//            for (Card card : cards) {
+//                String temp = card.getNumber();
+//                StringBuilder stringBuilder = new StringBuilder();
+//                for (int i = 0; i < temp.length(); i++) {
+//                    if (i % 4 == 0) {
+//                        stringBuilder.append(" ");
+//                    }
+//                    stringBuilder.append(temp.charAt(i));
+//                }
+//                card.setNumber(stringBuilder.toString().trim());
+//            }
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
         return cards;
+    }
+
+    @Override
+    public void changeCardStatus(String cardNumber, Status status) throws ServiceException {
+        try {
+            cardDAO.changeCardStatus(cardNumber, status);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public CardInfo getCardInfo(int id) throws ServiceException {
+        CardInfo cardInfo;
+        try {
+            cardInfo = cardDAO.getCardInfo(id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return cardInfo;
     }
 }

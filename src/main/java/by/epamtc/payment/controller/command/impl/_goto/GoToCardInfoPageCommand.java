@@ -1,8 +1,7 @@
 package by.epamtc.payment.controller.command.impl._goto;
 
 import by.epamtc.payment.controller.command.Command;
-import by.epamtc.payment.entity.Card;
-import by.epamtc.payment.entity.User;
+import by.epamtc.payment.entity.CardInfo;
 import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.exception.ServiceException;
@@ -13,29 +12,30 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
-public class GoToCardsPageCommand implements Command {
+public class GoToCardInfoPageCommand implements Command {
     private final static Logger log = LogManager.getLogger();
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static CardService cardService = serviceFactory.getCardService();
 
-    private final static String CARDS_PAGE = "WEB-INF/jsp/cards.jsp";
-
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        User user;
-        List<Card> cards;
-        user = (User) request.getSession().getAttribute("user");
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CardInfo cardInfo;
+        int id;
+
+        /*TODO: Change language on cardInfoPage!!!*/
 
         try {
-            cards = cardService.getAllCards(user);
-            request.setAttribute("cards", cards);
-            request.getRequestDispatcher(CARDS_PAGE).forward(request, response);
-
+            id = Integer.parseInt(request.getParameter("card_id"));
+            cardInfo = cardService.getCardInfo(id);
+            request.setAttribute("cardInfo", cardInfo);
         } catch (ServiceException e) {
-            log.error("Something wrong", e);
-            // TODO: 04.10.2020 Redirect to Error Page.
+            e.printStackTrace();
+            log.error(e);
         }
+
+        request.getRequestDispatcher("WEB-INF/jsp/cardInfoPage.jsp").
+
+                forward(request, response);
     }
 }

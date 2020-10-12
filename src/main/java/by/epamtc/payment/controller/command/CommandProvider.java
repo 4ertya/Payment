@@ -15,10 +15,12 @@ public class CommandProvider {
         commands.put(CommandName.TO_MAIN_PAGE, new GoToMainPageCommand());
         commands.put(CommandName.TO_LOGIN_PAGE, new GoToLoginPageCommand());
         commands.put(CommandName.TO_REGISTRATION_PAGE, new GoToRegistrationPageCommand());
-        commands.put(CommandName.TO_SETTING_PAGE, new GoToSettingPageCommand());
         commands.put(CommandName.TO_USER_PAGE, new GoToUserPageCommand());
         commands.put(CommandName.TO_CARDS_PAGE, new GoToCardsPageCommand());
+        commands.put(CommandName.TO_CARD_INFO_PAGE, new GoToCardInfoPageCommand());
+        commands.put(CommandName.TO_SETTING_PAGE, new GoToSettingPageCommand());
 
+        commands.put(CommandName.CHANGE_CARD_STATUS, new ChangeCardStatusCommand());
         commands.put(CommandName.LOGIN, new LoginCommand());
         commands.put(CommandName.REGISTRATION, new RegistrationCommand());
         commands.put(CommandName.LOGOUT, new LogoutCommand());
