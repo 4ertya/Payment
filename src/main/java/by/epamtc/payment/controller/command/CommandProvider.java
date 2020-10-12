@@ -1,7 +1,7 @@
 package by.epamtc.payment.controller.command;
 
 import by.epamtc.payment.controller.command.impl.*;
-import by.epamtc.payment.controller.command.impl._goto.*;
+import by.epamtc.payment.controller.command.impl.go_to_page.*;
 
 import java.util.HashMap;
 import java.util.Map;

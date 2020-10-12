@@ -1,4 +1,4 @@
-package by.epamtc.payment.controller.command.impl._goto;
+package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.entity.User;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GoToUserPageCommand implements Command {
+public class GoToSettingPageCommand implements Command {
     private final static Logger log = LogManager.getLogger();
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static UserService userService = serviceFactory.getUserService();
@@ -22,22 +22,24 @@ public class GoToUserPageCommand implements Command {
     private final static String ATTRIBUTE_USER = "user";
     private final static String ATTRIBUTE_USER_DETAIL = "userDetail";
 
-    private final static String USER_PAGE = "/WEB-INF/jsp/userPage.jsp";
+    private final static String SETTINGS_PAGE = "/WEB-INF/jsp/settings.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserDetail userDetail;
         User user;
-        long id;
+        UserDetail userDetail;
 
         user = (User) request.getSession().getAttribute(ATTRIBUTE_USER);
-        id = user.getId();
+        long id = user.getId();
 
         try {
+            user = userService.getUser(id);
             userDetail = userService.getUserDetail(id);
-            request.setAttribute(ATTRIBUTE_USER_DETAIL, userDetail);
+
             request.setAttribute(ATTRIBUTE_USER, user);
-            request.getRequestDispatcher(USER_PAGE)
+            request.setAttribute(ATTRIBUTE_USER_DETAIL, userDetail);
+
+            request.getRequestDispatcher(SETTINGS_PAGE)
                     .forward(request, response);
         } catch (ServiceException e) {
             log.error("Something wrong", e);

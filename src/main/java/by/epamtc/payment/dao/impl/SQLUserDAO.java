@@ -32,6 +32,19 @@ public class SQLUserDAO implements UserDAO {
             "WHERE u.id=? " +
             "AND u.roles_id=rol.id;";
 
+    private final static String ID_PARAMETER = "id";
+    private final static String LOGIN_PARAMETER = "login";
+    private final static String EMAIL_PARAMETER = "email";
+    private final static String ROLE_PARAMETER = "role";
+    private final static String PASSWORD_PARAMETER = "password";
+    private final static String NAME_PARAMETER = "name";
+    private final static String SURNAME_PARAMETER = "surname";
+    private final static String GENDER_PARAMETER = "gender";
+    private final static String PASSPORT_SERIES_PARAMETER = "passport_series";
+    private final static String PASSPORT_NUMBER_PARAMETER = "passport_number";
+    private final static String PHONE_NUMBER_PARAMETER = "phone_number";
+    private final static String LOCATION_PARAMETER = "location";
+
     @Override
     public User login(String login, String password) throws DAOException {
         Connection connection = null;
@@ -46,16 +59,17 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.setString(2, password);
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                user = new User();
-                user.setId(Integer.parseInt(resultSet.getString("id")));
-                user.setLogin(resultSet.getString("login"));
-                user.setEmail(resultSet.getString("email"));
-                user.setRole(Role.valueOf(resultSet.getString("role")));
-            } else {
+            if (!resultSet.next()) {
                 log.info("User already exist!");
                 throw new DAOUserNotFoundException();
             }
+
+            user = new User();
+            user.setId(Integer.parseInt(resultSet.getString(ID_PARAMETER)));
+            user.setLogin(resultSet.getString(LOGIN_PARAMETER));
+            user.setEmail(resultSet.getString(EMAIL_PARAMETER));
+            user.setRole(Role.valueOf(resultSet.getString(ROLE_PARAMETER)));
+
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
@@ -103,10 +117,10 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                user.setLogin(resultSet.getString("login"));
-                user.setEmail(resultSet.getString("email"));
-                user.setPassword(resultSet.getString("password"));
-                user.setRole(Role.valueOf(resultSet.getString("role")));
+                user.setLogin(resultSet.getString(LOGIN_PARAMETER));
+                user.setEmail(resultSet.getString(EMAIL_PARAMETER));
+                user.setPassword(resultSet.getString(PASSWORD_PARAMETER));
+                user.setRole(Role.valueOf(resultSet.getString(ROLE_PARAMETER)));
             }
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: getUser()", e);
@@ -132,13 +146,13 @@ public class SQLUserDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                userDetail.setName(resultSet.getString("name"));
-                userDetail.setSurname(resultSet.getString("surname"));
-                userDetail.setGender(resultSet.getString("gender"));
-                userDetail.setPassportSeries(resultSet.getString("passport_series"));
-                userDetail.setPassportNumber(resultSet.getString("passport_number"));
-                userDetail.setPhoneNumber(resultSet.getString("phone_number"));
-                userDetail.setLocation(resultSet.getString("location"));
+                userDetail.setName(resultSet.getString(NAME_PARAMETER));
+                userDetail.setSurname(resultSet.getString(SURNAME_PARAMETER));
+                userDetail.setGender(resultSet.getString(GENDER_PARAMETER));
+                userDetail.setPassportSeries(resultSet.getString(PASSPORT_SERIES_PARAMETER));
+                userDetail.setPassportNumber(resultSet.getString(PASSPORT_NUMBER_PARAMETER));
+                userDetail.setPhoneNumber(resultSet.getString(PHONE_NUMBER_PARAMETER));
+                userDetail.setLocation(resultSet.getString(LOCATION_PARAMETER));
             }
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: getUserDetail()", e);

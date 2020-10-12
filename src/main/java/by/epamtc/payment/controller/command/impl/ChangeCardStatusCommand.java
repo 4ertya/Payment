@@ -18,12 +18,15 @@ public class ChangeCardStatusCommand implements Command {
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static CardService cardService = serviceFactory.getCardService();
 
+    private final static String CARD_NUMBER_PARAMETER = "card_number";
+    private final static String CARD_STATUS_PARAMETER = "status";
+
     private final static String GO_TO_CARD_INFO_PAGE = "Controller?command=to_card_info_page";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String cardNumber = request.getParameter("card_number");
-        Status status = Status.valueOf(request.getParameter("status"));
+        String cardNumber = request.getParameter(CARD_NUMBER_PARAMETER);
+        Status status = Status.valueOf(request.getParameter(CARD_STATUS_PARAMETER));
         try {
             cardService.changeCardStatus(cardNumber, status);
             response.sendRedirect(GO_TO_CARD_INFO_PAGE);

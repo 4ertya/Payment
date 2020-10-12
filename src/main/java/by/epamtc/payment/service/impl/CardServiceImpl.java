@@ -33,6 +33,7 @@ public class CardServiceImpl implements CardService {
 //                }
 //                card.setNumber(stringBuilder.toString().trim());
 //            }
+            /*TODO: custom tag*/
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

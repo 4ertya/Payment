@@ -1,4 +1,4 @@
-package by.epamtc.payment.controller.command.impl._goto;
+package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
 
@@ -7,13 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GoToMainPageCommand implements Command {
+public class GoToRegistrationPageCommand implements Command {
 
-    private final static String MAIN_PAGE = "WEB-INF/jsp/mainPage.jsp";
+    private final static String REGISTRATION_PAGE = "/WEB-INF/jsp/registrationPage.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher(MAIN_PAGE)
+        request.getRequestDispatcher(REGISTRATION_PAGE)
                 .forward(request, response);
     }
 }

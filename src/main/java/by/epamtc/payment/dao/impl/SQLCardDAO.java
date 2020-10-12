@@ -17,6 +17,7 @@ import java.util.List;
 public class SQLCardDAO implements CardDAO {
     private final static Logger log = LogManager.getLogger();
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
+
     private final static String SELECT_ALL_CARDS_BY_USER = "Select * from payment_systems, status, cards " +
             "join accounts on cards.account_id=accounts.id " +
             "where users_id=? " +
@@ -30,6 +31,21 @@ public class SQLCardDAO implements CardDAO {
             "LEFT JOIN payment_systems ON cards.payment_systems_id=payment_systems.id " +
             "LEFT JOIN currencies ON accounts.currences_id=currencies.id " +
             "WHERE cards.id=?;";
+
+    private final static String ID_PARAMETER = "id";
+    private final static String CARD_NUMBER_PARAMETER = "card_number";
+    private final static String EXP_DATE_PARAMETER = "exp_date";
+    private final static String OWNER_NAME_PARAMETER = "owner_name";
+    private final static String OWNER_SURNAME_PARAMETER = "owner_surname";
+    private final static String PINCODE_PARAMETER = "pincode";
+    private final static String CVV_PARAMETER = "cvv";
+    private final static String ACCOUNT_ID_PARAMETER = "account_id";
+    private final static String STATUS_NAME_PARAMETER = "status_name";
+    private final static String PAYMENT_SYSTEM_PARAMETER = "systems";
+    private final static String ACCOUNT_NUMBER_PARAMETER = "account_number";
+    private final static String BALANCE_PARAMETER = "balance";
+    private final static String CURRENCY_PARAMETER = "currency";
+
 
     @Override
     public List<Card> getAllCards(User user) throws DAOException {
@@ -47,16 +63,16 @@ public class SQLCardDAO implements CardDAO {
             while (resultSet.next()) {
                 card = new Card();
 
-                card.setId(resultSet.getInt("id"));
-                card.setNumber(resultSet.getString("card_number"));
-                card.setExpDate(resultSet.getDate("exp_date"));
-                card.setOwnerName(resultSet.getString("owner_name"));
-                card.setOwnerSurname(resultSet.getString("owner_surname"));
-                card.setPin(resultSet.getInt("pincode"));
-                card.setCvv(resultSet.getInt("cvv"));
-                card.setAccount(resultSet.getString("account_id"));
-                card.setStatus(Status.valueOf(resultSet.getString("status_name")));
-                card.setPaymentSystem(PaymentSystem.valueOf(resultSet.getString("systems")));
+                card.setId(resultSet.getInt(ID_PARAMETER));
+                card.setNumber(resultSet.getString(CARD_NUMBER_PARAMETER));
+                card.setExpDate(resultSet.getDate(EXP_DATE_PARAMETER));
+                card.setOwnerName(resultSet.getString(OWNER_NAME_PARAMETER));
+                card.setOwnerSurname(resultSet.getString(OWNER_SURNAME_PARAMETER));
+                card.setPin(resultSet.getInt(PINCODE_PARAMETER));
+                card.setCvv(resultSet.getInt(CVV_PARAMETER));
+                card.setAccount(resultSet.getString(ACCOUNT_ID_PARAMETER));
+                card.setStatus(Status.valueOf(resultSet.getString(STATUS_NAME_PARAMETER)));
+                card.setPaymentSystem(PaymentSystem.valueOf(resultSet.getString(PAYMENT_SYSTEM_PARAMETER)));
 
                 cards.add(card);
             }
@@ -76,13 +92,12 @@ public class SQLCardDAO implements CardDAO {
         PreparedStatement preparedStatement = null;
 
         try {
-            System.out.println("status in sql - " + status.name());
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(UPDATE_CARD_STATUS);
             preparedStatement.setString(2, cardNumber);
             preparedStatement.setString(1, status.name());
             preparedStatement.executeUpdate();
-            System.out.println("изменил статус");
+            log.info("Status changed. Card " + cardNumber);
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
@@ -106,19 +121,19 @@ public class SQLCardDAO implements CardDAO {
 
             if (resultSet.next()) {
                 cardInfo = new CardInfo();
-                cardInfo.setId(resultSet.getInt("id"));
-                cardInfo.setNumber(resultSet.getString("card_number"));
-                cardInfo.setExpDate(resultSet.getDate("exp_date"));
-                cardInfo.setOwnerName(resultSet.getString("owner_name"));
-                cardInfo.setOwnerSurname(resultSet.getString("owner_surname"));
-                cardInfo.setPin(resultSet.getInt("pincode"));
-                cardInfo.setCvv(resultSet.getInt("cvv"));
-                cardInfo.setAccount(resultSet.getString("account_id"));
-                cardInfo.setStatus(Status.valueOf(resultSet.getString("status_name")));
-                cardInfo.setPaymentSystem(PaymentSystem.valueOf(resultSet.getString("systems")));
-                cardInfo.setAccount_number(resultSet.getString("account_number"));
-                cardInfo.setBalance(resultSet.getBigDecimal("balance"));
-                cardInfo.setCurrency(resultSet.getString("currency"));
+                cardInfo.setId(resultSet.getInt(ID_PARAMETER));
+                cardInfo.setNumber(resultSet.getString(CARD_NUMBER_PARAMETER));
+                cardInfo.setExpDate(resultSet.getDate(EXP_DATE_PARAMETER));
+                cardInfo.setOwnerName(resultSet.getString(OWNER_NAME_PARAMETER));
+                cardInfo.setOwnerSurname(resultSet.getString(OWNER_SURNAME_PARAMETER));
+                cardInfo.setPin(resultSet.getInt(PINCODE_PARAMETER));
+                cardInfo.setCvv(resultSet.getInt(CVV_PARAMETER));
+                cardInfo.setAccount(resultSet.getString(ACCOUNT_ID_PARAMETER));
+                cardInfo.setStatus(Status.valueOf(resultSet.getString(STATUS_NAME_PARAMETER)));
+                cardInfo.setPaymentSystem(PaymentSystem.valueOf(resultSet.getString(PAYMENT_SYSTEM_PARAMETER)));
+                cardInfo.setAccount_number(resultSet.getString(ACCOUNT_NUMBER_PARAMETER));
+                cardInfo.setBalance(resultSet.getBigDecimal(BALANCE_PARAMETER));
+                cardInfo.setCurrency(resultSet.getString(CURRENCY_PARAMETER));
             }
 
         } catch (SQLException e) {

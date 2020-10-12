@@ -1,4 +1,4 @@
-package by.epamtc.payment.controller.command.impl._goto;
+package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.entity.CardInfo;
@@ -18,6 +18,11 @@ public class GoToCardInfoPageCommand implements Command {
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static CardService cardService = serviceFactory.getCardService();
 
+    private final static String CARD_ID_PARAMETER = "card_id";
+    private final static String CARD_INFO_PARAMETER = "cardInfo";
+
+    private final static String CARD_INFO_PAGE = "WEB-INF/jsp/cardInfoPage.jsp";
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CardInfo cardInfo;
@@ -26,16 +31,14 @@ public class GoToCardInfoPageCommand implements Command {
         /*TODO: Change language on cardInfoPage!!!*/
 
         try {
-            id = Integer.parseInt(request.getParameter("card_id"));
+            id = Integer.parseInt(request.getParameter(CARD_ID_PARAMETER));
             cardInfo = cardService.getCardInfo(id);
-            request.setAttribute("cardInfo", cardInfo);
+            request.setAttribute(CARD_INFO_PARAMETER, cardInfo);
         } catch (ServiceException e) {
             e.printStackTrace();
             log.error(e);
         }
 
-        request.getRequestDispatcher("WEB-INF/jsp/cardInfoPage.jsp").
-
-                forward(request, response);
+        request.getRequestDispatcher(CARD_INFO_PAGE).forward(request, response);
     }
 }
