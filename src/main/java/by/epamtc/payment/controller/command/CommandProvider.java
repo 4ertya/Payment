@@ -19,12 +19,14 @@ public class CommandProvider {
         commands.put(CommandName.TO_CARDS_PAGE, new GoToCardsPageCommand());
         commands.put(CommandName.TO_CARD_INFO_PAGE, new GoToCardInfoPageCommand());
         commands.put(CommandName.TO_SETTING_PAGE, new GoToSettingPageCommand());
+        commands.put(CommandName.TO_CARD_TRANSFER_PAGE, new GoToCardTransferPageCommand());
 
         commands.put(CommandName.CHANGE_CARD_STATUS, new ChangeCardStatusCommand());
         commands.put(CommandName.LOGIN, new LoginCommand());
         commands.put(CommandName.REGISTRATION, new RegistrationCommand());
         commands.put(CommandName.LOGOUT, new LogoutCommand());
         commands.put(CommandName.CHANGE_LANGUAGE, new ChangeLanguageCommand());
+        commands.put(CommandName.TRANSFER, new TransferCommand());
     }
 
     public Command getCommand(String commandName) {

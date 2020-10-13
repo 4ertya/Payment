@@ -33,7 +33,6 @@
                         <div class="image">
                             <c:forEach items="${requestScope.cards}" var="card" varStatus="status">
                                 <article>
-
                                     <c:if test="${card.paymentSystem.name() eq 'VISA'}">
                                         <div class="visa">
                                             <form action="Controller?command=to_card_info_page" method="post">
@@ -45,7 +44,7 @@
                                                 <p class="blocked">Заблокирована</p>
                                             </c:if>
                                             <p class="card_number">${card.number}</p>
-                                            <p class="card_date">${card.expDate}</p>
+                                            <p class="card_date"><fmt:formatDate pattern = "MM/yy" value = "${card.expDate}" /></p>
                                             <p class="card_holder">${card.ownerName} ${card.ownerSurname}</p>
                                         </div>
                                     </c:if>
@@ -61,11 +60,10 @@
                                                 <p class="blocked">Заблокирована</p>
                                             </c:if>
                                             <p class="card_number">${card.number}</p>
-                                            <p class="card_date">${card.expDate}</p>
+                                            <p class="card_date"><fmt:formatDate pattern = "MM/yy" value = "${card.expDate}" /></p>
                                             <p class="card_holder">${card.ownerName} ${card.ownerSurname}</p>
                                         </div>
                                     </c:if>
-
                                 </article>
                             </c:forEach>
                             <article>

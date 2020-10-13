@@ -66,11 +66,7 @@
                         <td>Баланс</td>
                         <td>${cardInfo.balance} ${cardInfo.currency}</td>
                         <td>
-                            <form action="Controller?command=change_card_status" method="post">
-                                <input type="hidden" name="card_number" value="${cardInfo.number}">
-                                <input type="hidden" name="status" value="${cardInfo.status}">
-                                <input type="submit" value="Пополнить">
-                            </form>
+                            <button><a href="Controller?command=to_card_transfer_page">Переводы</a></button>
                         </td>
                     </tr>
                 </table>

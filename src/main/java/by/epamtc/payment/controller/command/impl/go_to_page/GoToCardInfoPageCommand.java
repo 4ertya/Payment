@@ -26,12 +26,11 @@ public class GoToCardInfoPageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CardInfo cardInfo;
-        int id;
+        int id = Integer.parseInt(request.getParameter(CARD_ID_PARAMETER));;
 
         /*TODO: Change language on cardInfoPage!!!*/
 
         try {
-            id = Integer.parseInt(request.getParameter(CARD_ID_PARAMETER));
             cardInfo = cardService.getCardInfo(id);
             request.setAttribute(CARD_INFO_PARAMETER, cardInfo);
         } catch (ServiceException e) {
