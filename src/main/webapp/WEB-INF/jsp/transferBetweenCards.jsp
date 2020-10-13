@@ -22,7 +22,7 @@
                 <option selected disabled>с карты...</option>
                 <c:forEach items="${requestScope.cards}" var="card">
                     <c:if test="${card.status eq 'ACTIVE'}">
-                        <option value="${card.account}">
+                        <option value="${card.id}">
                                 ${card.number}
                         </option>
                     </c:if>
@@ -32,7 +32,7 @@
                 <option disabled>на карту...</option>
                 <c:forEach items="${requestScope.cards}" var="card">
                     <c:if test="${card.status eq 'ACTIVE'}">
-                        <option value="${card.account}">${card.number}</option>
+                        <option value="${card.id}">${card.number}</option>
                     </c:if>
                 </c:forEach>
             </select>
