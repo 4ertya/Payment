@@ -88,40 +88,52 @@ public final class ConnectionPool {
     }
 
     public void closeConnection(Connection con, Statement st, ResultSet rs) {
-        try {
-            con.close();
-        } catch (SQLException e) {
-            log.error("Connection isn't return to the pool.");
+        if (con!=null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                log.error("Connection isn't return to the pool.");
+            }
         }
-        try {
-            rs.close();
-        } catch (SQLException e) {
-            log.error("ResultSet isn't closed.");
+        if (rs!=null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                log.error("ResultSet isn't closed.");
+            }
         }
-        try {
-            st.close();
-        } catch (SQLException e) {
-            log.error("Statement isn't closed.");
+        if (st!=null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                log.error("Statement isn't closed.");
+            }
         }
     }
     public void closeConnection(Connection con){
-        try {
-            con.close();
-        }catch (SQLException e){
-            log.error("Connection isn't return to the pool.");
+        if (con!=null) {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                log.error("Connection isn't return to the pool.");
+            }
         }
     }
 
     public void closeConnection(Connection con, Statement st) {
+        if (con != null) {
         try {
             con.close();
         } catch (SQLException e) {
             log.error("Connection isn't return to the pool.");
         }
-        try {
-            st.close();
-        } catch (SQLException e) {
-            log.error("Statement isn't closed.");
+    }
+        if (st!=null) {
+            try {
+                st.close();
+            } catch (SQLException e) {
+                log.error("Statement isn't closed.");
+            }
         }
     }
 

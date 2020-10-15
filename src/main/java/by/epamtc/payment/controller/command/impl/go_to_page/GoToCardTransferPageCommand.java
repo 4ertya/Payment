@@ -32,7 +32,7 @@ public class GoToCardTransferPageCommand implements Command {
         user = (User) request.getSession().getAttribute(USER_PARAMETER);
 
         try {
-            cards = cardService.getAllCards(user);
+            cards = cardService.getUserCards(user);
             request.setAttribute(CARDS_PARAMETER, cards);
             request.getRequestDispatcher(CARD_TRANSFER_PAGE).forward(request, response);
         } catch (ServiceException e) {

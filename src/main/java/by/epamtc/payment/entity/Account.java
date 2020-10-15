@@ -5,11 +5,20 @@ import java.util.Date;
 public class Account {
 
     private int id;
-    private long accountNumber;
+    private String accountNumber;
     private double balance;
     private Date openingDate;
+    private String user_id;
     private Status status;
     private Currency currency;
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
 
     public int getId() {
         return id;
@@ -19,11 +28,11 @@ public class Account {
         this.id = id;
     }
 
-    public long getAccountNumber() {
+    public String getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(long accountNumber) {
+    public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
 

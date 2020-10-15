@@ -31,6 +31,7 @@ public class SQLCardDAO implements CardDAO {
             "LEFT JOIN payment_systems ON cards.payment_systems_id=payment_systems.id " +
             "LEFT JOIN currencies ON accounts.currences_id=currencies.id " +
             "WHERE cards.id=?;";
+    private final static String SELECT_TRANSACTIONS = "SELECT * FROM transactions JOIN cards ON transactions.cards_id=cards.id JOIN accounts ON cards.account_id=accounts.id WHERE accounts.user_id=?;";
 
     private final static String ID_PARAMETER = "id";
     private final static String CARD_NUMBER_PARAMETER = "card_number";
@@ -48,7 +49,7 @@ public class SQLCardDAO implements CardDAO {
 
 
     @Override
-    public List<Card> getAllCards(User user) throws DAOException {
+    public List<Card> getUserCards(User user) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;

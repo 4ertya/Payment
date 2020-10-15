@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CardService {
 
-    List<Card> getAllCards(User user) throws ServiceException;
+    List<Card> getUserCards(User user) throws ServiceException;
     void changeCardStatus(String cardNumber, Status status) throws ServiceException;
     CardInfo getCardInfo(int id) throws ServiceException;
 }

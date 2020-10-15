@@ -1,9 +1,10 @@
 package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
+import by.epamtc.payment.entity.Account;
 import by.epamtc.payment.entity.Card;
 import by.epamtc.payment.entity.User;
-import by.epamtc.payment.service.CardService;
+import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
@@ -15,30 +16,28 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class GoToCardsPageCommand implements Command {
+public class GoToAccountsPageCommand implements Command {
     private final static Logger log = LogManager.getLogger();
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
-    private final static CardService cardService = serviceFactory.getCardService();
+    private final static AccountService accountService = serviceFactory.getAccountService();
 
     private final static String USER_PARAMETER = "user";
-    private final static String CARDS_PARAMETER = "cards";
+    private final static String ACCOUNTS_PARAMETER = "accounts";
 
-    private final static String CARDS_PAGE = "WEB-INF/jsp/cards.jsp";
+    private final static String ACCOUNTS_PAGE = "WEB-INF/jsp/accounts.jsp";
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user;
-        List<Card> cards;
+        List<Account> accounts;
+
         user = (User) request.getSession().getAttribute(USER_PARAMETER);
-
         try {
-            cards = cardService.getUserCards(user);
-            request.setAttribute(CARDS_PARAMETER, cards);
-            request.getRequestDispatcher(CARDS_PAGE).forward(request, response);
-
+            accounts = accountService.getUserAccounts(user);
+            request.setAttribute(ACCOUNTS_PARAMETER, accounts);
+            request.getRequestDispatcher(ACCOUNTS_PAGE).forward(request, response);
         } catch (ServiceException e) {
-            log.error("Something wrong", e);
-            // TODO: 04.10.2020 Redirect to Error Page.
+            e.printStackTrace();
         }
     }
 }

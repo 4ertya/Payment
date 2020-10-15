@@ -17,10 +17,10 @@ public class CardServiceImpl implements CardService {
     private final CardDAO cardDAO = instance.getCardDAO();
 
     @Override
-    public List<Card> getAllCards(User user) throws ServiceException {
+    public List<Card> getUserCards(User user) throws ServiceException {
         List<Card> cards;
         try {
-            cards = cardDAO.getAllCards(user);
+            cards = cardDAO.getUserCards(user);
 
 //            for (Card card : cards) {
 //                String temp = card.getNumber();

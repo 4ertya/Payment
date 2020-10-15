@@ -44,7 +44,8 @@
                                                 <p class="blocked">Заблокирована</p>
                                             </c:if>
                                             <p class="card_number">${card.number}</p>
-                                            <p class="card_date"><fmt:formatDate pattern = "MM/yy" value = "${card.expDate}" /></p>
+                                            <p class="card_date"><fmt:formatDate pattern="MM/yy"
+                                                                                 value="${card.expDate}"/></p>
                                             <p class="card_holder">${card.ownerName} ${card.ownerSurname}</p>
                                         </div>
                                     </c:if>
@@ -60,7 +61,8 @@
                                                 <p class="blocked">Заблокирована</p>
                                             </c:if>
                                             <p class="card_number">${card.number}</p>
-                                            <p class="card_date"><fmt:formatDate pattern = "MM/yy" value = "${card.expDate}" /></p>
+                                            <p class="card_date"><fmt:formatDate pattern="MM/yy"
+                                                                                 value="${card.expDate}"/></p>
                                             <p class="card_holder">${card.ownerName} ${card.ownerSurname}</p>
                                         </div>
                                     </c:if>
@@ -91,6 +93,7 @@
         </div>
     </div>
 </div>
+
 <%@include file="footer.jsp" %>
 
 </body>

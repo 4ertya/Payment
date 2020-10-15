@@ -18,6 +18,6 @@ public class ChangeLanguageCommand implements Command {
         String page = request.getParameter(PARAMETER_PREVIOUS_PAGE);
 
         request.getSession().setAttribute(PARAMETER_LOCAL, local);
-        response.sendRedirect(CONTROLLER_COMMAND + page);
+        response.sendRedirect(CONTROLLER_COMMAND +page);
     }
 }

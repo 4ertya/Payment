@@ -8,8 +8,8 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}../css/style.css">
-<script type="text/javascript" src="../../script/script.js"></script>
+<link rel="stylesheet" href="../../css/style.css">
+
 
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
@@ -60,6 +60,9 @@
                     <li>
                         <a href="Controller?command=to_user_page">${sessionScope.user.login}</a>
                         <ul>
+                            <li><a href="Controller?command=to_cards_page">Карты</a></li>
+                            <li><a href="Controller?command=to_accounts_page">Счета</a></li>
+                            <li><a href="Controller?command=to_card_transfer_page">Переводы</a></li>
                             <li><a href="Controller?command=to_setting_page">Настройки</a></li>
                             <li><a href="Controller?command=logout">${logout}</a></li>
                         </ul>

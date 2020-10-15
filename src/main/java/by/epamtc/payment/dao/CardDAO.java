@@ -10,7 +10,7 @@ import by.epamtc.payment.entity.User;
 import java.util.List;
 
 public interface CardDAO{
-    List<Card> getAllCards(User user) throws DAOException;
+    List<Card> getUserCards(User user) throws DAOException;
     void changeCardStatus(String cardNumber, Status status) throws DAOException;
     CardInfo getCardInfo(int id) throws DAOException;
 }

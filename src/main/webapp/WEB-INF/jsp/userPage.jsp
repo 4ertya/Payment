@@ -25,7 +25,7 @@
         <hr>
         <div class="nav-menu">
             <div class="link"><a href="Controller?command=to_cards_page">cards</a></div>
-            <div class="link"><a href="#">accounts</a></div>
+            <div class="link"><a href="Controller?command=to_accounts_page">accounts</a></div>
             <div class="link"><a href="#">payments</a></div>
             </ul>
         </div>

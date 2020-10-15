@@ -20,6 +20,7 @@ public class CommandProvider {
         commands.put(CommandName.TO_CARD_INFO_PAGE, new GoToCardInfoPageCommand());
         commands.put(CommandName.TO_SETTING_PAGE, new GoToSettingPageCommand());
         commands.put(CommandName.TO_CARD_TRANSFER_PAGE, new GoToCardTransferPageCommand());
+        commands.put(CommandName.TO_ACCOUNTS_PAGE, new GoToAccountsPageCommand());
 
         commands.put(CommandName.CHANGE_CARD_STATUS, new ChangeCardStatusCommand());
         commands.put(CommandName.LOGIN, new LoginCommand());

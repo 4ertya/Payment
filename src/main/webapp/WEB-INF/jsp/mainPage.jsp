@@ -15,7 +15,7 @@
 <body>
 <%@include file="header.jsp" %>
 <div class="content">
-
+${pageContext.request.requestURI}
 </div>
 
 

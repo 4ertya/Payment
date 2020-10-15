@@ -628,9 +628,11 @@ label, a { /*при наведении на стрелки или переклю
     z-index: 1;
 }
 
-.card_info table{
+.card_info table {
     margin-top: 20px;
 }
+
+
 
 .card_info table > td{
     margin-top: 20px;

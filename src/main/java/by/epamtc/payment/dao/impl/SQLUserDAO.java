@@ -67,7 +67,6 @@ public class SQLUserDAO implements UserDAO {
             user = new User();
             user.setId(Integer.parseInt(resultSet.getString(ID_PARAMETER)));
             user.setLogin(resultSet.getString(LOGIN_PARAMETER));
-            user.setEmail(resultSet.getString(EMAIL_PARAMETER));
             user.setRole(Role.valueOf(resultSet.getString(ROLE_PARAMETER)));
 
         } catch (SQLException e) {

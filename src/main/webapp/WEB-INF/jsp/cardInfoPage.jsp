@@ -26,8 +26,9 @@
             <c:if test="${cardInfo.paymentSystem.name() eq 'MASTERCARD'}">
                 <img src="../../img/masterWorld.jpg" width="250px" height="150px">
             </c:if>
-<br>
-                <table cellpadding="5" >
+            <br>
+            <div class="table">
+                <table cellpadding="5">
                     <tr>
                         <td>Номер карты</td>
                         <td>${cardInfo.number}</td>
@@ -70,7 +71,7 @@
                         </td>
                     </tr>
                 </table>
-
+            </div>
 
         </div>
     </div>
