@@ -3,10 +3,7 @@ package by.epamtc.payment.service.impl;
 import by.epamtc.payment.dao.AccountDAO;
 import by.epamtc.payment.dao.DAOFactory;
 import by.epamtc.payment.dao.exception.DAOException;
-import by.epamtc.payment.entity.Account;
-import by.epamtc.payment.entity.Card;
-import by.epamtc.payment.entity.CardInfo;
-import by.epamtc.payment.entity.User;
+import by.epamtc.payment.entity.*;
 import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.exception.ServiceException;
 
@@ -27,6 +24,28 @@ public class AccountServiceImpl implements AccountService {
 
         try {
             accounts = accountDAO.getUserAccounts(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return accounts;
+    }
+
+    @Override
+    public void createNewAccount(User user, Currency currency) throws ServiceException {
+
+        try {
+            accountDAO.createNewAccount(user, currency);
+        } catch (DAOException e) {
+            throw new ServiceException();
+        }
+    }
+
+    @Override
+    public List<Account> getAllAccounts() throws ServiceException {
+        List<Account> accounts;
+
+        try {
+            accounts = accountDAO.getAllAccounts();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

@@ -21,15 +21,16 @@ public class ChangeCardStatusCommand implements Command {
     private final static String CARD_NUMBER_PARAMETER = "card_number";
     private final static String CARD_STATUS_PARAMETER = "status";
 
-    private final static String GO_TO_CARDS_PAGE = "Controller?command=to_cards_page";
+    private final static String GO_TO = "Controller?command=";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String cardNumber = request.getParameter(CARD_NUMBER_PARAMETER);
         Status status = Status.valueOf(request.getParameter(CARD_STATUS_PARAMETER));
+        String page = request.getParameter("page");
         try {
             cardService.changeCardStatus(cardNumber, status);
-            response.sendRedirect(GO_TO_CARDS_PAGE);
+            response.sendRedirect(GO_TO+page);
         } catch (ServiceException e) {
             log.error("Exception in ChangeCardStatusCommand", e);
         }

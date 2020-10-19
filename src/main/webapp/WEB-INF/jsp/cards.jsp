@@ -70,6 +70,9 @@
                             </c:forEach>
                             <article>
                                 <div class="empty_card">
+                                    <form action="Controller?command=to_create_new_card_page" method="post">
+                                        <button class="select_card" type="submit"></button>
+                                    </form>
                                     <img src="../../img/new.jpg" width="250px" height="150px">
                                     <p class="new_card">заказать карту</p>
                                 </div>

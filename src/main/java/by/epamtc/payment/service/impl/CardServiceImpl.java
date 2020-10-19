@@ -3,10 +3,7 @@ package by.epamtc.payment.service.impl;
 import by.epamtc.payment.dao.CardDAO;
 import by.epamtc.payment.dao.DAOFactory;
 import by.epamtc.payment.dao.exception.DAOException;
-import by.epamtc.payment.entity.Card;
-import by.epamtc.payment.entity.CardInfo;
-import by.epamtc.payment.entity.Status;
-import by.epamtc.payment.entity.User;
+import by.epamtc.payment.entity.*;
 import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.exception.ServiceException;
 
@@ -58,5 +55,26 @@ public class CardServiceImpl implements CardService {
             throw new ServiceException(e);
         }
         return cardInfo;
+    }
+
+    @Override
+    public void createNewCard(User user, int accountId, int term, PaymentSystem system) throws ServiceException {
+        try {
+            cardDAO.createNewCard(user, accountId, term, system);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<Card> getAllCards() throws ServiceException {
+        List<Card> cards;
+
+        try {
+            cards = cardDAO.getAllCards();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return cards;
     }
 }

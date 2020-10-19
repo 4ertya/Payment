@@ -9,6 +9,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <link rel="stylesheet" href="../../css/style.css">
+<script src="../../script/script.js"></script>
 
 
 <fmt:setLocale value="${sessionScope.local}"/>
@@ -54,21 +55,37 @@
             </div>
         </c:if>
 
+
         <c:if test="${sessionScope.user != null}">
             <div class="login">
-                <ul id="nav">
+                <ul class="nav">
                     <li>
                         <a href="Controller?command=to_user_page">${sessionScope.user.login}</a>
                         <ul>
-                            <li><a href="Controller?command=to_cards_page">Карты</a></li>
-                            <li><a href="Controller?command=to_accounts_page">Счета</a></li>
+                            <li><a href="Controller?command=to_user_cards_page">Мои Карты</a></li>
+                            <li><a href="Controller?command=to_user_accounts_page">Мои Счета</a></li>
                             <li><a href="Controller?command=to_card_transfer_page">Переводы</a></li>
+                            <li><a href="Controller?command=to_card_payment_page">Платежи</a></li>
                             <li><a href="Controller?command=to_setting_page">Настройки</a></li>
                             <li><a href="Controller?command=logout">${logout}</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
+            <c:if test="${sessionScope.user.role eq 'ADMIN'}">
+                <div class="login">
+                    <ul class="nav">
+                        <li>
+                            <a href="Controller?command=to_user_page">ADMIN</a>
+                            <ul>
+                                <li><a href="Controller?command=to_all_cards_page">Карты</a></li>
+                                <li><a href="Controller?command=to_all_accounts_page">Счета</a></li>
+                                <li><a href="Controller?command=to_all_users_page">Пользователи</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </c:if>
         </c:if>
     </div>
 </header>

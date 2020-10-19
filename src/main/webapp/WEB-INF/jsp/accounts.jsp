@@ -30,19 +30,41 @@
                 <th>status</th>
             </tr>
             <c:forEach items="${requestScope.accounts}" var="account">
-            <tr>
-                <td>${account.id}</td>
-                <td>${account.accountNumber}</td>
-                <td>${account.balance}</td>
-                <td>${account.currency}</td>
-                <td>${account.openingDate}</td>
-                <td>${account.user_id}</td>
-                <td>${account.status}</td>
-            </tr>
+                <tr>
+                    <td>${account.id}</td>
+                    <td>${account.accountNumber}</td>
+                    <td>${account.balance}</td>
+                    <td>${account.currency}</td>
+                    <td>${account.openingDate}</td>
+                    <td>${account.user_id}</td>
+                    <td>${account.status}</td>
+                    <c:if test="${sessionScope.user.role eq 'ADMIN'}">
+                    <td>
+                        <form action="Controller?command">
+                            <input type="submit" value="заблокировать">
+                        </form>
+                    </td>
+                    </c:if>
+                </tr>
             </c:forEach>
-            <tr>
-                <td align="center" colspan="7"><a href="#">Open new account</a></td>
-            </tr>
+            <form action="Controller?command=create_new_account" method="post">
+                <tr>
+                    <td align="center" colspan="4">
+                        <input type="submit" value="Открыть новый счет в">
+                    </td>
+                    <td align="center" colspan="3">
+                        <select name="currency" required>
+                            <option selected value=''>Валюта счета</option>
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="RUB">RUB</option>
+                            <option value="BYN">BYN</option>
+                            <option value="GBP">GBP</option>
+                        </select>
+                    </td>
+                </tr>
+            </form>
+
         </table>
     </div>
 </div>

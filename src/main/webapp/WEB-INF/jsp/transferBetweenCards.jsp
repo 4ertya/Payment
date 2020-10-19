@@ -16,6 +16,8 @@
 <%@include file="header.jsp" %>
 <div class="content">
     <div class="form main">
+        <h3><b>Переводы</b></h3>
+        <hr>
         <form action="Controller">
             <input type="hidden" name="command" value="transfer">
             <select name="from" class="select">

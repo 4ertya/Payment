@@ -40,6 +40,7 @@
                             <form action="Controller?command=change_card_status" method="post">
                                 <input type="hidden" name="card_number" value="${cardInfo.number}">
                                 <input type="hidden" name="status" value="${cardInfo.status}">
+                                <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
                                 <input type="submit" value="Заблокировать">
                             </form>
                         </td>

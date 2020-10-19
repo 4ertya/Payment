@@ -6,12 +6,11 @@ import by.epamtc.payment.controller.command.impl.go_to_page.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandProvider {
-
-    private static final CommandProvider instance = new CommandProvider();
+public class UserCommandProvider {
+    private static final UserCommandProvider instance = new UserCommandProvider();
     private final Map<CommandName, Command> commands = new HashMap<>();
 
-    public CommandProvider() {
+    public UserCommandProvider() {
         commands.put(CommandName.TO_MAIN_PAGE, new GoToMainPageCommand());
         commands.put(CommandName.TO_LOGIN_PAGE, new GoToLoginPageCommand());
         commands.put(CommandName.TO_REGISTRATION_PAGE, new GoToRegistrationPageCommand());
@@ -46,7 +45,7 @@ public class CommandProvider {
         return command;
     }
 
-    public static CommandProvider getInstance() {
+    public static UserCommandProvider getInstance() {
         return instance;
     }
 }

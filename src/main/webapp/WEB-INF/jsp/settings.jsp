@@ -21,22 +21,19 @@
 <div class="form detail">
     <div class="block-text">Personal data</div>
     <form action="Controller" method="post">
-        Имя:    <input class="inputD" type="text" name="login" value="${user.login}" required>
-        Фамилия:<input class="inputD" type="password" name="password" value="${user.password}" required>
+        логин:    <input class="inputD" type="text" name="login" value="${user.login}" required disabled>
+        пароль:<input class="inputD" type="password" name="password" value="${user.password}" required>
         e-mail: <input class="inputD" type="email" name="email" value="${user.email}" required>
-
-        <input class="inputD" type="email" name="email" value="${userDetail.name}" required>
-        <input class="inputD" type="email" name="email" value="${userDetail.surname}" required>
-        <input class="inputD" type="email" name="email" value="${userDetail.gender}" required>
-        <input class="inputD" type="email" name="email" value="${userDetail.passportSeries}" required>
-        <input class="inputD" type="email" name="email" value="${userDetail.passportNumber}" required>
-        <input class="inputD" type="email" name="email" value="${userDetail.phone_number}" required>
-        <input class="inputD" type="email" name="email" value="${userDetail.location}" required>
+<br>
+       имя: <input class="inputD" type="text" name="name" value="${userDetail.name}" required>
+       фамилия: <input class="inputD" type="text" name="surname" value="${userDetail.surname}" required>
+       пол: <input class="inputD" type="text" name="gender" value="${userDetail.gender}" required>
+       серия паспорта: <input class="inputD" type="text" name="passport_series" value="${userDetail.passportSeries}" required>
+       номер паспорта: <input class="inputD" type="number" name="passport_number" value="${userDetail.passportNumber}" required>
+       телефон: <input class="inputD" type="tel" name="phone_number" value="${userDetail.phone_number}" required>
+       адрес: <input class="inputD" type="text" name="location" value="${userDetail.location}" required>
         <input class="button" type="submit" value="Save">
     </form>
-    <c:if test="${sessionScope.User_exists !=null}">
-        <div class="error-text">Пользователь с такими данными уже существует!</div>
-    </c:if>
 </div>
 </div>
 <%@include file="footer.jsp"%>

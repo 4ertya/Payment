@@ -12,6 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLUserDAO implements UserDAO {
 
@@ -31,6 +33,7 @@ public class SQLUserDAO implements UserDAO {
     private final static String SELECT_USER_BY_ID = "SELECT * FROM users u, roles rol " +
             "WHERE u.id=? " +
             "AND u.roles_id=rol.id;";
+    private final static String SELECT_ALL_USERS = "SELECT u.id, u.login, u.email, r.role FROM users u JOIN roles r ON u.roles_id=r.id;";
 
     private final static String ID_PARAMETER = "id";
     private final static String LOGIN_PARAMETER = "login";
@@ -72,9 +75,7 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new DAOException(e);
         } finally {
-            if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement, resultSet);
-            }
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
         return user;
     }
@@ -97,9 +98,7 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: registration(User user)", e);
         } finally {
-            if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement);
-            }
+            connectionPool.closeConnection(connection, preparedStatement);
         }
     }
 
@@ -124,9 +123,7 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: getUser()", e);
         } finally {
-            if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement, resultSet);
-            }
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
         return user;
     }
@@ -156,11 +153,39 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: getUserDetail()", e);
         } finally {
-            if (connection != null) {
-                connectionPool.closeConnection(connection, preparedStatement, resultSet);
-            }
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
         return userDetail;
+    }
+
+    @Override
+    public List<User> getAllUsers() throws DAOException {
+        Connection connection;
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
+
+        List<User> users = new ArrayList<>();
+        User user;
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                user = new User();
+
+                user.setId(resultSet.getInt("id"));
+                user.setLogin(resultSet.getString("login"));
+                user.setEmail(resultSet.getString("email"));
+                user.setRole(Role.valueOf(resultSet.getString("role")));
+
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return users;
     }
 }
 

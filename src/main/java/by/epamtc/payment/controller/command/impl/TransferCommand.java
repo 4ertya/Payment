@@ -18,7 +18,6 @@ public class TransferCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         CardInfo fromCard=null;
         CardInfo toCard=null;
         int idFrom = Integer.parseInt(request.getParameter("from"));

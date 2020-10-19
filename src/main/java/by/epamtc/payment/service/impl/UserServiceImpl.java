@@ -12,6 +12,8 @@ import by.epamtc.payment.service.exception.ServiceException;
 import by.epamtc.payment.service.exception.ServiceUserExistException;
 import by.epamtc.payment.service.exception.ServiceUserNotFoundException;
 
+import java.util.List;
+
 public class UserServiceImpl implements UserService {
 
     private final DAOFactory instance = DAOFactory.getInstance();
@@ -64,5 +66,17 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Exception in UserServiceImpl: getUserDetail()", e);
         }
         return userDetail;
+    }
+
+    @Override
+    public List<User> getAllUsers() throws ServiceException {
+        List<User> users;
+
+        try {
+            users = userDAO.getAllUsers();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return users;
     }
 }

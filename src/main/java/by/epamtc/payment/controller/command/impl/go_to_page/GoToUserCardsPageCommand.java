@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-public class GoToCardsPageCommand implements Command {
+public class GoToUserCardsPageCommand implements Command {
     private final static Logger log = LogManager.getLogger();
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static CardService cardService = serviceFactory.getCardService();

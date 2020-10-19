@@ -7,12 +7,10 @@ import by.epamtc.payment.entity.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class SQLAccountDAO implements AccountDAO {
     private final static Logger log = LogManager.getLogger();
@@ -24,6 +22,9 @@ public class SQLAccountDAO implements AccountDAO {
             "FROM exchange " +
             "WHERE source_currency=? AND final_currency=?;";
     private final static String SELECT_USER_ACCOUNTS = "SELECT a.id, a.account_number, a.balance, a.openning_date, s.status_name, c.currency FROM accounts a LEFT JOIN status s ON s.id=a.status_id LEFT JOIN currencies c ON a.currences_id=c.id WHERE a.users_id=?;";
+    private final static String CREATE_NEW_ACCOUNT = "INSERT INTO accounts SET account_number=?, openning_date=?, users_id=?, currences_id=(SELECT id FROM currencies WHERE currency=?);";
+    private final static String SELECT_ALL_ACCOUNTS = "SELECT a.id, a.account_number, a.balance, a.openning_date, u.login, s.status_name, c.currency FROM accounts a JOIN users u ON u.id=a.users_id JOIN status s ON s.id=a.status_id JOIN currencies c ON c.id=a.currences_id;";
+    private final static String ADD_TRANSACTION = "INSERT INTO transactions SET date=?, amount=?, currency_id=(SELECT id FROM currencies WHERE currency=?), destination=?, cards_id=?, transaction_types_id=(SELECT id FROM transactions_types WHERE type=?);";
 
     @Override
     public void transfer(CardInfo fromCard, CardInfo toCard, double amount) {
@@ -50,17 +51,15 @@ public class SQLAccountDAO implements AccountDAO {
                 log.info("база данных полетела");
             }
         } finally {
-            if (connection != null) {
-                connectionPool.closeConnection(connection);
-            }
+            connectionPool.closeConnection(connection);
         }
     }
 
     @Override
     public List<Account> getUserAccounts(User user) throws DAOException {
-        Connection connection;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         List<Account> accounts = new ArrayList<>();
 
         try {
@@ -80,6 +79,72 @@ public class SQLAccountDAO implements AccountDAO {
             }
         } catch (SQLException e) {
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
+        }
+        return accounts;
+    }
+
+    @Override
+    public void createNewAccount(User user, Currency currency) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(CREATE_NEW_ACCOUNT);
+            preparedStatement.setString(1, "2201BY000123435813");
+            preparedStatement.setDate(2, new Date(new java.util.Date().getTime()));
+            preparedStatement.setLong(3, user.getId());
+            preparedStatement.setString(4, currency.name());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement);
+        }
+    }
+
+//    @Override
+//    public void pay(Transaction transaction ) throws DAOException {
+//        Connection connection;
+//
+//
+//        connection = connectionPool.takeConnection();
+//        try {
+//            withdraw(connection, fromCard, amount);
+//        } catch (SQLException e) {
+//            throw new DAOException(e);
+//        }
+//
+//    }
+
+    @Override
+    public List<Account> getAllAccounts() throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<Account> accounts = new ArrayList<>();
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ALL_ACCOUNTS);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Account account = new Account();
+                System.out.println(resultSet.getInt("id"));
+                account.setId(resultSet.getInt("id"));
+                account.setAccountNumber(resultSet.getString("account_number"));
+                account.setOpeningDate(resultSet.getDate("openning_date"));
+                account.setStatus(Status.valueOf(resultSet.getString("status_name")));
+                account.setBalance(resultSet.getDouble("balance"));
+                account.setCurrency(Currency.valueOf(resultSet.getString("currency")));
+                account.setUser_id(resultSet.getString("login"));
+                accounts.add(account);
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
         return accounts;
     }
@@ -114,7 +179,6 @@ public class SQLAccountDAO implements AccountDAO {
             withdrawStatement.setDouble(1, amount);
             withdrawStatement.setString(2, fromCard.getAccount());
             withdrawStatement.executeUpdate();
-            System.out.println("списано " + amount + " " + fromCard.getCurrency());
         } finally {
             if (withdrawStatement != null) {
                 withdrawStatement.close();
@@ -137,5 +201,18 @@ public class SQLAccountDAO implements AccountDAO {
             }
         }
     }
+
+//        private void writeTransaction(Connection connection, Transaction transaction) throws SQLException {
+//        PreparedStatement preparedStatement = null;
+//        try {
+//            preparedStatement = connection.prepareStatement(ADD_TRANSACTION);
+//            preparedStatement.setDate(1, new Date(new java.util.Date().getTime()));
+//            preparedStatement.setDouble(2, transaction.getAmount);
+//
+//        } finally {
+//            if (depositStatement != null) {
+//                depositStatement.close();
+//            }
+//        }
 }
 

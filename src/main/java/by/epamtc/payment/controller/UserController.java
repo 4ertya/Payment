@@ -9,12 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class Controller extends HttpServlet {
-
+public class UserController extends HttpServlet {
     private final static String COMMAND_NAME = "command";
     private final CommandProvider provider = CommandProvider.getInstance();
 
-    public Controller() {
+    public UserController() {
         super();
     }
 
@@ -30,25 +29,6 @@ public class Controller extends HttpServlet {
         command = provider.getCommand(currentCommand);
 
         command.execute(req, resp);
-
-
-//        StringBuilder stringBuffer = new StringBuilder();
-//        Map map = req.getParameterMap();
-//        for (Object key: map.keySet())
-//        {
-//            String keyStr = (String)key;
-//            stringBuffer.append(keyStr);
-//            stringBuffer.append("=");
-//            String[] value = (String[])map.get(keyStr);
-//            for (String val:value){
-//                stringBuffer.append(val);
-//            }
-//            stringBuffer.append("&");
-//        }
-
-//        String parameters = stringBuffer.toString();
-//        HttpSession session=req.getSession();
-//        session.setAttribute("prev_request_params", parameters);
 
     }
 }
