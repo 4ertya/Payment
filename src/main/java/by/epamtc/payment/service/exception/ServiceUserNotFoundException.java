@@ -1,6 +1,6 @@
 package by.epamtc.payment.service.exception;
 
-public class ServiceUserNotFoundException extends ServiceException {
+public class ServiceUserNotFoundException extends Exception {
 
     public ServiceUserNotFoundException() {
         super();

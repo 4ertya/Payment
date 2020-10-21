@@ -5,9 +5,11 @@
   Time: 11:20
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://localhost:8080/mytag" prefix="mytag" %>
+
 <html>
 <head>
     <title>Cards</title>
@@ -33,44 +35,12 @@
                         <div class="image">
                             <c:forEach items="${requestScope.cards}" var="card" varStatus="status">
                                 <article>
-                                    <c:if test="${card.paymentSystem.name() eq 'VISA'}">
-                                        <div class="visa">
-                                            <form action="Controller?command=to_card_info_page" method="post">
-                                                <input type="hidden" name="card_id" value="${card.id}">
-                                                <button class="select_card" type="submit"></button>
-                                            </form>
-                                            <img src="../../img/visaClassic.jpg" width="250px" height="150px">
-                                            <c:if test="${card.status.name() eq 'BLOCKED'}">
-                                                <p class="blocked">Заблокирована</p>
-                                            </c:if>
-                                            <p class="card_number">${card.number}</p>
-                                            <p class="card_date"><fmt:formatDate pattern="MM/yy"
-                                                                                 value="${card.expDate}"/></p>
-                                            <p class="card_holder">${card.ownerName} ${card.ownerSurname}</p>
-                                        </div>
-                                    </c:if>
-
-                                    <c:if test="${card.paymentSystem.name() eq 'MASTERCARD'}">
-                                        <div class="mastercard">
-                                            <form action="Controller?command=to_card_info_page" method="post">
-                                                <input type="hidden" name="card_id" value="${card.id}">
-                                                <button class="select_card" type="submit"></button>
-                                            </form>
-                                            <img src="../../img/masterWorld.jpg" width="250px" height="150px">
-                                            <c:if test="${card.status.name() eq 'BLOCKED'}">
-                                                <p class="blocked">Заблокирована</p>
-                                            </c:if>
-                                            <p class="card_number">${card.number}</p>
-                                            <p class="card_date"><fmt:formatDate pattern="MM/yy"
-                                                                                 value="${card.expDate}"/></p>
-                                            <p class="card_holder">${card.ownerName} ${card.ownerSurname}</p>
-                                        </div>
-                                    </c:if>
+                                    <mytag:card card="${card}"/>
                                 </article>
                             </c:forEach>
                             <article>
                                 <div class="empty_card">
-                                    <form action="Controller?command=to_create_new_card_page" method="post">
+                                    <form action="UserController?command=to_create_new_card_page" method="post">
                                         <button class="select_card" type="submit"></button>
                                     </form>
                                     <img src="../../img/new.jpg" width="250px" height="150px">

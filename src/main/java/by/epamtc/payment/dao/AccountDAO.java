@@ -10,9 +10,9 @@ public interface AccountDAO {
 
     List<Account> getUserAccounts(User user) throws DAOException;
 
-    void createNewAccount(User user, Currency currency) throws DAOException;
+    void createNewAccount(User user, Account account) throws DAOException;
 
-    void pay(Transaction transaction) throws DAOException;
+//    void pay(Transaction transaction) throws DAOException;
 
     void transfer(CardInfo fromCard, CardInfo toCard, double amount);
 

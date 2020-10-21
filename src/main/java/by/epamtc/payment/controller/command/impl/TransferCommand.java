@@ -34,7 +34,7 @@ public class TransferCommand implements Command {
 
         accountService.transfer(fromCard, toCard, amount);
 
-        response.sendRedirect("Controller?command=to_cards_page");
+        response.sendRedirect("UserController?command=to_cards_page");
 
     }
 }

@@ -1,6 +1,7 @@
 package by.epamtc.payment.controller.command.impl;
 
 import by.epamtc.payment.controller.command.Command;
+import by.epamtc.payment.entity.AuthorisationData;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.UserService;
@@ -20,10 +21,11 @@ public class LoginCommand implements Command {
     private final static String PARAMETER_LOGIN = "login";
     private final static String PARAMETER_PASSWORD = "password";
     private final static String ATTRIBUTE_USER = "user";
-    private final static String ATTRIBUTE_WRONG_DATA = "Wrong_Data";
+    private final static String WARNING_MESSAGE = "warning_message";
+    private final static String MESSAGE = "Invalid username or password.";
 
-    private final static String MAIN_PAGE = "Controller?command=to_main_page";
-    private final static String GO_TO_LOGIN_PAGE = "Controller?command=to_login_page";
+    private final static String MAIN_PAGE = "MainController?command=to_main_page";
+    private final static String GO_TO_LOGIN_PAGE = "MainController?command=to_login_page";
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -35,15 +37,19 @@ public class LoginCommand implements Command {
         String login = req.getParameter(PARAMETER_LOGIN);
         String password = req.getParameter(PARAMETER_PASSWORD);
 
+        AuthorisationData authorisationData = new AuthorisationData();
+        authorisationData.setLogin(login);
+        authorisationData.setPassword(password);
+
         try {
-            user = userService.login(login, password);
+            user = userService.login(authorisationData);
             session.setAttribute(ATTRIBUTE_USER, user);
-            session.removeAttribute(ATTRIBUTE_WRONG_DATA);
+            session.removeAttribute(WARNING_MESSAGE);
             log.info("User is Authorized");
             resp.sendRedirect(MAIN_PAGE);
         } catch (ServiceUserNotFoundException e) {
             log.info("Trying authorize with incorrect data");
-            session.setAttribute(ATTRIBUTE_WRONG_DATA, ATTRIBUTE_WRONG_DATA);
+            session.setAttribute(WARNING_MESSAGE, MESSAGE);
             resp.sendRedirect(GO_TO_LOGIN_PAGE);
         } catch (ServiceException e) {
             log.error("Something wrong", e);

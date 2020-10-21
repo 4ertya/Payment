@@ -5,8 +5,7 @@ import by.epamtc.payment.dao.UserDAO;
 import by.epamtc.payment.dao.exception.DAOException;
 import by.epamtc.payment.dao.exception.DAOUserExistException;
 import by.epamtc.payment.dao.exception.DAOUserNotFoundException;
-import by.epamtc.payment.entity.User;
-import by.epamtc.payment.entity.UserDetail;
+import by.epamtc.payment.entity.*;
 import by.epamtc.payment.service.UserService;
 import by.epamtc.payment.service.exception.ServiceException;
 import by.epamtc.payment.service.exception.ServiceUserExistException;
@@ -20,10 +19,10 @@ public class UserServiceImpl implements UserService {
     private final UserDAO userDAO = instance.getUserDAO();
 
     @Override
-    public void registration(User user) throws ServiceException {
+    public void registration(RegistrationData registrationData) throws ServiceException, ServiceUserExistException {
 
         try {
-            userDAO.registration(user);
+            userDAO.registration(registrationData);
         } catch (DAOUserExistException e) {
             throw new ServiceUserExistException();
         } catch (DAOException e) {
@@ -32,12 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(String login, String password) throws ServiceException {
+    public User login(AuthorisationData authorisationData) throws ServiceException, ServiceUserNotFoundException {
 
         User user;
 
         try {
-            user = userDAO.login(login, password);
+            user = userDAO.login(authorisationData);
         } catch (DAOUserNotFoundException e) {
             throw new ServiceUserNotFoundException();
         } catch (DAOException e) {
@@ -47,14 +46,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(Long id) throws ServiceException {
-        User user;
+    public UserData getUserData(Long id) throws ServiceException {
+        UserData userData;
         try {
-            user = userDAO.getUser(id);
+            userData = userDAO.getUserData(id);
         } catch (DAOException e) {
             throw new ServiceException("Exception in UserServiceImpl: getUser()", e);
         }
-        return user;
+        return userData;
     }
 
     @Override
@@ -69,8 +68,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() throws ServiceException {
-        List<User> users;
+    public List<UserData> getAllUsers() throws ServiceException {
+        List<UserData> users;
 
         try {
             users = userDAO.getAllUsers();

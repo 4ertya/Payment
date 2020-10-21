@@ -7,6 +7,9 @@ import by.epamtc.payment.entity.*;
 import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.exception.ServiceException;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class CardServiceImpl implements CardService {
@@ -14,10 +17,10 @@ public class CardServiceImpl implements CardService {
     private final CardDAO cardDAO = instance.getCardDAO();
 
     @Override
-    public List<Card> getUserCards(User user) throws ServiceException {
+    public List<Card> getUsersCards(User user) throws ServiceException {
         List<Card> cards;
         try {
-            cards = cardDAO.getUserCards(user);
+            cards = cardDAO.getUsersCards(user);
 
 //            for (Card card : cards) {
 //                String temp = card.getNumber();
@@ -38,16 +41,27 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void changeCardStatus(String cardNumber, Status status) throws ServiceException {
+    public void blockCard(long cardId) throws ServiceException {
+        Status status = Status.BLOCKED;
         try {
-            cardDAO.changeCardStatus(cardNumber, status);
+            cardDAO.changeCardStatus(cardId, status);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public CardInfo getCardInfo(int id) throws ServiceException {
+    public void unblockCard(long cardId) throws ServiceException {
+        Status status = Status.ACTIVE;
+        try {
+            cardDAO.changeCardStatus(cardId, status);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public CardInfo getCardInfo(long id) throws ServiceException {
         CardInfo cardInfo;
         try {
             cardInfo = cardDAO.getCardInfo(id);
@@ -58,11 +72,21 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void createNewCard(User user, int accountId, int term, PaymentSystem system) throws ServiceException {
+    public void createNewCard(User user, String accountNumber, int term, PaymentSystem paymentSystem) throws ServiceException {
+        Card card = new Card();
+        GregorianCalendar calendar = new GregorianCalendar();
+        calendar.add(Calendar.YEAR, term);
+
+        card.setAccountNumber(accountNumber);
+        card.setPaymentSystem(paymentSystem);
+        card.setStatus(Status.ACTIVE);
+        card.setExpDate(calendar.getTime());
+        card.setNumber(1111222233334444L);
+
         try {
-            cardDAO.createNewCard(user, accountId, term, system);
+            cardDAO.createNewCard(user, card);
         } catch (DAOException e) {
-            e.printStackTrace();
+            throw new ServiceException(e);
         }
     }
 

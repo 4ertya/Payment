@@ -3,30 +3,30 @@ package by.epamtc.payment.entity;
 import java.util.Date;
 
 public class Card {
-    private int id;
-    private String number;
+    private long id;
+    private long number;
     private Date expDate;
     private String ownerName;
     private String ownerSurname;
     private int pin;
     private int cvv;
-    private String account;
+    private String accountNumber;
     private Status status;
     private PaymentSystem paymentSystem;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getNumber() {
+    public long getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(long number) {
         this.number = number;
     }
 
@@ -70,12 +70,12 @@ public class Card {
         this.cvv = cvv;
     }
 
-    public String getAccount() {
-        return account;
+    public String getAccountNumber() {
+        return accountNumber;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
     public Status getStatus() {
@@ -105,11 +105,11 @@ public class Card {
         Card card = (Card) obj;
         return getPin() == card.getPin() &&
                 getCvv() == card.getCvv() &&
-                getNumber().equals(card.getNumber()) &&
+                getNumber() == card.getNumber() &&
                 getExpDate().equals(card.getExpDate()) &&
                 getOwnerName().equals(card.getOwnerName()) &&
                 getOwnerSurname().equals(card.getOwnerSurname()) &&
-                getAccount().equals(card.getAccount()) &&
+                getAccountNumber().equals(card.getAccountNumber()) &&
                 getStatus() == card.getStatus() &&
                 getPaymentSystem() == card.getPaymentSystem();
     }
@@ -119,13 +119,13 @@ public class Card {
         final int PRIME = 31;
         int result = 1;
 
-        result = result * PRIME + getNumber().hashCode();
+        result = result * PRIME + Long.valueOf(getNumber()).hashCode();
         result = result * PRIME + getExpDate().hashCode();
         result = result * PRIME + getOwnerName().hashCode();
         result = result * PRIME + getOwnerSurname().hashCode();
         result = result * PRIME + getPin();
         result = result * PRIME + getCvv();
-        result = result * PRIME + getAccount().hashCode();
+        result = result * PRIME + getAccountNumber().hashCode();
         result = result * PRIME + getStatus().hashCode();
         result = result * PRIME + getPaymentSystem().hashCode();
         return result;
@@ -138,7 +138,7 @@ public class Card {
                 ", expDate= " + expDate +
                 ", ownerName= " + ownerName +
                 ", ownerSurname= " + ownerSurname +
-                ", account= " + account +
+                ", account= " + accountNumber +
                 ", status= " + status +
                 ", paymentSystem= " + paymentSystem;
     }

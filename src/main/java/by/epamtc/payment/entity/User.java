@@ -1,5 +1,7 @@
 package by.epamtc.payment.entity;
 
+import java.io.Serializable;
+
 /**
  * This class describes users with properties
  * <b>id</b>
@@ -12,12 +14,11 @@ package by.epamtc.payment.entity;
  * @version 1.0 16 Sep 2020
  */
 
-public class User {
+public class User implements Serializable {
 
     private long id;
-    private String login;
-    private String password;
-    private String email;
+    private String name;
+    private String surname;
     private Role role;
 
 
@@ -32,28 +33,20 @@ public class User {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getName() {
+        return name;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSurname() {
+        return surname;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public Role getRole() {
@@ -70,9 +63,8 @@ public class User {
         if (obj == null || getClass() != obj.getClass()) return false;
         User user = (User) obj;
         return id == user.id &&
-                login.equals(user.login) &&
-                password.equals(user.password) &&
-                email.equals(user.email) &&
+                name.equals(user.name) &&
+                surname.equals(user.surname) &&
                 role == user.role;
     }
 
@@ -82,9 +74,8 @@ public class User {
         int result = 1;
 
         result = result * PRIME + Long.hashCode(id);
-        result = result * PRIME + login.hashCode();
-        result = result * PRIME + password.hashCode();
-        result = result * PRIME + email.hashCode();
+        result = result * PRIME + name.hashCode();
+        result = result * PRIME + surname.hashCode();
         result = result * PRIME + role.hashCode();
         return result;
     }
@@ -93,8 +84,8 @@ public class User {
     public String toString() {
         return "User: " +
                 "id= " + id +
-                ", login= " + login +
-                ", email= " + email +
+                ", name= " + name +
+                ", surname= " + surname +
                 ", role= " + role;
     }
 }

@@ -28,7 +28,9 @@ public class GoToCreateNewCardPageCommand implements Command {
 
         try {
             accounts = accountService.getUserAccounts(user);
-            request.setAttribute("accounts", accounts);
+            if (!accounts.isEmpty()) {
+                request.setAttribute("accounts", accounts);
+            }
             request.getRequestDispatcher("WEB-INF/jsp/createNewCardPAge.jsp").forward(request, response);
 
         } catch (ServiceException e) {

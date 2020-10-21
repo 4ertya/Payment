@@ -7,6 +7,8 @@ import by.epamtc.payment.entity.*;
 import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.exception.ServiceException;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
@@ -33,8 +35,16 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void createNewAccount(User user, Currency currency) throws ServiceException {
 
+        Account account = new Account();
+
+        account.setCurrency(currency);
+        account.setStatus(Status.ACTIVE);
+        account.setOpeningDate(new Date());
+        account.setAccountNumber("1111" + currency + "222222222222");
+        account.setUserId(user.getId());
+
         try {
-            accountDAO.createNewAccount(user, currency);
+            accountDAO.createNewAccount(user, account);
         } catch (DAOException e) {
             throw new ServiceException();
         }

@@ -2,8 +2,10 @@ package by.epamtc.payment.entity;
 
 /**
  * This class describes users details with properties
- * <b>name</b>
- * <b>surname</b>,
+ * <b>ruName</b>,
+ * <b>ruSurname</b>,
+ * <b>enName</b>,
+ * <b>enSurname</b>,
  * <b>gender</b>,
  * <b>passport series</b>,
  * <b>passport number</b>,
@@ -16,31 +18,58 @@ package by.epamtc.payment.entity;
 
 public class UserDetail {
 
-    private String name;
-    private String surname;
+    private Long id;
+    private String ruName;
+    private String ruSurname;
+    private String enName;
+    private String enSurname;
     private String gender;
     private String passportSeries;
-    private String passportNumber;
+    private Integer passportNumber;
     private String phoneNumber;
     private String location;
 
     public UserDetail() {
     }
 
-    public String getName() {
-        return name;
+    public Long getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getRuName() {
+        return ruName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setRuName(String ruName) {
+        this.ruName = ruName;
+    }
+
+    public String getRuSurname() {
+        return ruSurname;
+    }
+
+    public void setRuSurname(String ruSurname) {
+        this.ruSurname = ruSurname;
+    }
+
+    public String getEnName() {
+        return enName;
+    }
+
+    public void setEnName(String enName) {
+        this.enName = enName;
+    }
+
+    public String getEnSurname() {
+        return enSurname;
+    }
+
+    public void setEnSurname(String enSurname) {
+        this.enSurname = enSurname;
     }
 
     public String getGender() {
@@ -55,24 +84,24 @@ public class UserDetail {
         return passportSeries;
     }
 
-    public void setPassportSeries(String passport_series) {
-        this.passportSeries = passport_series;
+    public void setPassportSeries(String passportSeries) {
+        this.passportSeries = passportSeries;
     }
 
-    public String getPassportNumber() {
+    public Integer getPassportNumber() {
         return passportNumber;
     }
 
-    public void setPassportNumber(String passport_number) {
-        this.passportNumber = passport_number;
+    public void setPassportNumber(Integer passportNumber) {
+        this.passportNumber = passportNumber;
     }
 
-    public String getPhone_number() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phone_number) {
-        this.phoneNumber = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getLocation() {
@@ -92,8 +121,11 @@ public class UserDetail {
             return false;
         }
         UserDetail userDetail = (UserDetail) obj;
-        return name.equals(userDetail.name) &&
-                surname.equals(userDetail.surname) &&
+        return id.equals(userDetail.id) &&
+                ruName.equals(userDetail.ruName) &&
+                ruSurname.equals(userDetail.ruSurname) &&
+                enName.equals(userDetail.enName) &&
+                enSurname.equals(userDetail.enSurname) &&
                 gender.equals(userDetail.gender) &&
                 passportSeries.equals(userDetail.passportSeries) &&
                 passportNumber.equals(userDetail.passportNumber) &&
@@ -106,8 +138,11 @@ public class UserDetail {
         final int PRIME = 31;
         int result = 1;
 
-        result = result * PRIME + name.hashCode();
-        result = result * PRIME + surname.hashCode();
+        result = result * PRIME + id.hashCode();
+        result = result * PRIME + ruName.hashCode();
+        result = result * PRIME + ruSurname.hashCode();
+        result = result * PRIME + enName.hashCode();
+        result = result * PRIME + enSurname.hashCode();
         result = result * PRIME + gender.hashCode();
         result = result * PRIME + passportSeries.hashCode();
         result = result * PRIME + passportNumber.hashCode();

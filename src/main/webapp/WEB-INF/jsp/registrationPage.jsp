@@ -5,26 +5,34 @@
   Time: 16:26
   To change this template use File | Settings | File Templates.
 --%>
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="local" var="loc"/>
+
+<fmt:message bundle="${loc}" key="local.reg.registration" var="registration"/>
+<fmt:message bundle="${loc}" key="local.auth.login" var="login"/>
+<fmt:message bundle="${loc}" key="local.auth.password" var="password"/>
+<fmt:message bundle="${loc}" key="local.reg.button" var="sign_up"/>
+<fmt:message bundle="${loc}" key="local.reg.error_message" var="error_message"/>
+
 <html>
 <head>
-    <title>Registration</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}../css/style.css">
+    <title>Registration Page</title>
 </head>
 <body>
 <%@include file="header.jsp" %>
 <div class="form auth">
-    <div class="block-text">Registration</div>
-    <form action="Controller" method="post">
-        <input class="input" type="text" name="login" placeholder="Login" autofocus required>
-        <input class="input" type="password" name="password" placeholder="Password" required>
+    <div class="block-text">${registration}</div>
+
+    <form action="MainController" method="post">
+        <input class="input" type="text" name="login" placeholder="${login}" autofocus required>
+        <input class="input" type="password" name="password" placeholder="${password}" required>
         <input class="input" type="email" name="email" placeholder="example@gmail.com" required>
         <input type="hidden" name="command" value="registration">
-        <input class="button" type="submit" value="Sing in">
+        <input class="button" type="submit" value="${sign_up}">
     </form>
 
-    <c:if test="${sessionScope.User_exists !=null}">
-        <div class="error-text">Пользователь с такими данными уже существует!</div>
+    <c:if test="${sessionScope.warning_message !=null}">
+        <div class="error-text">${error_message}</div>
     </c:if>
 
 </div>

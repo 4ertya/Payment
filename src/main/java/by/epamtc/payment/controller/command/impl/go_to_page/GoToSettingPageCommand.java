@@ -1,7 +1,7 @@
 package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
-import by.epamtc.payment.entity.User;
+import by.epamtc.payment.entity.UserData;
 import by.epamtc.payment.entity.UserDetail;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.UserService;
@@ -26,14 +26,14 @@ public class GoToSettingPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        User user;
+        UserData user;
         UserDetail userDetail;
 
-        user = (User) request.getSession().getAttribute(ATTRIBUTE_USER);
+        user = (UserData) request.getSession().getAttribute(ATTRIBUTE_USER);
         long id = user.getId();
 
         try {
-            user = userService.getUser(id);
+            user = userService.getUserData(id);
             userDetail = userService.getUserDetail(id);
 
             request.setAttribute(ATTRIBUTE_USER, user);

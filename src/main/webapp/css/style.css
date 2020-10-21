@@ -477,7 +477,7 @@ footer a {
     background: linear-gradient(45deg, rgba(245, 246, 246, 1) 0%, rgba(219, 220, 226, 1) 21%, rgba(184, 186, 198, 1) 49%, rgba(221, 223, 227, 1) 80%, rgba(245, 246, 246, 1) 100%); /* Градиент для текста */
     -webkit-background-clip: text; /* Обрезаем фон по тексту */
     -webkit-text-fill-color: transparent; /* Прозрачный текст */
-    font-family: "Credit Card", serif;
+    font-family: "AudioWide", serif;
     float: left;
     left: -50px;
     bottom: 3px;

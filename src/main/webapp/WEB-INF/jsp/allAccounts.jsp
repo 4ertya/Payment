@@ -39,7 +39,7 @@
                     <td>${account.balance}</td>
                     <td>${account.currency}</td>
                     <td>${account.openingDate}</td>
-                    <td>${account.user_id}</td>
+                    <td>${account.userId}</td>
                     <td>${account.status}</td>
                         <td>
                             <form action="Controller?command=change_card_status" method="post">

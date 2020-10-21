@@ -26,7 +26,7 @@ public class GoToCardInfoPageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CardInfo cardInfo;
-        int id = Integer.parseInt(request.getParameter(CARD_ID_PARAMETER));
+        long id = Integer.parseInt(request.getParameter(CARD_ID_PARAMETER));
 
         try {
             cardInfo = cardService.getCardInfo(id);

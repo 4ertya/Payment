@@ -5,7 +5,7 @@
   Time: 13:09
   To change this template use File | Settings | File Templates.
 --%>
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
@@ -36,18 +36,18 @@
                     <td>${account.balance}</td>
                     <td>${account.currency}</td>
                     <td>${account.openingDate}</td>
-                    <td>${account.user_id}</td>
+                    <td>${account.userId}</td>
                     <td>${account.status}</td>
                     <c:if test="${sessionScope.user.role eq 'ADMIN'}">
                     <td>
-                        <form action="Controller?command">
+                        <form action="UserController?command">
                             <input type="submit" value="заблокировать">
                         </form>
                     </td>
                     </c:if>
                 </tr>
             </c:forEach>
-            <form action="Controller?command=create_new_account" method="post">
+            <form action="UserController?command=create_new_account" method="post">
                 <tr>
                     <td align="center" colspan="4">
                         <input type="submit" value="Открыть новый счет в">

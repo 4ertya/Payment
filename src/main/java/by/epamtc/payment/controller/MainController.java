@@ -1,7 +1,7 @@
 package by.epamtc.payment.controller;
 
 import by.epamtc.payment.controller.command.Command;
-import by.epamtc.payment.controller.command.CommandProvider;
+import by.epamtc.payment.controller.command.MainCommandProvider;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class Controller extends HttpServlet {
+public class MainController extends HttpServlet {
 
     private final static String COMMAND_NAME = "command";
-    private final CommandProvider provider = CommandProvider.getInstance();
+    private final MainCommandProvider provider = MainCommandProvider.getInstance();
 
-    public Controller() {
+    public MainController() {
         super();
     }
 

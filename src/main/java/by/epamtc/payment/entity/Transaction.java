@@ -9,7 +9,7 @@ public class Transaction {
     private Currency currency;
     private String destination;
     private int cards_id;
-    private TransactionType transaction_types;
+//    private TransactionType transaction_types;
 
     public int getId() {
         return id;
@@ -59,11 +59,11 @@ public class Transaction {
         this.cards_id = cards_id;
     }
 
-    public TransactionType getTransaction_types() {
-        return transaction_types;
-    }
-
-    public void setTransaction_types(TransactionType transaction_types) {
-        this.transaction_types = transaction_types;
-    }
+//    public TransactionType getTransaction_types() {
+//        return transaction_types;
+//    }
+//
+//    public void setTransaction_types(TransactionType transaction_types) {
+//        this.transaction_types = transaction_types;
+//    }
 }

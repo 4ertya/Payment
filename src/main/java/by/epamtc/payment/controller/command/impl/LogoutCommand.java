@@ -11,7 +11,7 @@ import java.io.IOException;
 public class LogoutCommand implements Command {
     private final static Logger log = LogManager.getLogger();
 
-    private final static String GO_TO_LOGIN_PAGE = "Controller?command=to_login_page";
+    private final static String GO_TO_LOGIN_PAGE = "UserController?command=to_login_page";
     private final static String ATTRIBUTE_USER = "user";
 
     @Override

@@ -5,9 +5,7 @@ import by.epamtc.payment.dao.connection.ConnectionPool;
 import by.epamtc.payment.dao.exception.DAOException;
 import by.epamtc.payment.dao.exception.DAOUserExistException;
 import by.epamtc.payment.dao.exception.DAOUserNotFoundException;
-import by.epamtc.payment.entity.Role;
-import by.epamtc.payment.entity.User;
-import by.epamtc.payment.entity.UserDetail;
+import by.epamtc.payment.entity.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,43 +15,42 @@ import java.util.List;
 
 public class SQLUserDAO implements UserDAO {
 
-    private final static Logger log = LogManager.getLogger();
+    private final static Logger log = LogManager.getLogger(SQLUserDAO.class);
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
-    private final static String INSERT_USERS_SQL = "INSERT INTO users (login,password,email,roles_id) " +
-            "VALUES(?,?,?,2);";
-
-    private final static String SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.id, u.login,u.password, u.email, rol.role " +
-            "FROM users u, roles rol " +
+    //language=MySQL
+    private final static String INSERT_USER = "INSERT INTO users " +
+            "SET login=?, password=?, email=?, role_id=(SELECT role_id FROM roles WHERE role=?);";
+    //language=MySQL
+    private final static String SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.user_id, rol.role, ud.en_name, ud.en_surname " +
+            "FROM users u " +
+            "JOIN roles rol USING (role_id) " +
+            "LEFT JOIN user_details ud USING (user_id) " +
             "WHERE login=? " +
-            "AND password=? " +
-            "AND u.roles_id=rol.id;";
-
-    private final static String SELECT_USER_DETAIL_BY_ID = "SELECT * FROM user_details WHERE users_id=?;";
-    private final static String SELECT_USER_BY_ID = "SELECT * FROM users u, roles rol " +
-            "WHERE u.id=? " +
-            "AND u.roles_id=rol.id;";
-    private final static String SELECT_ALL_USERS = "SELECT u.id, u.login, u.email, r.role FROM users u JOIN roles r ON u.roles_id=r.id;";
-
-    private final static String ID_PARAMETER = "id";
-    private final static String LOGIN_PARAMETER = "login";
-    private final static String EMAIL_PARAMETER = "email";
-    private final static String ROLE_PARAMETER = "role";
-    private final static String PASSWORD_PARAMETER = "password";
-    private final static String NAME_PARAMETER = "name";
-    private final static String SURNAME_PARAMETER = "surname";
-    private final static String GENDER_PARAMETER = "gender";
-    private final static String PASSPORT_SERIES_PARAMETER = "passport_series";
-    private final static String PASSPORT_NUMBER_PARAMETER = "passport_number";
-    private final static String PHONE_NUMBER_PARAMETER = "phone_number";
-    private final static String LOCATION_PARAMETER = "location";
+            "AND password=?;";
+    //language=MySQL
+    private final static String SELECT_USER_DETAIL_BY_ID = "SELECT * FROM user_details WHERE user_id=?;";
+    //language=MySQL
+    private final static String SELECT_USER_DATA_BY_ID = "SELECT u.user_id, u.login, u.email, rol.role " +
+            "FROM users u " +
+            "JOIN roles rol USING (role_id) " +
+            "WHERE u.user_id=?;";
+    //language=MySQL
+    private final static String SELECT_ALL_USERS = "SELECT u.user_id, u.login, u.email, r.role " +
+            "FROM users u " +
+            "JOIN roles r USING (role_id);";
+    //language=MySQL
+    private final static String INSERT_ID_IN_USER_DETAILS = "INSERT INTO user_details SET user_id=?;";
 
     @Override
-    public User login(String login, String password) throws DAOException {
+    public User login(AuthorisationData authorisationData) throws DAOUserNotFoundException, DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         User user;
+
+        String login = authorisationData.getLogin();
+        String password = authorisationData.getPassword();
 
         try {
             connection = connectionPool.takeConnection();
@@ -63,14 +60,20 @@ public class SQLUserDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.next()) {
-                log.info("User already exist!");
                 throw new DAOUserNotFoundException();
             }
 
+            long id = Long.parseLong(resultSet.getString(SQLParameter.USER_ID));
+            String name = resultSet.getString(SQLParameter.EN_NAME);
+            String surname = resultSet.getString(SQLParameter.EN_SURNAME);
+            Role role = Role.valueOf(resultSet.getString(SQLParameter.ROLE));
+
             user = new User();
-            user.setId(Integer.parseInt(resultSet.getString(ID_PARAMETER)));
-            user.setLogin(resultSet.getString(LOGIN_PARAMETER));
-            user.setRole(Role.valueOf(resultSet.getString(ROLE_PARAMETER)));
+
+            user.setId(id);
+            user.setName(name);
+            user.setSurname(surname);
+            user.setRole(role);
 
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -81,51 +84,77 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public void registration(User user) throws DAOException {
+    public void registration(RegistrationData registrationData) throws DAOUserExistException, DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        String login = registrationData.getLogin();
+        String password = registrationData.getPassword();
+        String email = registrationData.getEmail();
+        String role = registrationData.getRole().name();
 
         try {
             connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(INSERT_USERS_SQL);
+            preparedStatement = connection.prepareStatement((INSERT_USER), Statement.RETURN_GENERATED_KEYS);
 
-            preparedStatement.setString(1, user.getLogin());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getEmail());
+            preparedStatement.setString(1, login);
+            preparedStatement.setString(2, password);
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(4, role);
             preparedStatement.executeUpdate();
+
+            resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                long id = resultSet.getLong(1);
+
+                preparedStatement = connection.prepareStatement(INSERT_ID_IN_USER_DETAILS);
+                preparedStatement.setLong(1, id);
+                preparedStatement.executeUpdate();
+            }
+
+
         } catch (SQLIntegrityConstraintViolationException ex) {
-            throw new DAOUserExistException(ex);
+            throw new DAOUserExistException();
         } catch (SQLException e) {
-            throw new DAOException("Exception in SQLUserDAO: registration(User user)", e);
+            throw new DAOException("Exception in SQLUserDAO: registration(RegistrationData registrationData)", e);
         } finally {
-            connectionPool.closeConnection(connection, preparedStatement);
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
     }
 
     @Override
-    public User getUser(Long id) throws DAOException {
+    public UserData getUserData(Long id) throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
-        User user = new User();
+        UserData userData = new UserData();
 
         try {
             connection = connectionPool.takeConnection();
-            preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID);
+            preparedStatement = connection.prepareStatement(SELECT_USER_DATA_BY_ID);
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                user.setLogin(resultSet.getString(LOGIN_PARAMETER));
-                user.setEmail(resultSet.getString(EMAIL_PARAMETER));
-                user.setPassword(resultSet.getString(PASSWORD_PARAMETER));
-                user.setRole(Role.valueOf(resultSet.getString(ROLE_PARAMETER)));
+
+            if (!resultSet.next()) {
+                return userData;
             }
+
+            String login = resultSet.getString(SQLParameter.LOGIN);
+            String email = resultSet.getString(SQLParameter.EMAIL);
+            Role role = Role.valueOf(resultSet.getString(SQLParameter.ROLE));
+
+            userData.setId(id);
+            userData.setLogin(login);
+            userData.setEmail(email);
+            userData.setRole(role);
+
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: getUser()", e);
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
-        return user;
+        return userData;
     }
 
     @Override
@@ -141,15 +170,31 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.setLong(1, id);
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                userDetail.setName(resultSet.getString(NAME_PARAMETER));
-                userDetail.setSurname(resultSet.getString(SURNAME_PARAMETER));
-                userDetail.setGender(resultSet.getString(GENDER_PARAMETER));
-                userDetail.setPassportSeries(resultSet.getString(PASSPORT_SERIES_PARAMETER));
-                userDetail.setPassportNumber(resultSet.getString(PASSPORT_NUMBER_PARAMETER));
-                userDetail.setPhoneNumber(resultSet.getString(PHONE_NUMBER_PARAMETER));
-                userDetail.setLocation(resultSet.getString(LOCATION_PARAMETER));
+            if (!resultSet.next()) {
+                return userDetail;
             }
+
+            String ruName = resultSet.getString(SQLParameter.RU_NAME);
+            String ruSurname = resultSet.getString(SQLParameter.RU_SURNAME);
+            String enName = resultSet.getString(SQLParameter.EN_SURNAME);
+            String enSurname = resultSet.getString(SQLParameter.EN_SURNAME);
+            String gender = resultSet.getString(SQLParameter.GENDER);
+            String passportSeries = resultSet.getString(SQLParameter.PASSPORT_SERIES);
+            Integer passportNumber = resultSet.getInt(SQLParameter.PASSPORT_NUMBER);
+            String phoneNumber = resultSet.getString(SQLParameter.PHONE_NUMBER);
+            String location = resultSet.getString(SQLParameter.LOCATION);
+
+            userDetail.setId(id);
+            userDetail.setRuName(ruName);
+            userDetail.setRuSurname(ruSurname);
+            userDetail.setEnName(enName);
+            userDetail.setEnSurname(enSurname);
+            userDetail.setGender(gender);
+            userDetail.setPassportSeries(passportSeries);
+            userDetail.setPassportNumber(passportNumber);
+            userDetail.setPhoneNumber(phoneNumber);
+            userDetail.setLocation(location);
+
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: getUserDetail()", e);
         } finally {
@@ -159,13 +204,13 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public List<User> getAllUsers() throws DAOException {
+    public List<UserData> getAllUsers() throws DAOException {
         Connection connection;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
 
-        List<User> users = new ArrayList<>();
-        User user;
+        List<UserData> users = new ArrayList<>();
+        UserData userData;
 
         try {
             connection = connectionPool.takeConnection();
@@ -173,19 +218,41 @@ public class SQLUserDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                user = new User();
+                long id = resultSet.getLong(SQLParameter.USER_ID);
+                String login = resultSet.getString(SQLParameter.LOGIN);
+                String email = resultSet.getString(SQLParameter.EMAIL);
+                Role role = Role.valueOf(resultSet.getString(SQLParameter.ROLE));
 
-                user.setId(resultSet.getInt("id"));
-                user.setLogin(resultSet.getString("login"));
-                user.setEmail(resultSet.getString("email"));
-                user.setRole(Role.valueOf(resultSet.getString("role")));
+                userData = new UserData();
 
-                users.add(user);
+                userData.setId(id);
+                userData.setLogin(login);
+                userData.setEmail(email);
+                userData.setRole(role);
+
+                users.add(userData);
             }
         } catch (SQLException e) {
             throw new DAOException(e);
         }
         return users;
+    }
+
+    private static class SQLParameter {
+        private final static String USER_ID = "user_id";
+        private final static String LOGIN = "login";
+        private final static String EMAIL = "email";
+        private final static String ROLE = "role";
+        private final static String PASSWORD = "password";
+        private final static String RU_NAME = "ru_name";
+        private final static String RU_SURNAME = "ru_surname";
+        private final static String EN_NAME = "en_name";
+        private final static String EN_SURNAME = "en_surname";
+        private final static String GENDER = "gender";
+        private final static String PASSPORT_SERIES = "passport_series";
+        private final static String PASSPORT_NUMBER = "passport_number";
+        private final static String PHONE_NUMBER = "phone_number";
+        private final static String LOCATION = "location";
     }
 }
 

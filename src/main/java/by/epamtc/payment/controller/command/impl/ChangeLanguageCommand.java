@@ -10,7 +10,7 @@ public class ChangeLanguageCommand implements Command {
 
     private final static String PARAMETER_LOCAL = "local";
     private final static String PARAMETER_PREVIOUS_PAGE = "page";
-    private final static String CONTROLLER_COMMAND = "Controller?command=";
+    private final static String CONTROLLER_COMMAND = "MainController?command=";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {

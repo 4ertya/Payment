@@ -5,21 +5,24 @@
   Time: 14:09
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<fmt:message bundle="${loc}" key="local.about" var="about"/>
+<fmt:message bundle="${loc}" key="local.contacts" var="contacts"/>
+<fmt:message bundle="${loc}" key="local.privacy" var="privacy"/>
 
 <footer>
     <div class="navbar">
         <div class="footer-info">
             <div class="footer-block">
-                <a href="#">О проекте</a>
+                <a href="#">${about}</a>
             </div>
 
             <div class="footer-block">
-                <a href="#">Контакты</a>
+                <a href="#">${contacts}</a>
             </div>
 
             <div class="footer-block">
-                <a href="#">Польтика конфиденциальности</a>
+                <a href="#">${privacy}</a>
             </div>
         </div>
     </div>

@@ -9,10 +9,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="local" var="loc"/>
+
+<fmt:message bundle="${loc}" key="local.card.card_number" var="card_number"/>
+<fmt:message bundle="${loc}" key="local.card.cardholder" var="cardholder"/>
+<fmt:message bundle="${loc}" key="local.card.exp_date" var="exp_date"/>
+<fmt:message bundle="${loc}" key="local.card.account_number" var="account_number"/>
+<fmt:message bundle="${loc}" key="local.card.balance" var="balance"/>
+<fmt:message bundle="${loc}" key="local.card.status" var="status"/>
+
 
 <html>
 <head>
-    <title>Title</title>
+    <title>Card Info Page</title>
 </head>
 <body>
 <jsp:useBean id="cardInfo" class="by.epamtc.payment.entity.CardInfo" scope="request"/>
@@ -20,24 +30,29 @@
 <div class="content">
     <div class="form main">
         <div class="card_info">
-            <c:if test="${cardInfo.paymentSystem.name() eq 'VISA'}">
-                <img src="../../img/visaClassic.jpg" width="250px" height="150px">
-            </c:if>
-            <c:if test="${cardInfo.paymentSystem.name() eq 'MASTERCARD'}">
-                <img src="../../img/masterWorld.jpg" width="250px" height="150px">
-            </c:if>
+
+            <c:choose>
+                <c:when test="${cardInfo.paymentSystem.name() eq 'VISA'}">
+                    <img src="../../img/visaClassic.jpg" width="250px" height="150px" alt="VISA">
+                </c:when>
+                <c:when test="${cardInfo.paymentSystem.name() eq 'MASTERCARD'}">
+                    <img src="../../img/masterWorld.jpg" width="250px" height="150px" alt="MASTERCARD">
+                </c:when>
+            </c:choose>
+
             <br>
+
             <div class="table">
-                <table cellpadding="5">
+                <table cellpadding="5" cellspacing="0" border="1">
                     <tr>
-                        <td>Номер карты</td>
+                        <th>${card_number}</th>
                         <td>${cardInfo.number}</td>
                     </tr>
                     <tr>
-                        <td>Статус</td>
+                        <td>${status}</td>
                         <td>${cardInfo.status}</td>
                         <td>
-                            <form action="Controller?command=change_card_status" method="post">
+                            <form action="UserController?command=block_card" method="post">
                                 <input type="hidden" name="card_number" value="${cardInfo.number}">
                                 <input type="hidden" name="status" value="${cardInfo.status}">
                                 <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
@@ -46,14 +61,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Имя владельца</td>
+                        <td>${cardholder}</td>
                         <td>${cardInfo.ownerName} ${cardInfo.ownerSurname}</td>
                     </tr>
                     <tr>
-                        <td>Срок окончания действия</td>
+                        <td>${exp_date}</td>
                         <td>${cardInfo.expDate}</td>
                         <td>
-                            <form action="Controller?command=new_card" method="post">
+                            <form action="UserController?command=new_card" method="post">
                                 <input type="hidden" name="card_number" value="${cardInfo.number}">
                                 <input type="hidden" name="status" value="${cardInfo.status}">
                                 <input type="submit" value="Перевыпустить">
@@ -61,14 +76,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>Номер счета</td>
-                        <td>${cardInfo.account_number}</td>
+                        <td>${account_number}</td>
+                        <td>${cardInfo.accountNumber}</td>
                     </tr>
                     <tr>
-                        <td>Баланс</td>
+                        <td>${balance}</td>
                         <td>${cardInfo.balance} ${cardInfo.currency}</td>
                         <td>
-                            <button><a href="Controller?command=to_card_transfer_page">Переводы</a></button>
+                            <button><a href="UserController?command=to_card_transfer_page">Переводы</a></button>
                         </td>
                     </tr>
                 </table>

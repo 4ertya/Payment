@@ -1,29 +1,19 @@
 package by.epamtc.payment.entity;
 
 
-
 import java.math.BigDecimal;
-import java.util.Objects;
 
 public class CardInfo extends Card {
-    private String account_number;
-    private BigDecimal balance;
-    private String currency;
 
-    public String getCurrency() {
+    private BigDecimal balance;
+    private Currency currency;
+
+    public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
+    public void setCurrency(Currency currency) {
         this.currency = currency;
-    }
-
-    public String getAccount_number() {
-        return account_number;
-    }
-
-    public void setAccount_number(String account_number) {
-        this.account_number = account_number;
     }
 
     public BigDecimal getBalance() {
@@ -40,12 +30,20 @@ public class CardInfo extends Card {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         CardInfo cardInfo = (CardInfo) o;
-        return Objects.equals(getAccount_number(), cardInfo.getAccount_number()) &&
-                Objects.equals(getBalance(), cardInfo.getBalance());
+        return getBalance().equals(cardInfo.getBalance()) &&
+                getCurrency() == cardInfo.getCurrency();
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getAccount_number(), getBalance());
+        final int PRIME = 31;
+        int result;
+
+        result = super.hashCode();
+        result = result * PRIME + getBalance().hashCode();
+        result = result * PRIME + getCurrency().hashCode();
+
+        return result;
     }
 }

@@ -1,16 +1,24 @@
 package by.epamtc.payment.service;
 
-import by.epamtc.payment.dao.exception.DAOException;
-import by.epamtc.payment.entity.*;
+import by.epamtc.payment.entity.Card;
+import by.epamtc.payment.entity.CardInfo;
+import by.epamtc.payment.entity.PaymentSystem;
+import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.exception.ServiceException;
 
 import java.util.List;
 
 public interface CardService {
 
-    List<Card> getUserCards(User user) throws ServiceException;
-    void changeCardStatus(String cardNumber, Status status) throws ServiceException;
-    CardInfo getCardInfo(int id) throws ServiceException;
-    void createNewCard(User user, int accountId, int term, PaymentSystem system) throws ServiceException;
+    List<Card> getUsersCards(User user) throws ServiceException;
+
+    void blockCard(long card_id) throws ServiceException;
+
+    void unblockCard(long card_id) throws ServiceException;
+
+    CardInfo getCardInfo(long cardId) throws ServiceException;
+
+    void createNewCard(User user, String accountNumber, int term, PaymentSystem paymentSystem) throws ServiceException;
+
     List<Card> getAllCards() throws ServiceException;
 }

@@ -1,30 +1,31 @@
 package by.epamtc.payment.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Account {
 
-    private int id;
+    private long id;
     private String accountNumber;
-    private double balance;
+    private BigDecimal balance;
     private Date openingDate;
-    private String user_id;
+    private long userId;
     private Status status;
     private Currency currency;
 
-    public String getUser_id() {
-        return user_id;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -36,11 +37,11 @@ public class Account {
         this.accountNumber = accountNumber;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

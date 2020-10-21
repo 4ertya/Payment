@@ -5,13 +5,13 @@
   Time: 20:01
   To change this template use File | Settings | File Templates.
 --%>
-<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
-<fmt:message bundle="${loc}" key="local.auth.message" var="message"/>
+
+<fmt:message bundle="${loc}" key="local.auth.authorization" var="authorization"/>
 <fmt:message bundle="${loc}" key="local.auth.login" var="login"/>
 <fmt:message bundle="${loc}" key="local.auth.password" var="password"/>
 <fmt:message bundle="${loc}" key="local.auth.button" var="button"/>
@@ -19,23 +19,25 @@
 
 <html>
 <head>
-    <title>Title</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}../css/style.css">
+    <title>Login Page</title>
 </head>
 <body>
 <%@include file="header.jsp" %>
 <div class="form auth">
+    <div class="block-text">${authorization}</div>
 
-    <div class="block-text">${message}</div>
-
-    <form action="Controller" method="post">
-        <input class="input" type="text" name="login" placeholder=${login} autofocus>
-        <input class="input" type="password" name="password" placeholder=${password}>
+    <form action="MainController" method="post">
+        <label>
+            <input class="input" type="text" name="login" placeholder=${login} autofocus>
+        </label>
+        <label>
+            <input class="input" type="password" name="password" placeholder=${password}>
+        </label>
         <input type="hidden" name="command" value="login">
         <input class="button" type="submit" value=${button}>
     </form>
 
-    <c:if test="${sessionScope.Wrong_Data !=null}">
+    <c:if test="${sessionScope.warning_message !=null}">
         <div class="error-text">${error_message}</div>
     </c:if>
 
