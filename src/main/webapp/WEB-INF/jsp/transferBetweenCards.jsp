@@ -8,6 +8,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://localhost:8080/mytag" prefix="mytag" %>
 <html>
 <head>
     <title>Title</title>
@@ -18,23 +19,25 @@
     <div class="form main">
         <h3><b>Переводы</b></h3>
         <hr>
-        <form action="Controller">
+        <form action="UserController">
             <input type="hidden" name="command" value="transfer">
             <select name="from" class="select">
                 <option selected disabled>с карты...</option>
                 <c:forEach items="${requestScope.cards}" var="card">
                     <c:if test="${card.status eq 'ACTIVE'}">
                         <option value="${card.id}">
-                                ${card.number}
+                            <mytag:cardNumber cardNumber="${card.number}"/> | ${card.balance} ${card.currency}
                         </option>
                     </c:if>
                 </c:forEach>
             </select>
             <select name="to" class="select">
-                <option disabled>на карту...</option>
+                <option selected disabled>на карту...</option>
                 <c:forEach items="${requestScope.cards}" var="card">
                     <c:if test="${card.status eq 'ACTIVE'}">
-                        <option value="${card.id}">${card.number}</option>
+                        <option value="${card.id}">
+                            <mytag:cardNumber cardNumber="${card.number}"/> | ${card.balance} ${card.currency}
+                        </option>
                     </c:if>
                 </c:forEach>
             </select>

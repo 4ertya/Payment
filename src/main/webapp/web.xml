@@ -25,6 +25,15 @@
         <url-pattern>/UserController</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>by.epamtc.payment.controller.filter.AdminFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <url-pattern>/AdminController</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>MainController</servlet-name>
         <servlet-class>by.epamtc.payment.controller.MainController</servlet-class>

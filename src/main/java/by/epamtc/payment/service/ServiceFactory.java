@@ -2,6 +2,7 @@ package by.epamtc.payment.service;
 
 import by.epamtc.payment.service.impl.AccountServiceImpl;
 import by.epamtc.payment.service.impl.CardServiceImpl;
+import by.epamtc.payment.service.impl.TransactionServiceImpl;
 import by.epamtc.payment.service.impl.UserServiceImpl;
 
 public class ServiceFactory {
@@ -15,6 +16,7 @@ public class ServiceFactory {
     private final UserService userService = new UserServiceImpl();
     private final CardService cardService = new CardServiceImpl();
     private final AccountService accountService = new AccountServiceImpl();
+    private final TransactionService transactionService = new TransactionServiceImpl();
 
     private ServiceFactory() {
     }
@@ -29,5 +31,9 @@ public class ServiceFactory {
 
     public AccountService getAccountService() {
         return accountService;
+    }
+
+    public TransactionService getTransactionService() {
+        return transactionService;
     }
 }

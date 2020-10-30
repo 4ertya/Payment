@@ -1,16 +1,23 @@
 package by.epamtc.payment.service;
 
-import by.epamtc.payment.entity.Account;
-import by.epamtc.payment.entity.CardInfo;
-import by.epamtc.payment.entity.Currency;
-import by.epamtc.payment.entity.User;
+import by.epamtc.payment.entity.*;
 import by.epamtc.payment.service.exception.ServiceException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface AccountService {
-    void transfer(CardInfo fromCard, CardInfo toCard, double amount);
+    void transfer(Card fromCard, Card toCard, BigDecimal amount) throws ServiceException;
+
     List<Account> getUserAccounts(User user) throws ServiceException;
+
     void createNewAccount(User user, Currency currency) throws ServiceException;
+
     List<Account> getAllAccounts() throws ServiceException;
+
+    void blockAccount(long accountId) throws ServiceException;
+
+    void unblockAccount(long accountId) throws ServiceException;
+
+    void pay(Transaction transaction) throws ServiceException;
 }

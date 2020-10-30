@@ -24,8 +24,7 @@
                 <th>id</th>
                 <th>number</th>
                 <th>exp_date</th>
-                <th>owner_name</th>
-                <th>owner_surname</th>
+                <th>card holder</th>
                 <th>account</th>
                 <th>status</th>
                 <th>system</th>
@@ -35,26 +34,34 @@
                     <td>${card.id}</td>
                     <td>${card.number}</td>
                     <td>${card.expDate}</td>
-                    <td>${card.ownerName}</td>
-                    <td>${card.ownerSurname}</td>
-                    <td>${card.account}</td>
+                    <td>${card.ownerName} ${card.ownerSurname}</td>
+                    <td>${card.accountNumber}</td>
                     <td>${card.status}</td>
                     <td>${card.paymentSystem}</td>
-                    <c:if test="${sessionScope.user.role eq 'ADMIN'}">
-                        <td>
-                            <form action="Controller?command=change_card_status" method="post">
-                                <input type="hidden" name="card_number" value="${card.number}">
-                                <input type="hidden" name="status" value="${card.status}">
-                                <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
-                                <input type="submit" value="Заблокировать">
-                            </form>
-                        </td>
-                    </c:if>
+
+                    <td>
+                        <c:choose>
+                            <c:when test="${card.status eq 'ACTIVE'}">
+
+                                <form action="UserController?command=block_card&card_id=${card.id}" method="post">
+                                    <input type="submit" value="${block}">
+                                </form>
+
+                            </c:when>
+                            <c:otherwise>
+                                    <form action="AdminController?command=unblock_card" method="post">
+                                        <input type="hidden" name="card_id" value="${card.id}">
+                                        <input type="submit" value="${unblock}">
+                                    </form>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+
                 </tr>
             </c:forEach>
         </table>
     </div>
 </div>
-<%@include file="footer.jsp"%>
+<%@include file="footer.jsp" %>
 </body>
 </html>

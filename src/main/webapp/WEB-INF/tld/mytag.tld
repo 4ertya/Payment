@@ -21,6 +21,18 @@
         </attribute>
     </tag>
 
+    <tag>
+        <name>cardNumber</name>
+        <tag-class>by.epamtc.payment.view.tag.CardNumberTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <name>cardNumber</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
 </taglib>
 
 

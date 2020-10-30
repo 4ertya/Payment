@@ -5,13 +5,18 @@
   Time: 11:42
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<jsp:useBean id="user" class="by.epamtc.payment.entity.User" scope="request"/>
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="local" var="loc"/>
 
 <fmt:message bundle="${loc}" key="local.my_cards" var="my_cards"/>
 <fmt:message bundle="${loc}" key="local.my_accounts" var="my_accounts"/>
 <fmt:message bundle="${loc}" key="local.payments" var="payments"/>
+
+<jsp:useBean id="user" class="by.epamtc.payment.entity.User" scope="request"/>
 
 <html>
 <head>
@@ -26,8 +31,8 @@
 
         <hr>
         <div class="nav-menu">
-            <div class="link"><a href="UserController?command=to_cards_page">${my_cards}</a></div>
-            <div class="link"><a href="UserController?command=to_accounts_page">${my_accounts}</a></div>
+            <div class="link"><a href="UserController?command=to_user_cards_page">${my_cards}</a></div>
+            <div class="link"><a href="UserController?command=to_user_accounts_page">${my_accounts}</a></div>
             <div class="link"><a href="#">${payments}</a></div>
         </div>
 

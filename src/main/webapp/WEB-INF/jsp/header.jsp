@@ -43,15 +43,13 @@
         </div>
         <div class="language">
             <form action="MainController">
-                <input type="hidden" name="command" value="change_language">
                 <input type="hidden" name="local" value="ru">
-                <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
+                <input type="hidden" name="command" value="change_language">
                 <input type="image" src="../../img/ru.png">
             </form>
             <form action="MainController">
-                <input type="hidden" name="command" value="change_language">
                 <input type="hidden" name="local" value="uk">
-                <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
+                <input type="hidden" name="command" value="change_language">
                 <input type="image" src="../../img/uk.png">
             </form>
         </div>
@@ -74,7 +72,7 @@
                             <li><a href="UserController?command=to_user_cards_page">${my_cards}</a></li>
                             <li><a href="UserController?command=to_user_accounts_page">${my_accounts}</a></li>
                             <li><a href="UserController?command=to_card_transfer_page">${transfers}</a></li>
-                            <li><a href="UserController?command=to_card_payment_page">${payments}</a></li>
+                            <li><a href="UserController?command=to_payment_categories_page">${payments}</a></li>
                             <li><a href="UserController?command=to_setting_page">${settings}</a></li>
                             <li><a href="UserController?command=logout">${logout}</a></li>
                         </ul>

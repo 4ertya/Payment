@@ -5,7 +5,7 @@
   Time: 16:54
   To change this template use File | Settings | File Templates.
 --%>
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
@@ -39,16 +39,22 @@
                     <td>${account.balance}</td>
                     <td>${account.currency}</td>
                     <td>${account.openingDate}</td>
-                    <td>${account.userId}</td>
+                    <td>${account.name} ${account.surname}</td>
                     <td>${account.status}</td>
+                    <c:if test="${account.status.name() eq 'ACTIVE'}">
                         <td>
-                            <form action="Controller?command=change_card_status" method="post">
-                                <input type="hidden" name="card_number" value="${card.number}">
-                                <input type="hidden" name="status" value="${card.status}">
-                                <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
+                            <form action="AdminController?command=block_account&account_id=${account.id}" method="post">
                                 <input type="submit" value="Заблокировать">
                             </form>
                         </td>
+                    </c:if>
+                    <c:if test="${account.status.name() eq 'BLOCKED'}">
+                        <td>
+                            <form action="AdminController?command=unblock_account&account_id=${account.id}" method="post">
+                                <input type="submit" value="Разблокировать">
+                            </form>
+                        </td>
+                    </c:if>
                 </tr>
             </c:forEach>
             </tbody>

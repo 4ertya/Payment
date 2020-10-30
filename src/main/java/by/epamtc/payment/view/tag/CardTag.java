@@ -44,18 +44,17 @@ public class CardTag extends TagSupport {
             }
             if (card.getPaymentSystem().name().equals(MASTERCARD_NAME)) {
                 out.write("<div class=\"mastercard\">");
-                out.write("<form action=\"UserController?command=to_card_info_page\" method=\"post\">");
-                out.write("<input type=\"hidden\" name=\"card_id\" value=" + card.getId() + ">");
-                out.write("<button class=\"select_card\" type=\"submit\"></button>");
-                out.write("</form>");
+                out.write("<a class=\"select_card\" " +
+                        "href=\"UserController?command=to_card_info_page&card_id=" + card.getId() + "\"></a>");
                 out.write("<img src=\"" + MASTERCARD_IMG + "\" width=\"250px\" height=\"150px\">");
                 if (card.getStatus().name().equals("BLOCKED")) {
                     out.write("<p class=\"blocked\">Заблокирована</p>");
                 }
                 out.write("<p class=\"card_number\">" + card.getNumber() + "</p>");
                 out.write("<p class=\"card_date\">" +
-                        "<fmt:formatDate pattern=\"MM/yy\" value=\"" + card.getExpDate() + "\"/></p>");
-                out.write("<p class=\"card_holder\">" + card.getOwnerName() + " " + card.getOwnerSurname() + "</p>");
+                        new SimpleDateFormat("MM/yy").format(card.getExpDate()) + "</p>");
+                out.write("<p class=\"card_holder\">" + card.getOwnerName().toUpperCase() + " " +
+                        card.getOwnerSurname().toUpperCase() + "</p>");
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,7 +1,6 @@
 package by.epamtc.payment.service;
 
 import by.epamtc.payment.entity.Card;
-import by.epamtc.payment.entity.CardInfo;
 import by.epamtc.payment.entity.PaymentSystem;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.exception.ServiceException;
@@ -16,9 +15,11 @@ public interface CardService {
 
     void unblockCard(long card_id) throws ServiceException;
 
-    CardInfo getCardInfo(long cardId) throws ServiceException;
+    Card getCardById(long cardId) throws ServiceException;
 
     void createNewCard(User user, String accountNumber, int term, PaymentSystem paymentSystem) throws ServiceException;
 
     List<Card> getAllCards() throws ServiceException;
+
+
 }

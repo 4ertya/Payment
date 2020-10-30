@@ -263,6 +263,13 @@ header {
     color: red;
 }
 
+.good-text {
+    text-align: center;
+    font-family: AudioWide, serif;
+    font-size: 16px;
+    color: greenyellow;
+}
+
 .detail {
     top: 100px;
     width: 500px;
@@ -491,7 +498,7 @@ footer a {
     background: linear-gradient(45deg, rgba(245, 246, 246, 1) 0%, rgba(219, 220, 226, 1) 21%, rgba(184, 186, 198, 1) 49%, rgba(221, 223, 227, 1) 80%, rgba(245, 246, 246, 1) 100%); /* Градиент для текста */
     -webkit-background-clip: text; /* Обрезаем фон по тексту */
     -webkit-text-fill-color: transparent; /* Прозрачный текст */
-    font-family: "Credit Card", serif;
+    font-family: "AudioWide", serif;
     float: left;
     left: -50px;
     bottom: 3px;
@@ -709,4 +716,60 @@ label, a { /*при наведении на стрелки или переклю
 *[dir="rtl"] .select_temp, :root:lang(ar) .select_temp, :root:lang(iw) .select_temp {
     background-position: left .7em top 50%, 0 0;
     padding: .6em .8em .5em 1.4em;
+}
+
+table > input {
+    display: block;
+    margin: 0 auto;
+}
+
+#menuVertical{width:250px;height:auto;}
+#menuVertical ul{
+    display:block;
+    width:100%;
+    height:auto;
+    margin:0px;
+    padding:0px;
+    list-style:none;
+    position:relative;
+}
+#menuVertical ul li{display:block; width:100%; height:auto; position:relative;}
+
+#menuVertical ul li a{
+    position:relative;
+    display:block;
+    width:100%;
+    height:auto;
+    box-sizing:border-box;
+    font-size:13px;
+    text-transform:uppercase;
+    font-weight:bold;
+    color:#FBF7F7;
+    line-height:1.2em;
+    padding:10px 15px;
+    background:#9B111E;
+    border-top:1px solid #236A92;
+    text-decoration:none;
+}
+#menuVertical ul  li:first-child a{border:0px;}
+#menuVertical ul li a:hover, #menuVertical ul li:hover a{
+    background: #dc0505;
+}
+#menuVertical ul li ul{
+    position:absolute;
+    top:0px;
+    left:100%;
+    display:none;
+    width:auto;
+}
+/*******показываем выпадашку при наведении ********/
+#menuVertical ul li:hover ul{display:block;}
+#menuVertical ul li ul li a{
+    white-space:nowrap;
+    text-transform:none;
+    padding:5px 20px;
+}
+#menuVertical ul li ul li a:hover{
+    background:#9B111E;
+    color:#FBF7F7;
 }

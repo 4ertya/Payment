@@ -10,11 +10,13 @@ import java.util.List;
 public interface UserService {
     void registration(RegistrationData registrationData) throws ServiceUserExistException, ServiceException;
 
-    User login(AuthorisationData authorisationData) throws ServiceUserNotFoundException, ServiceException;
+    User login(AuthorizationData authorizationData) throws ServiceUserNotFoundException, ServiceException;
 
     UserData getUserData(Long id) throws ServiceException;
 
     UserDetail getUserDetail(Long id) throws ServiceException;
 
     List<UserData> getAllUsers() throws ServiceException;
+
+    void updateUserDetails(UserDetail userDetail) throws ServiceException;
 }

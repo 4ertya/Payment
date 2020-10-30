@@ -22,11 +22,14 @@ public class MainCommandProvider {
     }
 
     public Command getCommand(String commandName) {
-        Command command;
+        Command command = null;
         CommandName valueName;
 
-        valueName = CommandName.valueOf(commandName.toUpperCase());
-        command = commands.get(valueName);
+        try {
+            valueName = CommandName.valueOf(commandName.toUpperCase());
+            command = commands.get(valueName);
+        } catch (IllegalArgumentException ignored) {
+        }
 
         return command;
     }

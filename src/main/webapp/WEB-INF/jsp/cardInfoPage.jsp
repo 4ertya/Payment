@@ -18,6 +18,8 @@
 <fmt:message bundle="${loc}" key="local.card.account_number" var="account_number"/>
 <fmt:message bundle="${loc}" key="local.card.balance" var="balance"/>
 <fmt:message bundle="${loc}" key="local.card.status" var="status"/>
+<fmt:message bundle="${loc}" key="local.card.block" var="block"/>
+<fmt:message bundle="${loc}" key="local.card.unblock" var="unblock"/>
 
 
 <html>
@@ -25,66 +27,70 @@
     <title>Card Info Page</title>
 </head>
 <body>
-<jsp:useBean id="cardInfo" class="by.epamtc.payment.entity.CardInfo" scope="request"/>
+<jsp:useBean id="card" class="by.epamtc.payment.entity.Card" scope="request"/>
 <%@include file="header.jsp" %>
 <div class="content">
     <div class="form main">
         <div class="card_info">
 
             <c:choose>
-                <c:when test="${cardInfo.paymentSystem.name() eq 'VISA'}">
+                <c:when test="${card.paymentSystem.name() eq 'VISA'}">
                     <img src="../../img/visaClassic.jpg" width="250px" height="150px" alt="VISA">
                 </c:when>
-                <c:when test="${cardInfo.paymentSystem.name() eq 'MASTERCARD'}">
+                <c:when test="${card.paymentSystem.name() eq 'MASTERCARD'}">
                     <img src="../../img/masterWorld.jpg" width="250px" height="150px" alt="MASTERCARD">
                 </c:when>
             </c:choose>
 
-            <br>
+            <hr>
 
             <div class="table">
                 <table cellpadding="5" cellspacing="0" border="1">
                     <tr>
                         <th>${card_number}</th>
-                        <td>${cardInfo.number}</td>
+                        <td>${card.number}</td>
                     </tr>
                     <tr>
-                        <td>${status}</td>
-                        <td>${cardInfo.status}</td>
+                        <th>${status}</th>
+                        <td>${card.status}</td>
+
+                            <c:choose>
+                                <c:when test="${card.status eq 'ACTIVE'}">
                         <td>
-                            <form action="UserController?command=block_card" method="post">
-                                <input type="hidden" name="card_number" value="${cardInfo.number}">
-                                <input type="hidden" name="status" value="${cardInfo.status}">
-                                <input type="hidden" name="page" value="${pageContext.request.getParameter("command")}">
-                                <input type="submit" value="Заблокировать">
-                            </form>
+                                    <form action="UserController?command=block_card&card_id=${card.id}" method="post">
+                                        <input type="submit" value="${block}">
+                                    </form>
                         </td>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:if test="${sessionScope.user.role eq 'ADMIN'}">
+                                        <td>
+                                        <form action="AdminController?command=unblock_card" method="post">
+                                            <input type="hidden" name="card_id" value="${card.id}">
+                                            <input type="submit" value="${unblock}">
+                                        </form>
+                                        </td>
+                                    </c:if>
+                                </c:otherwise>
+                            </c:choose>
+
                     </tr>
                     <tr>
                         <td>${cardholder}</td>
-                        <td>${cardInfo.ownerName} ${cardInfo.ownerSurname}</td>
+                        <td>${card.ownerName} ${card.ownerSurname}</td>
                     </tr>
                     <tr>
                         <td>${exp_date}</td>
-                        <td>${cardInfo.expDate}</td>
-                        <td>
-                            <form action="UserController?command=new_card" method="post">
-                                <input type="hidden" name="card_number" value="${cardInfo.number}">
-                                <input type="hidden" name="status" value="${cardInfo.status}">
-                                <input type="submit" value="Перевыпустить">
-                            </form>
-                        </td>
+                        <td>${card.expDate}</td>
+
                     </tr>
                     <tr>
                         <td>${account_number}</td>
-                        <td>${cardInfo.accountNumber}</td>
+                        <td>${card.accountNumber}</td>
                     </tr>
                     <tr>
                         <td>${balance}</td>
-                        <td>${cardInfo.balance} ${cardInfo.currency}</td>
-                        <td>
-                            <button><a href="UserController?command=to_card_transfer_page">Переводы</a></button>
-                        </td>
+                        <td>${card.balance} ${card.currency}</td>
                     </tr>
                 </table>
             </div>

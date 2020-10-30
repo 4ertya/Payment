@@ -19,6 +19,9 @@
 <div class="content">
     <div class="form main">
         <h3><b>Ваши карты</b></h3>
+        <c:if test="${sessionScope.warning_message!=null}">
+            Карта добавлена!
+        </c:if>
         <hr>
         <div class="all">
             <input checked type="radio" name="respond" id="desktop">

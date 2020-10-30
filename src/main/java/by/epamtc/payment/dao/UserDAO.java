@@ -11,7 +11,7 @@ public interface UserDAO {
 
     void registration(RegistrationData registrationData) throws DAOException, DAOUserExistException;
 
-    User login(AuthorisationData authorisationData) throws DAOUserNotFoundException, DAOException;
+    User login(AuthorizationData authorizationData) throws DAOUserNotFoundException, DAOException;
 
     UserData getUserData(Long id) throws DAOException;
 
@@ -19,4 +19,5 @@ public interface UserDAO {
 
     List<UserData> getAllUsers() throws DAOException;
 
+    void updateUserDetails(UserDetail userDetail) throws DAOException;
 }

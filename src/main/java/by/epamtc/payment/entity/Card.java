@@ -1,32 +1,35 @@
 package by.epamtc.payment.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Card {
-    private long id;
-    private long number;
+    private Long id;
+    private Long number;
     private Date expDate;
     private String ownerName;
     private String ownerSurname;
-    private int pin;
-    private int cvv;
+    private Integer pin;
+    private Integer cvv;
     private String accountNumber;
     private Status status;
     private PaymentSystem paymentSystem;
+    private BigDecimal balance;
+    private Currency currency;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getNumber() {
+    public Long getNumber() {
         return number;
     }
 
-    public void setNumber(long number) {
+    public void setNumber(Long number) {
         this.number = number;
     }
 
@@ -54,19 +57,19 @@ public class Card {
         this.ownerSurname = ownerSurname;
     }
 
-    public int getPin() {
+    public Integer getPin() {
         return pin;
     }
 
-    public void setPin(int pin) {
+    public void setPin(Integer pin) {
         this.pin = pin;
     }
 
-    public int getCvv() {
+    public Integer getCvv() {
         return cvv;
     }
 
-    public void setCvv(int cvv) {
+    public void setCvv(Integer cvv) {
         this.cvv = cvv;
     }
 
@@ -94,6 +97,22 @@ public class Card {
         this.paymentSystem = paymentSystem;
     }
 
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -103,15 +122,10 @@ public class Card {
             return false;
         }
         Card card = (Card) obj;
-        return getPin() == card.getPin() &&
-                getCvv() == card.getCvv() &&
-                getNumber() == card.getNumber() &&
-                getExpDate().equals(card.getExpDate()) &&
+        return getNumber().equals(card.getNumber()) &&
                 getOwnerName().equals(card.getOwnerName()) &&
                 getOwnerSurname().equals(card.getOwnerSurname()) &&
-                getAccountNumber().equals(card.getAccountNumber()) &&
-                getStatus() == card.getStatus() &&
-                getPaymentSystem() == card.getPaymentSystem();
+                getAccountNumber().equals(card.getAccountNumber());
     }
 
     @Override
@@ -119,27 +133,24 @@ public class Card {
         final int PRIME = 31;
         int result = 1;
 
-        result = result * PRIME + Long.valueOf(getNumber()).hashCode();
-        result = result * PRIME + getExpDate().hashCode();
+        result = result * PRIME + getNumber().hashCode();
         result = result * PRIME + getOwnerName().hashCode();
         result = result * PRIME + getOwnerSurname().hashCode();
-        result = result * PRIME + getPin();
-        result = result * PRIME + getCvv();
         result = result * PRIME + getAccountNumber().hashCode();
-        result = result * PRIME + getStatus().hashCode();
-        result = result * PRIME + getPaymentSystem().hashCode();
         return result;
     }
 
     @Override
     public String toString() {
         return "Card:" +
-                "number= " + number +
-                ", expDate= " + expDate +
-                ", ownerName= " + ownerName +
-                ", ownerSurname= " + ownerSurname +
-                ", account= " + accountNumber +
-                ", status= " + status +
-                ", paymentSystem= " + paymentSystem;
+                "number= " + getNumber() +
+                ", expDate= " + getExpDate() +
+                ", ownerName= " + getOwnerName() +
+                ", ownerSurname= " + getOwnerSurname() +
+                ", account= " + getAccountNumber() +
+                ", status= " + getStatus() +
+                ", paymentSystem= " + getPaymentSystem() +
+                ", currency= " + getCurrency() +
+                ", balance= " + getBalance();
     }
 }

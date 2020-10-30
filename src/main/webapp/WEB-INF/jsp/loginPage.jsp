@@ -15,7 +15,12 @@
 <fmt:message bundle="${loc}" key="local.auth.login" var="login"/>
 <fmt:message bundle="${loc}" key="local.auth.password" var="password"/>
 <fmt:message bundle="${loc}" key="local.auth.button" var="button"/>
-<fmt:message bundle="${loc}" key="local.auth.error_message" var="error_message"/>
+<fmt:message bundle="${loc}" key="local.auth.error" var="error"/>
+<fmt:message bundle="${loc}" key="local.auth.incorrect_data" var="incorrect_message"/>
+<fmt:message bundle="${loc}" key="local.auth.wrong_data" var="wrong_data"/>
+<fmt:message bundle="${loc}" key="local.reg.successful" var="successful"/>
+<fmt:message bundle="${loc}" key="local.auth.must_log_in" var="must_log_in"/>
+<fmt:message bundle="${loc}" key="local.auth.must_log_in_as_admin" var="must_log_in_as_admin"/>
 
 <html>
 <head>
@@ -38,7 +43,27 @@
     </form>
 
     <c:if test="${sessionScope.warning_message !=null}">
-        <div class="error-text">${error_message}</div>
+        <c:choose>
+            <c:when test="${sessionScope.warning_message eq 'wrong_data'}">
+                <div class="error-text">${wrong_data}</div>
+            </c:when>
+            <c:when test="${sessionScope.warning_message eq 'login_incorrect_data'}">
+                <div class="error-text">${incorrect_message}</div>
+            </c:when>
+            <c:when test="${sessionScope.warning_message eq 'error'}">
+                <div class="error-text">${error}</div>
+            </c:when>
+            <c:when test="${sessionScope.warning_message eq 'registration_successful'}">
+                <div class="good-text">${successful}</div>
+            </c:when>
+            <c:when test="${sessionScope.warning_message eq 'log_in'}">
+                <div class="error-text">${must_log_in}</div>
+            </c:when>
+            <c:when test="${sessionScope.warning_message eq 'log_in_as_admin'}">
+                <div class="error-text">${must_log_in_as_admin}</div>
+            </c:when>
+        </c:choose>
+
     </c:if>
 
 </div>

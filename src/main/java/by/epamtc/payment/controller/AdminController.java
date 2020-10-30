@@ -27,8 +27,11 @@ public class AdminController extends HttpServlet {
         Command command;
         currentCommand = req.getParameter(COMMAND_NAME);
         command = provider.getCommand(currentCommand);
-
-        command.execute(req, resp);
+        if (command==null){
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }else {
+            command.execute(req, resp);
+        }
 
     }
 }

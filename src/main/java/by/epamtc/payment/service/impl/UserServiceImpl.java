@@ -31,12 +31,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User login(AuthorisationData authorisationData) throws ServiceException, ServiceUserNotFoundException {
+    public User login(AuthorizationData authorizationData) throws ServiceException, ServiceUserNotFoundException {
 
         User user;
 
         try {
-            user = userDAO.login(authorisationData);
+            user = userDAO.login(authorizationData);
         } catch (DAOUserNotFoundException e) {
             throw new ServiceUserNotFoundException();
         } catch (DAOException e) {
@@ -77,5 +77,14 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         return users;
+    }
+
+    @Override
+    public void updateUserDetails(UserDetail userDetail) throws ServiceException {
+        try{
+            userDAO.updateUserDetails(userDetail);
+        }catch (DAOException e){
+            throw new ServiceException(e);
+        }
     }
 }

@@ -1,6 +1,7 @@
-package by.epamtc.payment.controller.command.impl;
+package by.epamtc.payment.controller.command.impl.user;
 
 import by.epamtc.payment.controller.command.Command;
+import by.epamtc.payment.controller.command.impl.admin.UnblockCardCommand;
 import by.epamtc.payment.entity.PaymentSystem;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.CardService;
@@ -20,6 +21,10 @@ public class CreateNewCardCommand implements Command {
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static CardService cardService = serviceFactory.getCardService();
 
+    private final static String WARNING_MESSAGE = "warning_message";
+    private final static String MESSAGE = "Card is created!";
+
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user;
@@ -34,6 +39,7 @@ public class CreateNewCardCommand implements Command {
 
         try {
             cardService.createNewCard(user, accountNumber, term, paymentSystem);
+            request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
             response.sendRedirect("UserController?command=to_user_cards_page");
         } catch (ServiceException e) {
             e.printStackTrace();

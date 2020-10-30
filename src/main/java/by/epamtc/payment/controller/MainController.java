@@ -12,6 +12,8 @@ import java.io.IOException;
 public class MainController extends HttpServlet {
 
     private final static String COMMAND_NAME = "command";
+    private final static String CONTROLLER_NAME = "MainController";
+    private final static String PREVIOUS_REQUEST = "previous_request";
     private final MainCommandProvider provider = MainCommandProvider.getInstance();
 
     public MainController() {
@@ -24,31 +26,19 @@ public class MainController extends HttpServlet {
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        String previousRequest;
         String currentCommand;
         Command command;
         currentCommand = req.getParameter(COMMAND_NAME);
         command = provider.getCommand(currentCommand);
 
-        command.execute(req, resp);
+        if (command==null){
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }else {
+            command.execute(req, resp);
+        }
 
-
-//        StringBuilder stringBuffer = new StringBuilder();
-//        Map map = req.getParameterMap();
-//        for (Object key: map.keySet())
-//        {
-//            String keyStr = (String)key;
-//            stringBuffer.append(keyStr);
-//            stringBuffer.append("=");
-//            String[] value = (String[])map.get(keyStr);
-//            for (String val:value){
-//                stringBuffer.append(val);
-//            }
-//            stringBuffer.append("&");
-//        }
-
-//        String parameters = stringBuffer.toString();
-//        HttpSession session=req.getSession();
-//        session.setAttribute("prev_request_params", parameters);
-
+        previousRequest = CONTROLLER_NAME +"?"+ req.getQueryString();
+        req.getSession().setAttribute(PREVIOUS_REQUEST, previousRequest);
     }
 }

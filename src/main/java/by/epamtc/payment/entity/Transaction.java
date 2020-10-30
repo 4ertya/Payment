@@ -1,21 +1,23 @@
 package by.epamtc.payment.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Transaction {
-    private int id;
+    private Long id;
     private Date date;
-    private double amount;
+    private BigDecimal amount;
     private Currency currency;
     private String destination;
-    private int cards_id;
-//    private TransactionType transaction_types;
+    private Long cardNumber;
+    private Long cardId;
+    private TransactionType transactionType;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -27,11 +29,11 @@ public class Transaction {
         this.date = date;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -51,15 +53,30 @@ public class Transaction {
         this.destination = destination;
     }
 
-    public int getCards_id() {
-        return cards_id;
+    public Long getCardId() {
+        return cardId;
     }
 
-    public void setCards_id(int cards_id) {
-        this.cards_id = cards_id;
+    public void setCardId(Long cards_id) {
+        this.cardId = cards_id;
     }
 
-//    public TransactionType getTransaction_types() {
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public Long getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(Long cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+    //    public TransactionType getTransaction_types() {
 //        return transaction_types;
 //    }
 //

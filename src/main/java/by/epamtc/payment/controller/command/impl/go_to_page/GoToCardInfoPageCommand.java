@@ -1,7 +1,7 @@
 package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
-import by.epamtc.payment.entity.CardInfo;
+import by.epamtc.payment.entity.Card;
 import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.exception.ServiceException;
@@ -19,18 +19,18 @@ public class GoToCardInfoPageCommand implements Command {
     private final static CardService cardService = serviceFactory.getCardService();
 
     private final static String CARD_ID_PARAMETER = "card_id";
-    private final static String CARD_INFO_PARAMETER = "cardInfo";
+    private final static String CARD_PARAMETER = "card";
 
     private final static String CARD_INFO_PAGE = "WEB-INF/jsp/cardInfoPage.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CardInfo cardInfo;
-        long id = Integer.parseInt(request.getParameter(CARD_ID_PARAMETER));
+        Card card;
+        long id = Long.parseLong(request.getParameter(CARD_ID_PARAMETER));
 
         try {
-            cardInfo = cardService.getCardInfo(id);
-            request.setAttribute(CARD_INFO_PARAMETER, cardInfo);
+            card = cardService.getCardById(id);
+            request.setAttribute(CARD_PARAMETER, card);
         } catch (ServiceException e) {
             e.printStackTrace();
             log.error(e);

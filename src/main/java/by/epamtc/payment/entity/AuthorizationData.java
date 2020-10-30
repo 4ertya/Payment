@@ -1,10 +1,10 @@
 package by.epamtc.payment.entity;
 
-public class AuthorisationData {
+public class AuthorizationData {
     private String login;
     private String password;
 
-    public AuthorisationData(){
+    public AuthorizationData(){
     }
 
     public String getLogin() {

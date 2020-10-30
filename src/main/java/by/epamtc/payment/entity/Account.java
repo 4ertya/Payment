@@ -5,27 +5,21 @@ import java.util.Date;
 
 public class Account {
 
-    private long id;
+    private Long id;
     private String accountNumber;
     private BigDecimal balance;
     private Date openingDate;
-    private long userId;
+    private Long userId;
+    private String name;
+    private String surname;
     private Status status;
     private Currency currency;
 
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,5 +61,29 @@ public class Account {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 }

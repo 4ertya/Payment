@@ -1,7 +1,7 @@
 package by.epamtc.payment.controller.command;
 
-import by.epamtc.payment.controller.command.impl.*;
 import by.epamtc.payment.controller.command.impl.go_to_page.*;
+import by.epamtc.payment.controller.command.impl.user.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,20 +19,27 @@ public class UserCommandProvider {
         commands.put(CommandName.TO_CARD_TRANSFER_PAGE, new GoToCardTransferPageCommand());
         commands.put(CommandName.TO_USER_ACCOUNTS_PAGE, new GoToAccountsPageCommand());
         commands.put(CommandName.TO_CREATE_NEW_CARD_PAGE, new GoToCreateNewCardPageCommand());
+        commands.put(CommandName.TO_PAYMENT_CATEGORIES_PAGE, new GoToPaymentCategoriesPage());
+        commands.put(CommandName.TO_PAYMENT_PAGE, new GoToPaymentPage());
 
-        commands.put(CommandName.CHANGE_CARD_STATUS, new UnblockCardCommand());
         commands.put(CommandName.LOGOUT, new LogoutCommand());
         commands.put(CommandName.TRANSFER, new TransferCommand());
         commands.put(CommandName.CREATE_NEW_ACCOUNT, new CreateNewAccountCommand());
         commands.put(CommandName.CREATE_NEW_CARD, new CreateNewCardCommand());
+        commands.put(CommandName.BLOCK_CARD, new BlockCardCommand());
+        commands.put(CommandName.UPDATE_USER_DETAILS, new UpdateUserDetailsCommand());
+        commands.put(CommandName.PAYMENT, new PaymentCommand());
     }
 
     public Command getCommand(String commandName) {
-        Command command;
+        Command command = null;
         CommandName valueName;
 
-        valueName = CommandName.valueOf(commandName.toUpperCase());
-        command = commands.get(valueName);
+        try {
+            valueName = CommandName.valueOf(commandName.toUpperCase());
+            command = commands.get(valueName);
+        } catch (IllegalArgumentException ignored) {
+        }
 
         return command;
     }

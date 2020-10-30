@@ -41,16 +41,20 @@ public class SQLUserDAO implements UserDAO {
             "JOIN roles r USING (role_id);";
     //language=MySQL
     private final static String INSERT_ID_IN_USER_DETAILS = "INSERT INTO user_details SET user_id=?;";
+    //language=MySQL
+    private final static String UPDATE_USER_DETAILS_BY_ID = "UPDATE user_details SET ru_name=?, ru_surname=?, " +
+            "en_name=?, en_surname=?, gender=?, passport_series=?, passport_number=?, phone_number=?, location=? " +
+            "WHERE user_id=?;";
 
     @Override
-    public User login(AuthorisationData authorisationData) throws DAOUserNotFoundException, DAOException {
+    public User login(AuthorizationData authorizationData) throws DAOUserNotFoundException, DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         User user;
 
-        String login = authorisationData.getLogin();
-        String password = authorisationData.getPassword();
+        String login = authorizationData.getLogin();
+        String password = authorizationData.getPassword();
 
         try {
             connection = connectionPool.takeConnection();
@@ -236,6 +240,36 @@ public class SQLUserDAO implements UserDAO {
             throw new DAOException(e);
         }
         return users;
+    }
+
+    @Override
+    public void updateUserDetails(UserDetail userDetail) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
+
+            preparedStatement = connection.prepareStatement(UPDATE_USER_DETAILS_BY_ID);
+
+            preparedStatement.setString(1, userDetail.getRuName());
+            preparedStatement.setString(2, userDetail.getRuSurname());
+            preparedStatement.setString(3, userDetail.getEnName());
+            preparedStatement.setString(4, userDetail.getEnSurname());
+            preparedStatement.setString(5, userDetail.getGender());
+            preparedStatement.setString(6, userDetail.getPassportSeries());
+            preparedStatement.setInt(7, userDetail.getPassportNumber());
+            preparedStatement.setString(8, userDetail.getPhoneNumber());
+            preparedStatement.setString(9, userDetail.getLocation());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement);
+        }
     }
 
     private static class SQLParameter {
