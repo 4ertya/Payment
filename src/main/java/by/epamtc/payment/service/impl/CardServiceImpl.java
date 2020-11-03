@@ -46,6 +46,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public void blockCard(long cardId) throws ServiceException {
         Status status = Status.BLOCKED;
+
         try {
             cardDAO.changeCardStatus(cardId, status);
         } catch (DAOException e) {

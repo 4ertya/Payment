@@ -17,9 +17,13 @@ public class LogoutCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         User user = (User) request.getSession().getAttribute("user");
-        log.info("User "+user.getName()+" "+user.getSurname()+" logged off ");
-        request.getSession().removeAttribute(ATTRIBUTE_USER);
+
+        if (user!=null) {
+            log.info("User " + user.getName() + " " + user.getSurname() + " logged off ");
+            request.getSession().removeAttribute(ATTRIBUTE_USER);
+        }
         response.sendRedirect(GO_TO_LOGIN_PAGE);
     }
 }

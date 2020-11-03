@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class AdminController extends HttpServlet {
     private final static String COMMAND_NAME = "command";
+    private final static String CONTROLLER_NAME = "AdminController";
+    private final static String PREVIOUS_REQUEST = "previous_request";
     private final AdminCommandProvider provider = AdminCommandProvider.getInstance();
 
     public AdminController() {
@@ -25,6 +27,8 @@ public class AdminController extends HttpServlet {
 
         String currentCommand;
         Command command;
+        String previousRequest;
+
         currentCommand = req.getParameter(COMMAND_NAME);
         command = provider.getCommand(currentCommand);
         if (command==null){
@@ -32,7 +36,8 @@ public class AdminController extends HttpServlet {
         }else {
             command.execute(req, resp);
         }
-
+        previousRequest = CONTROLLER_NAME +"?"+ req.getQueryString();
+        req.getSession().setAttribute(PREVIOUS_REQUEST, previousRequest);
     }
 }
 

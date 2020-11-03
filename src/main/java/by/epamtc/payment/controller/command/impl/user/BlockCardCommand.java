@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * --------------------DONE-----------------------
+ */
+
 public class BlockCardCommand implements Command {
     private final static Logger log = LogManager.getLogger(BlockCardCommand.class);
 
@@ -21,13 +25,14 @@ public class BlockCardCommand implements Command {
     private final static String CARD_ID_PARAMETER = "card_id";
 
     private final static String PREVIOUS_REQUEST = "previous_request";
-    private final static String ERROR_PAGE = "WEB-INF/jsp/errorPage.jsp";
     private final static String WARNING_MESSAGE = "warning_message";
     private final static String INVALID_DATA = "invalid_data";
+    private final static String MESSAGE = "card_blocked";
     private final static String ERROR = "error";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         String previousRequest = (String) request.getSession().getAttribute(PREVIOUS_REQUEST);
 
         long cardId = 0;
@@ -37,10 +42,11 @@ public class BlockCardCommand implements Command {
         } catch (NumberFormatException ignored) {
         }
 
-        if (CardTechnicalValidator.blockCardValidation(cardId)) {
+        if (CardTechnicalValidator.cardIdValidation(cardId)) {
 
             try {
                 cardService.blockCard(cardId);
+                request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
                 response.sendRedirect(previousRequest);
             } catch (ServiceException e) {
                 log.error(e);

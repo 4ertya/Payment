@@ -20,12 +20,16 @@ public class SQLUserDAO implements UserDAO {
 
     //language=MySQL
     private final static String INSERT_USER = "INSERT INTO users " +
-            "SET login=?, password=?, email=?, role_id=(SELECT role_id FROM roles WHERE role=?);";
+            "SET login=?, password=?, email=?, " +
+            "role_id=(SELECT role_id FROM roles WHERE role=?), " +
+            "user_status_id=(SELECT user_status_id FROM user_statuses WHERE user_status=?);";
     //language=MySQL
-    private final static String SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.user_id, rol.role, ud.en_name, ud.en_surname " +
+    private final static String SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.user_id, rol.role, ud.en_name, ud.en_surname," +
+            "s.user_status " +
             "FROM users u " +
             "JOIN roles rol USING (role_id) " +
-            "LEFT JOIN user_details ud USING (user_id) " +
+            "JOIN user_details ud USING (user_id) " +
+            "JOIN user_statuses s USING (user_status_id)" +
             "WHERE login=? " +
             "AND password=?;";
     //language=MySQL
@@ -36,14 +40,22 @@ public class SQLUserDAO implements UserDAO {
             "JOIN roles rol USING (role_id) " +
             "WHERE u.user_id=?;";
     //language=MySQL
-    private final static String SELECT_ALL_USERS = "SELECT u.user_id, u.login, u.email, r.role " +
-            "FROM users u " +
-            "JOIN roles r USING (role_id);";
+    private final static String SELECT_ALL_USERS = "SELECT ud.user_id, ud.ru_name, ud.ru_surname, ud.passport_series," +
+            "ud.passport_number, ud.phone_number, u.role_id, u.user_status_id, rol.role, us.user_status " +
+            "FROM user_details ud " +
+            "JOIN users u USING (user_id)" +
+            "JOIN roles rol USING (role_id)" +
+            "JOIN user_statuses us USING (user_status_id);";
     //language=MySQL
     private final static String INSERT_ID_IN_USER_DETAILS = "INSERT INTO user_details SET user_id=?;";
     //language=MySQL
     private final static String UPDATE_USER_DETAILS_BY_ID = "UPDATE user_details SET ru_name=?, ru_surname=?, " +
             "en_name=?, en_surname=?, gender=?, passport_series=?, passport_number=?, phone_number=?, location=? " +
+            "WHERE user_id=?;";
+    //language=MySQL
+    private final static String UPDATE_USER_BY_ID = "UPDATE users  SET " +
+            "user_status_id=(SELECT user_status_id FROM user_statuses WHERE user_status=?), " +
+            "role_id=(SELECT role_id FROM roles WHERE role=?) " +
             "WHERE user_id=?;";
 
     @Override
@@ -71,6 +83,7 @@ public class SQLUserDAO implements UserDAO {
             String name = resultSet.getString(SQLParameter.EN_NAME);
             String surname = resultSet.getString(SQLParameter.EN_SURNAME);
             Role role = Role.valueOf(resultSet.getString(SQLParameter.ROLE));
+            Status status = Status.valueOf(resultSet.getString(SQLParameter.STATUS));
 
             user = new User();
 
@@ -78,6 +91,7 @@ public class SQLUserDAO implements UserDAO {
             user.setName(name);
             user.setSurname(surname);
             user.setRole(role);
+            user.setStatus(status);
 
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -97,15 +111,18 @@ public class SQLUserDAO implements UserDAO {
         String password = registrationData.getPassword();
         String email = registrationData.getEmail();
         String role = registrationData.getRole().name();
+        String status = registrationData.getStatus().name();
 
         try {
             connection = connectionPool.takeConnection();
+            connection.setAutoCommit(false);
             preparedStatement = connection.prepareStatement((INSERT_USER), Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, login);
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, email);
             preparedStatement.setString(4, role);
+            preparedStatement.setString(5, status);
             preparedStatement.executeUpdate();
 
             resultSet = preparedStatement.getGeneratedKeys();
@@ -116,12 +133,20 @@ public class SQLUserDAO implements UserDAO {
                 preparedStatement.setLong(1, id);
                 preparedStatement.executeUpdate();
             }
+            connection.commit();
 
 
         } catch (SQLIntegrityConstraintViolationException ex) {
+            ex.printStackTrace();
             throw new DAOUserExistException();
         } catch (SQLException e) {
-            throw new DAOException("Exception in SQLUserDAO: registration(RegistrationData registrationData)", e);
+            try {
+                connection.rollback();
+                throw new DAOException("Exception in SQLUserDAO: registration(RegistrationData registrationData)", e);
+            } catch (SQLException roll) {
+                log.info("Couldn't roll back connection");
+                throw new DAOException("Exception in SQLUserDAO: registration(RegistrationData registrationData)", e);
+            }
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
@@ -208,13 +233,13 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public List<UserData> getAllUsers() throws DAOException {
+    public List<UserDetail> getAllUsers() throws DAOException {
         Connection connection;
         PreparedStatement preparedStatement;
         ResultSet resultSet;
 
-        List<UserData> users = new ArrayList<>();
-        UserData userData;
+        List<UserDetail> users = new ArrayList<>();
+        UserDetail userDetail;
 
         try {
             connection = connectionPool.takeConnection();
@@ -223,18 +248,27 @@ public class SQLUserDAO implements UserDAO {
 
             while (resultSet.next()) {
                 long id = resultSet.getLong(SQLParameter.USER_ID);
-                String login = resultSet.getString(SQLParameter.LOGIN);
-                String email = resultSet.getString(SQLParameter.EMAIL);
-                Role role = Role.valueOf(resultSet.getString(SQLParameter.ROLE));
+                String ruName = resultSet.getString(SQLParameter.RU_NAME);
+                String ruSurname = resultSet.getString(SQLParameter.RU_SURNAME);
+                String passportSeries = resultSet.getString(SQLParameter.PASSPORT_SERIES);
+                int passportNumber = resultSet.getInt(SQLParameter.PASSPORT_NUMBER);
+                String phoneNumber = resultSet.getString(SQLParameter.PHONE_NUMBER);
+                String role = resultSet.getString(SQLParameter.ROLE);
+                String status = resultSet.getString(SQLParameter.STATUS);
 
-                userData = new UserData();
 
-                userData.setId(id);
-                userData.setLogin(login);
-                userData.setEmail(email);
-                userData.setRole(role);
+                userDetail = new UserDetail();
 
-                users.add(userData);
+                userDetail.setId(id);
+                userDetail.setRuName(ruName);
+                userDetail.setRuSurname(ruSurname);
+                userDetail.setPassportSeries(passportSeries);
+                userDetail.setPassportNumber(passportNumber);
+                userDetail.setPhoneNumber(phoneNumber);
+                userDetail.setRole(Role.valueOf(role));
+                userDetail.setStatus(Status.valueOf(status));
+
+                users.add(userDetail);
             }
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -250,7 +284,6 @@ public class SQLUserDAO implements UserDAO {
         try {
             connection = connectionPool.takeConnection();
             connection.setAutoCommit(false);
-
             preparedStatement = connection.prepareStatement(UPDATE_USER_DETAILS_BY_ID);
 
             preparedStatement.setString(1, userDetail.getRuName());
@@ -262,11 +295,26 @@ public class SQLUserDAO implements UserDAO {
             preparedStatement.setInt(7, userDetail.getPassportNumber());
             preparedStatement.setString(8, userDetail.getPhoneNumber());
             preparedStatement.setString(9, userDetail.getLocation());
+            preparedStatement.setLong(10, userDetail.getId());
 
             preparedStatement.executeUpdate();
 
+            preparedStatement = connection.prepareStatement(UPDATE_USER_BY_ID);
+            preparedStatement.setString(1, userDetail.getStatus().name());
+            preparedStatement.setString(2, userDetail.getRole().name());
+            preparedStatement.setLong(3, userDetail.getId());
+
+            preparedStatement.executeUpdate();
+
+            connection.commit();
         } catch (SQLException e) {
-            throw new DAOException(e);
+            try {
+                connection.rollback();
+                throw new DAOException(e);
+            } catch (SQLException ex) {
+                log.info("Couldn't roll back connection");
+                throw new DAOException(e);
+            }
         } finally {
             connectionPool.closeConnection(connection, preparedStatement);
         }
@@ -287,6 +335,7 @@ public class SQLUserDAO implements UserDAO {
         private final static String PASSPORT_NUMBER = "passport_number";
         private final static String PHONE_NUMBER = "phone_number";
         private final static String LOCATION = "location";
+        private final static String STATUS = "user_status";
     }
 }
 

@@ -5,6 +5,7 @@ public class RegistrationData {
     private String password;
     private String email;
     private Role role;
+    private Status status;
 
     public RegistrationData(){
     }
@@ -39,5 +40,13 @@ public class RegistrationData {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

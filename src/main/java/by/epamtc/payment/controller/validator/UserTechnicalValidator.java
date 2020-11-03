@@ -45,12 +45,22 @@ public class UserTechnicalValidator {
         int passportNumber = userDetails.getPassportNumber();
         String phoneNumber = userDetails.getPhoneNumber();
         String location = userDetails.getLocation();
+        System.out.println(id > 0);
+        System.out.println(ruName != null && ruName.matches(RU_NAMES_REGEXP));
+        System.out.println(ruSurname != null && ruSurname.matches(RU_NAMES_REGEXP));
+        System.out.println(enName != null && enName.matches(EN_NAMES_REGEXP));
+        System.out.println(enSurname != null && enSurname.matches(EN_NAMES_REGEXP));
+        System.out.println((gender == null || gender.matches(GENDER_REGEXP)));
+        System.out.println(passportSeries != null && passportSeries.matches(PASSPORT_SERIES_REGEXP));
+        System.out.println(passportNumber > 999999);
+        System.out.println(phoneNumber != null && phoneNumber.matches(PHONE_NUMBER_REGEXP));
+        System.out.println(location != null);
 
         return id > 0
                 && ruName != null && ruName.matches(RU_NAMES_REGEXP)
                 && ruSurname != null && ruSurname.matches(RU_NAMES_REGEXP)
-                && enName != null && ruName.matches(EN_NAMES_REGEXP)
-                && enSurname != null && ruSurname.matches(EN_NAMES_REGEXP)
+                && enName != null && enName.matches(EN_NAMES_REGEXP)
+                && enSurname != null && enSurname.matches(EN_NAMES_REGEXP)
                 && (gender == null || gender.matches(GENDER_REGEXP))
                 && passportSeries != null && passportSeries.matches(PASSPORT_SERIES_REGEXP)
                 && passportNumber > 999999

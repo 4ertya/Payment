@@ -15,7 +15,7 @@ public class UserCommandProvider {
         commands.put(CommandName.TO_USER_PAGE, new GoToUserPageCommand());
         commands.put(CommandName.TO_USER_CARDS_PAGE, new GoToUserCardsPageCommand());
         commands.put(CommandName.TO_CARD_INFO_PAGE, new GoToCardInfoPageCommand());
-        commands.put(CommandName.TO_SETTING_PAGE, new GoToSettingPageCommand());
+        commands.put(CommandName.TO_SETTINGS_PAGE, new GoToSettingPageCommand());
         commands.put(CommandName.TO_CARD_TRANSFER_PAGE, new GoToCardTransferPageCommand());
         commands.put(CommandName.TO_USER_ACCOUNTS_PAGE, new GoToAccountsPageCommand());
         commands.put(CommandName.TO_CREATE_NEW_CARD_PAGE, new GoToCreateNewCardPageCommand());

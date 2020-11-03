@@ -25,10 +25,14 @@ public class MainCommandProvider {
         Command command = null;
         CommandName valueName;
 
-        try {
-            valueName = CommandName.valueOf(commandName.toUpperCase());
-            command = commands.get(valueName);
-        } catch (IllegalArgumentException ignored) {
+        if (commandName != null) {
+
+            try {
+                valueName = CommandName.valueOf(commandName.toUpperCase());
+                command = commands.get(valueName);
+            } catch (IllegalArgumentException ignored) {
+            }
+
         }
 
         return command;

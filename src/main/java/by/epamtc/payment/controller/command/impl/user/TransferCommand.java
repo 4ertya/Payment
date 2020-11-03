@@ -1,11 +1,12 @@
 package by.epamtc.payment.controller.command.impl.user;
 
 import by.epamtc.payment.controller.command.Command;
-import by.epamtc.payment.entity.Card;
+import by.epamtc.payment.controller.validator.AccountTechnicalValidator;
 import by.epamtc.payment.service.AccountService;
-import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.exception.ServiceException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,16 +14,27 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 public class TransferCommand implements Command {
+    private final static Logger log = LogManager.getLogger(TransferCommand.class);
+
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static AccountService accountService = serviceFactory.getAccountService();
-    private final static CardService cardService = serviceFactory.getCardService();
+
+    private final static String WARNING_MESSAGE = "warning_message";
+    private final static String MESSAGE = "Transfer is made!";
+    private final static String INVALID_DATA = "invalid_data";
+    private final static String ERROR = "error";
+
+    private final static String PREVIOUS_REQUEST = "previous_request";
+
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+        String previousRequest = (String) request.getSession().getAttribute(PREVIOUS_REQUEST);
+
         long cardIdFrom = 0;
         long cardIdTo = 0;
-        BigDecimal amount = new BigDecimal("0.0");
+        BigDecimal amount = null;
 
         try {
             cardIdFrom = Long.parseLong(request.getParameter("from"));
@@ -31,15 +43,22 @@ public class TransferCommand implements Command {
         } catch (NumberFormatException ignored) {
         }
 
-        try {
-            Card fromCard= cardService.getCardById(cardIdFrom);
-            Card toCard = cardService.getCardById(cardIdTo);
-            accountService.transfer(fromCard, toCard, amount);
-        } catch (ServiceException e) {
-            e.printStackTrace();
+        if (AccountTechnicalValidator.transferValidation(cardIdFrom, cardIdTo, amount)) {
+            try {
+                accountService.transfer(cardIdFrom, cardIdTo, amount);
+                request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
+                response.sendRedirect(previousRequest);
+            } catch (ServiceException e) {
+                log.error("Exception in PaymentCommand", e);
+                request.getSession().setAttribute(WARNING_MESSAGE, ERROR);
+                response.sendRedirect(previousRequest);
+            }
+        } else {
+            log.info("Transfer with invalid data");
+            request.getSession().setAttribute(WARNING_MESSAGE, INVALID_DATA);
+            response.sendRedirect(previousRequest);
         }
 
-        response.sendRedirect("UserController?command=to_user_cards_page");
 
     }
 }

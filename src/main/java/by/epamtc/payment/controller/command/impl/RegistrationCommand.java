@@ -4,6 +4,7 @@ import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.controller.validator.UserTechnicalValidator;
 import by.epamtc.payment.entity.RegistrationData;
 import by.epamtc.payment.entity.Role;
+import by.epamtc.payment.entity.Status;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.UserService;
 import by.epamtc.payment.service.exception.ServiceException;
@@ -46,20 +47,15 @@ public class RegistrationCommand implements Command {
         String login = req.getParameter(LOGIN);
         String password = req.getParameter(PASSWORD);
         String email = req.getParameter(EMAIL);
-        String role = req.getParameter(ROLE);
+        Role role = Role.USER;
+        Status status = Status.NEW;
 
-
-        for (Role rol : Role.values()) {
-            if (!(rol.name().equals(role))) {
-                role = Role.USER.name();
-                break;
-            }
-        }
 
         registrationData.setLogin(login);
         registrationData.setPassword(password);
         registrationData.setEmail(email);
-        registrationData.setRole(Role.valueOf(role));
+        registrationData.setRole(role);
+        registrationData.setStatus(status);
 
         if (UserTechnicalValidator.registrationValidation(registrationData)) {
             ServiceFactory factory = ServiceFactory.getInstance();

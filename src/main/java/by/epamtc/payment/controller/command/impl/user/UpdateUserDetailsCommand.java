@@ -2,6 +2,9 @@ package by.epamtc.payment.controller.command.impl.user;
 
 import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.controller.validator.UserTechnicalValidator;
+import by.epamtc.payment.entity.Role;
+import by.epamtc.payment.entity.Status;
+import by.epamtc.payment.entity.User;
 import by.epamtc.payment.entity.UserDetail;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.UserService;
@@ -33,12 +36,17 @@ public class UpdateUserDetailsCommand implements Command {
     private final static String PASSPORT_NUMBER_PARAMETER = "passport_number";
     private final static String PHONE_NUMBER_PARAMETER = "phone_number";
     private final static String LOCATION_PARAMETER = "location";
+    private final static String STATUS = "user_status";
+    private final static String ROLE = "user_role";
 
     private final static String GO_TO_SETTING_PAGE = "UserController?command=to_settings_page";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        Role role;
+        Status status;
 
         long id = 0;
 
@@ -57,6 +65,10 @@ public class UpdateUserDetailsCommand implements Command {
         String enSurname = request.getParameter(EN_SURNAME_PARAMETER);
         String gender = request.getParameter(GENDER_PARAMETER);
         String passportSeries = request.getParameter(PASSPORT_SERIES_PARAMETER);
+        status= Status.valueOf(request.getParameter(STATUS));
+        role= Role.valueOf(request.getParameter(ROLE));
+
+
         int passportNumber = 0;
 
         try {
@@ -66,6 +78,11 @@ public class UpdateUserDetailsCommand implements Command {
 
         if (passportNumber < 0) {
             passportNumber = 0;
+        }
+
+        if (user.getRole()!=Role.ADMIN){
+            role = user.getRole();
+            status = Status.WAITING;
         }
 
         String phoneNumber = request.getParameter(PHONE_NUMBER_PARAMETER);
@@ -83,6 +100,8 @@ public class UpdateUserDetailsCommand implements Command {
         userDetail.setPassportNumber(passportNumber);
         userDetail.setPhoneNumber(phoneNumber);
         userDetail.setLocation(location);
+        userDetail.setRole(role);
+        userDetail.setStatus(status);
 
         if (UserTechnicalValidator.userDetailValidation(userDetail)) {
             ServiceFactory factory = ServiceFactory.getInstance();
@@ -93,13 +112,13 @@ public class UpdateUserDetailsCommand implements Command {
 
                 session.setAttribute(WARNING_MESSAGE, STORED_SUCCESSFUL);
 
-                log.info("User is registered");
+                log.info("Data is saved");
                 response.sendRedirect(GO_TO_SETTING_PAGE);
 
             } catch (ServiceException e) {
                 session.setAttribute(WARNING_MESSAGE, ERROR);
 
-                log.error("Cannot register", e);
+                log.error("Couldn't save", e);
 
                 response.sendRedirect(GO_TO_SETTING_PAGE);
             }

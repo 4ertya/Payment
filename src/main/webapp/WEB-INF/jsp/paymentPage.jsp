@@ -27,7 +27,6 @@
         <hr>
         <form action="UserController">
             <input type="hidden" name="command" value="payment">
-            <input type="hidden" name="type" value="${requestScope.type}">
             <input type="hidden" name="category" value="${requestScope.category}">
             <select name="card_id" class="select">
                 <option selected disabled>с карты...</option>

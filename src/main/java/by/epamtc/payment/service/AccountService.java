@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface AccountService {
-    void transfer(Card fromCard, Card toCard, BigDecimal amount) throws ServiceException;
+    void transfer(long fromCardId, long toCardId, BigDecimal amount) throws ServiceException;
 
     List<Account> getUserAccounts(User user) throws ServiceException;
 

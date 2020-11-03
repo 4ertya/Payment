@@ -1,8 +1,8 @@
 package by.epamtc.payment.service.impl;
 
 import by.epamtc.payment.dao.AccountDAO;
+import by.epamtc.payment.dao.CardDAO;
 import by.epamtc.payment.dao.DAOFactory;
-import by.epamtc.payment.dao.connection.ConnectionPool;
 import by.epamtc.payment.dao.exception.AccountBlockedDAOException;
 import by.epamtc.payment.dao.exception.DAOException;
 import by.epamtc.payment.dao.exception.InsufficientFundsDAOException;
@@ -11,8 +11,6 @@ import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.exception.ServiceException;
 
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -20,11 +18,16 @@ import java.util.concurrent.ThreadLocalRandom;
 public class AccountServiceImpl implements AccountService {
     private final DAOFactory instance = DAOFactory.getInstance();
     private final AccountDAO accountDAO = instance.getAccountDAO();
+    private final CardDAO cardDAO = instance.getCardDAO();
 
 
     @Override
-    public void transfer(Card fromCard, Card toCard, BigDecimal amount) throws ServiceException {
+    public void transfer(long fromCardId, long toCardId, BigDecimal amount) throws ServiceException {
+
+
         try {
+            Card fromCard= cardDAO.getCardById(fromCardId);
+            Card toCard = cardDAO.getCardById(toCardId);
             accountDAO.transfer(fromCard,toCard,amount);
         } catch (DAOException e) {
            throw new ServiceException(e);
@@ -115,7 +118,7 @@ public class AccountServiceImpl implements AccountService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        String result="";
+        String result;
         do {
             int  generateInt = ThreadLocalRandom.current().nextInt(100000,1000000);
             long generateLong = ThreadLocalRandom.current().nextLong(1000000000L,10000000000L);

@@ -27,9 +27,9 @@
             <ul>
                 <li><a>Мобильная связь</a>
                     <ul>
-                        <li><a href="UserController?command=to_payment_page&category=mobile&type=mts">MTS</a></li>
-                        <li><a href="UserController?command=to_payment_page&category=mobile&type=a1">A1</a></li>
-                        <li><a href="UserController?command=to_payment_page&category=mobile&type=life">Life</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=mobile:mts">MTS</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=mobile:a1">A1</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=mobile:life">Life</a></li>
                     </ul>
                 </li>
 

@@ -9,6 +9,7 @@ import java.io.Serializable;
  * <b>password</b>,
  * <b>email</b>,
  * <b>role</b>
+ * <b>status</b>
  *
  * @author Dmitry Palchynski
  * @version 1.0 16 Sep 2020
@@ -20,6 +21,7 @@ public class User implements Serializable {
     private String name;
     private String surname;
     private Role role;
+    private Status status;
 
 
     public User() {
@@ -55,6 +57,14 @@ public class User implements Serializable {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override

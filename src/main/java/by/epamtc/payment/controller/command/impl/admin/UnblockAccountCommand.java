@@ -12,12 +12,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**--------------------DONE-----------------------*/
+
 public class UnblockAccountCommand implements Command {
-    private final static Logger log = LogManager.getLogger(UnblockCardCommand.class);
+    private final static Logger log = LogManager.getLogger(UnblockAccountCommand.class);
 
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static AccountService accountService = serviceFactory.getAccountService();
 
+    private final static String WARNING_MESSAGE = "warning_message";
+    private final static String ERROR = "error";
     private final static String ACCOUNT_ID_PARAMETER = "account_id";
     private final static String PREVIOUS_REQUEST = "previous_request";
 
@@ -31,6 +35,8 @@ public class UnblockAccountCommand implements Command {
             response.sendRedirect(previousRequest);
         } catch (ServiceException e) {
             log.error("Exception in UnblockAccountCommand", e);
+            request.getSession().setAttribute(WARNING_MESSAGE, ERROR);
+            response.sendRedirect(previousRequest);
         }
     }
 }

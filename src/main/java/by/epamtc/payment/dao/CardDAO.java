@@ -12,7 +12,7 @@ public interface CardDAO {
 
     Card getCardById(Long id) throws DAOException;
 
-    void changeCardStatus(long cardNumber, Status status) throws DAOException;
+    void changeCardStatus(long cardId, Status status) throws DAOException;
 
     void createNewCard(User user, Card card) throws DAOException;
 

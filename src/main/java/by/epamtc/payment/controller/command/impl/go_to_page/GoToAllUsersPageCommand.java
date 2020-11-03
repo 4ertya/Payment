@@ -3,6 +3,7 @@ package by.epamtc.payment.controller.command.impl.go_to_page;
 import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.entity.UserData;
+import by.epamtc.payment.entity.UserDetail;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.UserService;
 import by.epamtc.payment.service.exception.ServiceException;
@@ -25,7 +26,7 @@ public class GoToAllUsersPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<UserData> users;
+        List<UserDetail> users;
 
         try {
             users = userService.getAllUsers();

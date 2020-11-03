@@ -26,7 +26,7 @@
                 <th>number</th>
                 <th>balance</th>
                 <th>currency</th>
-                <th>openning_date</th>
+                <th>opening_date</th>
                 <th>user</th>
                 <th>status</th>
             </tr>

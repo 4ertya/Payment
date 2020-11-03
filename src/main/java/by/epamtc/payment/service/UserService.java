@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDetail getUserDetail(Long id) throws ServiceException;
 
-    List<UserData> getAllUsers() throws ServiceException;
+    List<UserDetail> getAllUsers() throws ServiceException;
 
     void updateUserDetails(UserDetail userDetail) throws ServiceException;
 }

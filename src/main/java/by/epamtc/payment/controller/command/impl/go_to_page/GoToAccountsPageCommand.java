@@ -33,6 +33,7 @@ public class GoToAccountsPageCommand implements Command {
         List<Account> accounts;
 
         user = (User) request.getSession().getAttribute(USER_PARAMETER);
+
         try {
             accounts = accountService.getUserAccounts(user);
             request.setAttribute(ACCOUNTS_PARAMETER, accounts);

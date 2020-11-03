@@ -73,7 +73,7 @@
                             <li><a href="UserController?command=to_user_accounts_page">${my_accounts}</a></li>
                             <li><a href="UserController?command=to_card_transfer_page">${transfers}</a></li>
                             <li><a href="UserController?command=to_payment_categories_page">${payments}</a></li>
-                            <li><a href="UserController?command=to_setting_page">${settings}</a></li>
+                            <li><a href="UserController?command=to_settings_page">${settings}</a></li>
                             <li><a href="UserController?command=logout">${logout}</a></li>
                         </ul>
                     </li>

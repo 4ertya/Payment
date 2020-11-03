@@ -68,8 +68,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserData> getAllUsers() throws ServiceException {
-        List<UserData> users;
+    public List<UserDetail> getAllUsers() throws ServiceException {
+        List<UserDetail> users;
 
         try {
             users = userDAO.getAllUsers();

@@ -46,6 +46,7 @@
             <div class="good-text">${account_created}</div>
         </c:when>
     </c:choose>
+</c:if>
         <hr>
         <table cellpadding="5" cellspacing="0" border="1">
 
@@ -63,8 +64,8 @@
                     <td>${account.currency}</td>
                     <td>${account.openingDate}</td>
                     <td>${account.status}</td>
+                    <c:if test="${sessionScope.user.role eq 'ADMIN'}">
                     <c:choose>
-                        <c:if test="${sessionScope.user.role eq 'ADMIN'}">
                             <c:when test="${account.status eq 'ACTIVE'}">
                                 <td>
                                     <form action="AdminController?command=block_account&account_id=${account.id}"
@@ -81,8 +82,8 @@
                                     </form>
                                 </td>
                             </c:otherwise>
-                        </c:if>
                     </c:choose>
+                    </c:if>
                 </tr>
             </c:forEach>
             <form action="UserController?command=create_new_account" method="post">
@@ -91,14 +92,16 @@
                         <input type="submit" value="${new_account}">
                     </td>
                     <td align="center" colspan="3">
-                        <select name="currency" required>
-                            <option disabled selected value=''>${currency}</option>
-                            <option value="USD">USD</option>
-                            <option value="EUR">EUR</option>
-                            <option value="RUB">RUB</option>
-                            <option value="BYN">BYN</option>
-                            <option value="GBP">GBP</option>
-                        </select>
+                        <label>
+                            <select name="currency" required>
+                                <option disabled selected value=''>${currency}</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                                <option value="RUB">RUB</option>
+                                <option value="BYN">BYN</option>
+                                <option value="GBP">GBP</option>
+                            </select>
+                        </label>
                     </td>
                 </tr>
             </form>

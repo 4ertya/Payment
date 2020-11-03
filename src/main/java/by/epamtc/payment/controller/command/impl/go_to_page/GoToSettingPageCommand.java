@@ -1,6 +1,7 @@
 package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
+import by.epamtc.payment.entity.Role;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.entity.UserData;
 import by.epamtc.payment.entity.UserDetail;
@@ -32,8 +33,16 @@ public class GoToSettingPageCommand implements Command {
         UserData userData;
         UserDetail userDetail;
 
+
         user = (User) request.getSession().getAttribute(ATTRIBUTE_USER);
-        long id = user.getId();
+        long id=user.getId();
+
+        if (user.getRole() == Role.ADMIN) {
+            try {
+                id = Long.parseLong(request.getParameter("user_id"));
+            }catch (NumberFormatException ignored ){
+            }
+        }
 
         try {
             userData = userService.getUserData(id);

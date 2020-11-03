@@ -28,6 +28,9 @@ public class UserDetail {
     private Integer passportNumber;
     private String phoneNumber;
     private String location;
+    private String email;
+    private Role role;
+    private Status status;
 
     public UserDetail() {
     }
@@ -110,6 +113,30 @@ public class UserDetail {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     @Override
