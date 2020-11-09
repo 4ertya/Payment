@@ -13,7 +13,7 @@ import java.util.List;
 public class TransactionServiceImpl implements TransactionService {
 
     private final DAOFactory instance = DAOFactory.getInstance();
-    private final TransactionDAO transactionDAO = instance.getSqlTransactionDAO();
+    private final TransactionDAO transactionDAO = instance.getTransactionDAO();
 
     @Override
     public List<Transaction> getFiveLastPayments(Long userId) throws ServiceException {

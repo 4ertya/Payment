@@ -4,6 +4,7 @@ import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.controller.command.impl.admin.UnblockCardCommand;
 import by.epamtc.payment.controller.validator.AccountTechnicalValidator;
 import by.epamtc.payment.entity.Currency;
+import by.epamtc.payment.entity.Status;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.ServiceFactory;
@@ -33,6 +34,8 @@ public class CreateNewAccountCommand implements Command {
     private final static String MESSAGE = "account_created";
     private final static String INVALID_DATA = "invalid_data";
     private final static String ERROR = "error";
+    private final static String ADD_PERSONAL_DATA = "add_data";
+    private final static String WAIT_VERIFICATION = "wait";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,35 +46,48 @@ public class CreateNewAccountCommand implements Command {
         Currency currency = null;
         String currencyName;
 
-        currencyName = request.getParameter("currency");
-        user = (User) request.getSession().getAttribute("user");
+        currencyName = request.getParameter(CURRENCY_PARAMETER);
+        user = (User) request.getSession().getAttribute(USER_ATTRIBUTE);
 
-        if (currencyName != null) {
-
-            try {
-                currency = Currency.valueOf(request.getParameter("currency").toUpperCase());
-            } catch (IllegalArgumentException ignored) {
-            }
-
+        if (user.getStatus() == Status.NEW) {
+            request.getSession().setAttribute(WARNING_MESSAGE, ADD_PERSONAL_DATA);
+            response.sendRedirect("UserController?command=to_settings_page");
         }
 
-        if (AccountTechnicalValidator.crateNewAccountValidation(user, currency)) {
+        if (user.getStatus() == Status.WAITING) {
+            request.getSession().setAttribute(WARNING_MESSAGE, WAIT_VERIFICATION);
+            response.sendRedirect(previousRequest);
+        }
 
-            try {
+        if (user.getStatus() == Status.ACTIVE) {
 
-                accountService.createNewAccount(user, currency);
-                request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
-                response.sendRedirect("UserController?command=to_user_accounts_page");
+            if (currencyName != null) {
 
-            } catch (ServiceException e) {
-                log.error("Exception in CreateNewAccountCommand",e);
-                request.getSession().setAttribute(WARNING_MESSAGE, ERROR);
-                response.sendRedirect(previousRequest);
+                try {
+                    currency = Currency.valueOf(request.getParameter("currency").toUpperCase());
+                } catch (IllegalArgumentException ignored) {
+                }
+
             }
 
-        }else {
-            request.getSession().setAttribute(WARNING_MESSAGE, INVALID_DATA);
-            response.sendRedirect(previousRequest);
+            if (AccountTechnicalValidator.crateNewAccountValidation(user, currency)) {
+
+                try {
+
+                    accountService.createNewAccount(user, currency);
+                    request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
+                    response.sendRedirect("UserController?command=to_user_accounts_page");
+
+                } catch (ServiceException e) {
+                    log.error("Exception in CreateNewAccountCommand", e);
+                    request.getSession().setAttribute(WARNING_MESSAGE, ERROR);
+                    response.sendRedirect(previousRequest);
+                }
+
+            } else {
+                request.getSession().setAttribute(WARNING_MESSAGE, INVALID_DATA);
+                response.sendRedirect(previousRequest);
+            }
         }
     }
 }

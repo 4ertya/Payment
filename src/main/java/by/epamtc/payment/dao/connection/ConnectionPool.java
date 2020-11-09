@@ -88,21 +88,21 @@ public final class ConnectionPool {
     }
 
     public void closeConnection(Connection con, Statement st, ResultSet rs) {
-        if (con!=null) {
+        if (con != null) {
             try {
                 con.close();
             } catch (SQLException e) {
                 log.error("Connection isn't return to the pool.");
             }
         }
-        if (rs!=null) {
+        if (rs != null) {
             try {
                 rs.close();
             } catch (SQLException e) {
                 log.error("ResultSet isn't closed.");
             }
         }
-        if (st!=null) {
+        if (st != null) {
             try {
                 st.close();
             } catch (SQLException e) {
@@ -110,8 +110,9 @@ public final class ConnectionPool {
             }
         }
     }
-    public void closeConnection(Connection con){
-        if (con!=null) {
+
+    public void closeConnection(Connection con) {
+        if (con != null) {
             try {
                 con.close();
             } catch (SQLException e) {
@@ -122,13 +123,13 @@ public final class ConnectionPool {
 
     public void closeConnection(Connection con, Statement st) {
         if (con != null) {
-        try {
-            con.close();
-        } catch (SQLException e) {
-            log.error("Connection isn't return to the pool.");
+            try {
+                con.close();
+            } catch (SQLException e) {
+                log.error("Connection isn't return to the pool.");
+            }
         }
-    }
-        if (st!=null) {
+        if (st != null) {
             try {
                 st.close();
             } catch (SQLException e) {
@@ -170,6 +171,8 @@ public final class ConnectionPool {
 
         @Override
         public void close() throws SQLException {
+            this.setAutoCommit(true);
+
             if (connection.isClosed()) {
                 throw new SQLException("Attempting to close closed connection.");
             }

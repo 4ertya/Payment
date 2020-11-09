@@ -30,7 +30,8 @@ public class DAOFactory {
         return sqlAccountDAO;
     }
 
-    public SQLTransactionDAO getSqlTransactionDAO() {
+    public SQLTransactionDAO getTransactionDAO() {
         return sqlTransactionDAO;
     }
 }
+

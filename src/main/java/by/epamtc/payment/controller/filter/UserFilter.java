@@ -14,6 +14,11 @@ public class UserFilter implements Filter {
 
 
     @Override
+    public void init(FilterConfig filterConfig) {
+
+    }
+
+    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         System.out.println("USER FILTER");
@@ -27,5 +32,10 @@ public class UserFilter implements Filter {
         }else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }

@@ -14,6 +14,10 @@ public class AdminFilter implements Filter {
     private final static String LOG_IN_AS_ADMIN = "log_in_as_admin";
 
     @Override
+    public void init(FilterConfig filterConfig) {
+    }
+
+    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession();
         User user = (User) session.getAttribute("user");
@@ -26,5 +30,9 @@ public class AdminFilter implements Filter {
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
+    }
+
+    @Override
+    public void destroy() {
     }
 }

@@ -27,9 +27,9 @@ public class SQLUserDAO implements UserDAO {
     private final static String SELECT_USER_BY_LOGIN_PASSWORD = "SELECT u.user_id, rol.role, ud.en_name, ud.en_surname," +
             "s.user_status " +
             "FROM users u " +
-            "JOIN roles rol USING (role_id) " +
-            "JOIN user_details ud USING (user_id) " +
-            "JOIN user_statuses s USING (user_status_id)" +
+            "Left JOIN roles rol USING (role_id) " +
+            "Left JOIN user_details ud USING (user_id) " +
+            "LEFT JOIN user_statuses s USING (user_status_id)" +
             "WHERE login=? " +
             "AND password=?;";
     //language=MySQL
@@ -40,8 +40,7 @@ public class SQLUserDAO implements UserDAO {
             "JOIN roles rol USING (role_id) " +
             "WHERE u.user_id=?;";
     //language=MySQL
-    private final static String SELECT_ALL_USERS = "SELECT ud.user_id, ud.ru_name, ud.ru_surname, ud.passport_series," +
-            "ud.passport_number, ud.phone_number, u.role_id, u.user_status_id, rol.role, us.user_status " +
+    private final static String SELECT_ALL_USERS = "SELECT ud.*, u.role_id, u.user_status_id, rol.role, us.user_status " +
             "FROM user_details ud " +
             "JOIN users u USING (user_id)" +
             "JOIN roles rol USING (role_id)" +
@@ -84,6 +83,10 @@ public class SQLUserDAO implements UserDAO {
             String surname = resultSet.getString(SQLParameter.EN_SURNAME);
             Role role = Role.valueOf(resultSet.getString(SQLParameter.ROLE));
             Status status = Status.valueOf(resultSet.getString(SQLParameter.STATUS));
+
+            if (name == null) {
+                name = "User";
+            }
 
             user = new User();
 
@@ -137,7 +140,6 @@ public class SQLUserDAO implements UserDAO {
 
 
         } catch (SQLIntegrityConstraintViolationException ex) {
-            ex.printStackTrace();
             throw new DAOUserExistException();
         } catch (SQLException e) {
             try {
@@ -205,7 +207,7 @@ public class SQLUserDAO implements UserDAO {
 
             String ruName = resultSet.getString(SQLParameter.RU_NAME);
             String ruSurname = resultSet.getString(SQLParameter.RU_SURNAME);
-            String enName = resultSet.getString(SQLParameter.EN_SURNAME);
+            String enName = resultSet.getString(SQLParameter.EN_NAME);
             String enSurname = resultSet.getString(SQLParameter.EN_SURNAME);
             String gender = resultSet.getString(SQLParameter.GENDER);
             String passportSeries = resultSet.getString(SQLParameter.PASSPORT_SERIES);
@@ -234,9 +236,9 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public List<UserDetail> getAllUsers() throws DAOException {
-        Connection connection;
-        PreparedStatement preparedStatement;
-        ResultSet resultSet;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
 
         List<UserDetail> users = new ArrayList<>();
         UserDetail userDetail;
@@ -250,9 +252,13 @@ public class SQLUserDAO implements UserDAO {
                 long id = resultSet.getLong(SQLParameter.USER_ID);
                 String ruName = resultSet.getString(SQLParameter.RU_NAME);
                 String ruSurname = resultSet.getString(SQLParameter.RU_SURNAME);
+                String enName = resultSet.getString(SQLParameter.EN_NAME);
+                String enSurname = resultSet.getString(SQLParameter.EN_SURNAME);
+                String gender = resultSet.getString(SQLParameter.GENDER);
                 String passportSeries = resultSet.getString(SQLParameter.PASSPORT_SERIES);
-                int passportNumber = resultSet.getInt(SQLParameter.PASSPORT_NUMBER);
+                Integer passportNumber = resultSet.getInt(SQLParameter.PASSPORT_NUMBER);
                 String phoneNumber = resultSet.getString(SQLParameter.PHONE_NUMBER);
+                String location = resultSet.getString(SQLParameter.LOCATION);
                 String role = resultSet.getString(SQLParameter.ROLE);
                 String status = resultSet.getString(SQLParameter.STATUS);
 
@@ -262,9 +268,13 @@ public class SQLUserDAO implements UserDAO {
                 userDetail.setId(id);
                 userDetail.setRuName(ruName);
                 userDetail.setRuSurname(ruSurname);
+                userDetail.setEnName(enName);
+                userDetail.setEnSurname(enSurname);
+                userDetail.setGender(gender);
                 userDetail.setPassportSeries(passportSeries);
                 userDetail.setPassportNumber(passportNumber);
                 userDetail.setPhoneNumber(phoneNumber);
+                userDetail.setLocation(location);
                 userDetail.setRole(Role.valueOf(role));
                 userDetail.setStatus(Status.valueOf(status));
 
@@ -272,6 +282,8 @@ public class SQLUserDAO implements UserDAO {
             }
         } catch (SQLException e) {
             throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
         return users;
     }
@@ -325,7 +337,6 @@ public class SQLUserDAO implements UserDAO {
         private final static String LOGIN = "login";
         private final static String EMAIL = "email";
         private final static String ROLE = "role";
-        private final static String PASSWORD = "password";
         private final static String RU_NAME = "ru_name";
         private final static String RU_SURNAME = "ru_surname";
         private final static String EN_NAME = "en_name";

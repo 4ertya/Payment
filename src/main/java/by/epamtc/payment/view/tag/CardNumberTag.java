@@ -1,5 +1,6 @@
 package by.epamtc.payment.view.tag;
 
+
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
@@ -29,10 +30,8 @@ public class CardNumberTag extends TagSupport {
 
     private String reformatCardNumber(Long cardNumber) {
         long lastDigits = cardNumber % 10000;
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("xxxx")
-                .append(" ")
-                .append(lastDigits);
-        return stringBuilder.toString();
+        return "xxxx" +
+                " " +
+                lastDigits;
     }
 }

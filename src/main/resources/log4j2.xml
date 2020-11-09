@@ -9,7 +9,7 @@
         </Console>
 
         <RollingFile name="rollingFile"
-                     fileName="../webapps/Payment_war/logs/log4j2.log"
+                     fileName="../webapps/Payment/logs/log4j2.log"
                      filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
 
             <PatternLayout>

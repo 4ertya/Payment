@@ -177,6 +177,24 @@ public class UserDetail {
         result = result * PRIME + location.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "UserDetail: " +
+                "id= " + id +
+                ", ruName= " + ruName +
+                ", ruSurname= " + ruSurname +
+                ", enName= " + enName +
+                ", enSurname= " + enSurname +
+                ", gender= " + gender +
+                ", passportSeries= " + passportSeries +
+                ", passportNumber= " + passportNumber +
+                ", phoneNumber= " + phoneNumber +
+                ", location= " + location +
+                ", email= " + email +
+                ", role= " + role +
+                ", status= " + status;
+    }
 }
 
 
