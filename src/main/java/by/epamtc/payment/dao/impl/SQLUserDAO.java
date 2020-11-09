@@ -57,6 +57,15 @@ public class SQLUserDAO implements UserDAO {
             "role_id=(SELECT role_id FROM roles WHERE role=?) " +
             "WHERE user_id=?;";
 
+    /**
+     * Returns {@code User} from the database.
+     *
+     * @param authorizationData contains data for the sql query.
+     * @return {@code User} with properties from the database.
+     * @throws DAOUserNotFoundException if there are no records in the database
+     *                                  that match the query parameters
+     * @throws DAOException             if a database access error occurs
+     */
     @Override
     public User login(AuthorizationData authorizationData) throws DAOUserNotFoundException, DAOException {
         Connection connection = null;
@@ -104,6 +113,13 @@ public class SQLUserDAO implements UserDAO {
         return user;
     }
 
+    /**
+     * Adds a new user to the database.
+     *
+     * @param registrationData contains data for the sql query.
+     * @throws DAOUserExistException if entry with this data already exists in the database.
+     * @throws DAOException          if a database access error occurs
+     */
     @Override
     public void registration(RegistrationData registrationData) throws DAOUserExistException, DAOException {
         Connection connection = null;
@@ -142,18 +158,27 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLIntegrityConstraintViolationException ex) {
             throw new DAOUserExistException();
         } catch (SQLException e) {
+
             try {
                 connection.rollback();
-                throw new DAOException("Exception in SQLUserDAO: registration(RegistrationData registrationData)", e);
             } catch (SQLException roll) {
-                log.info("Couldn't roll back connection");
-                throw new DAOException("Exception in SQLUserDAO: registration(RegistrationData registrationData)", e);
+                log.error("Couldn't roll back connection");
             }
+
+            throw new DAOException("Exception in SQLUserDAO: registration(RegistrationData registrationData)", e);
+
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
     }
 
+    /**
+     * Return {@code UserData} from the database.
+     *
+     * @param id user id in the database
+     * @return {@code UserData} with properties from the database.
+     * @throws DAOException if a database access error occurs.
+     */
     @Override
     public UserData getUserData(Long id) throws DAOException {
         Connection connection = null;
@@ -188,6 +213,13 @@ public class SQLUserDAO implements UserDAO {
         return userData;
     }
 
+    /**
+     * Return {@code UserDetail} from the database.
+     *
+     * @param id user id in the database
+     * @return {@code UserDetails} with properties from the database.
+     * @throws DAOException if a database access error occurs.
+     */
     @Override
     public UserDetail getUserDetail(Long id) throws DAOException {
         Connection connection = null;
@@ -205,26 +237,7 @@ public class SQLUserDAO implements UserDAO {
                 return userDetail;
             }
 
-            String ruName = resultSet.getString(SQLParameter.RU_NAME);
-            String ruSurname = resultSet.getString(SQLParameter.RU_SURNAME);
-            String enName = resultSet.getString(SQLParameter.EN_NAME);
-            String enSurname = resultSet.getString(SQLParameter.EN_SURNAME);
-            String gender = resultSet.getString(SQLParameter.GENDER);
-            String passportSeries = resultSet.getString(SQLParameter.PASSPORT_SERIES);
-            Integer passportNumber = resultSet.getInt(SQLParameter.PASSPORT_NUMBER);
-            String phoneNumber = resultSet.getString(SQLParameter.PHONE_NUMBER);
-            String location = resultSet.getString(SQLParameter.LOCATION);
-
-            userDetail.setId(id);
-            userDetail.setRuName(ruName);
-            userDetail.setRuSurname(ruSurname);
-            userDetail.setEnName(enName);
-            userDetail.setEnSurname(enSurname);
-            userDetail.setGender(gender);
-            userDetail.setPassportSeries(passportSeries);
-            userDetail.setPassportNumber(passportNumber);
-            userDetail.setPhoneNumber(phoneNumber);
-            userDetail.setLocation(location);
+            userDetail = fillInUserDetail(resultSet);
 
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: getUserDetail()", e);
@@ -234,8 +247,14 @@ public class SQLUserDAO implements UserDAO {
         return userDetail;
     }
 
+    /**
+     * Return {@code List<UserDetails>} with all {@code UserDetail} from the database.
+     *
+     * @return {@code List<UserDetails>}
+     * @throws DAOException if a database access error occurs.
+     */
     @Override
-    public List<UserDetail> getAllUsers() throws DAOException {
+    public List<UserDetail> getAllUserDetails() throws DAOException {
         Connection connection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -249,35 +268,7 @@ public class SQLUserDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                long id = resultSet.getLong(SQLParameter.USER_ID);
-                String ruName = resultSet.getString(SQLParameter.RU_NAME);
-                String ruSurname = resultSet.getString(SQLParameter.RU_SURNAME);
-                String enName = resultSet.getString(SQLParameter.EN_NAME);
-                String enSurname = resultSet.getString(SQLParameter.EN_SURNAME);
-                String gender = resultSet.getString(SQLParameter.GENDER);
-                String passportSeries = resultSet.getString(SQLParameter.PASSPORT_SERIES);
-                Integer passportNumber = resultSet.getInt(SQLParameter.PASSPORT_NUMBER);
-                String phoneNumber = resultSet.getString(SQLParameter.PHONE_NUMBER);
-                String location = resultSet.getString(SQLParameter.LOCATION);
-                String role = resultSet.getString(SQLParameter.ROLE);
-                String status = resultSet.getString(SQLParameter.STATUS);
-
-
-                userDetail = new UserDetail();
-
-                userDetail.setId(id);
-                userDetail.setRuName(ruName);
-                userDetail.setRuSurname(ruSurname);
-                userDetail.setEnName(enName);
-                userDetail.setEnSurname(enSurname);
-                userDetail.setGender(gender);
-                userDetail.setPassportSeries(passportSeries);
-                userDetail.setPassportNumber(passportNumber);
-                userDetail.setPhoneNumber(phoneNumber);
-                userDetail.setLocation(location);
-                userDetail.setRole(Role.valueOf(role));
-                userDetail.setStatus(Status.valueOf(status));
-
+                userDetail = fillInUserDetail(resultSet);
                 users.add(userDetail);
             }
         } catch (SQLException e) {
@@ -288,6 +279,12 @@ public class SQLUserDAO implements UserDAO {
         return users;
     }
 
+    /**
+     * Update entry in the database.
+     *
+     * @param userDetail contains data for the sql query.
+     * @throws DAOException if a database access error occurs.
+     */
     @Override
     public void updateUserDetails(UserDetail userDetail) throws DAOException {
         Connection connection = null;
@@ -330,6 +327,39 @@ public class SQLUserDAO implements UserDAO {
         } finally {
             connectionPool.closeConnection(connection, preparedStatement);
         }
+    }
+
+    private UserDetail fillInUserDetail(ResultSet resultSet) throws SQLException {
+        long id = resultSet.getLong(SQLParameter.USER_ID);
+        String ruName = resultSet.getString(SQLParameter.RU_NAME);
+        String ruSurname = resultSet.getString(SQLParameter.RU_SURNAME);
+        String enName = resultSet.getString(SQLParameter.EN_NAME);
+        String enSurname = resultSet.getString(SQLParameter.EN_SURNAME);
+        String gender = resultSet.getString(SQLParameter.GENDER);
+        String passportSeries = resultSet.getString(SQLParameter.PASSPORT_SERIES);
+        Integer passportNumber = resultSet.getInt(SQLParameter.PASSPORT_NUMBER);
+        String phoneNumber = resultSet.getString(SQLParameter.PHONE_NUMBER);
+        String location = resultSet.getString(SQLParameter.LOCATION);
+        String role = resultSet.getString(SQLParameter.ROLE);
+        String status = resultSet.getString(SQLParameter.STATUS);
+
+
+        UserDetail userDetail = new UserDetail();
+
+        userDetail.setId(id);
+        userDetail.setRuName(ruName);
+        userDetail.setRuSurname(ruSurname);
+        userDetail.setEnName(enName);
+        userDetail.setEnSurname(enSurname);
+        userDetail.setGender(gender);
+        userDetail.setPassportSeries(passportSeries);
+        userDetail.setPassportNumber(passportNumber);
+        userDetail.setPhoneNumber(phoneNumber);
+        userDetail.setLocation(location);
+        userDetail.setRole(Role.valueOf(role));
+        userDetail.setStatus(Status.valueOf(status));
+
+        return userDetail;
     }
 
     private static class SQLParameter {

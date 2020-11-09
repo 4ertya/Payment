@@ -21,10 +21,10 @@ public class UserFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
-        System.out.println("USER FILTER");
+
         HttpSession session = ((HttpServletRequest) servletRequest).getSession();
         User user = (User) session.getAttribute("user");
-        System.out.println(user);
+        
         if (user == null) {
             session.setAttribute(WARNING_MESSAGE, LOG_IN);
             ((HttpServletResponse) servletResponse).sendRedirect("MainController?command=to_login_page");

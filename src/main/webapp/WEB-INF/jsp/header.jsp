@@ -8,8 +8,8 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<link rel="stylesheet" href="../../css/style.css">
-<script src="../../script/script.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<script type="text/javascript" src="script/script.js"></script>
 
 
 <fmt:setLocale value="${sessionScope.local}"/>
@@ -45,12 +45,12 @@
             <form action="MainController">
                 <input type="hidden" name="local" value="ru">
                 <input type="hidden" name="command" value="change_language">
-                <input type="image" src="../../img/ru.png">
+                <input type="image" src="img/ru.png">
             </form>
             <form action="MainController">
                 <input type="hidden" name="local" value="uk">
                 <input type="hidden" name="command" value="change_language">
-                <input type="image" src="../../img/uk.png">
+                <input type="image" src="img/uk.png">
             </form>
         </div>
 

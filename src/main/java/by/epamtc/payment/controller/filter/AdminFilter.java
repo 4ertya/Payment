@@ -21,7 +21,6 @@ public class AdminFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession();
         User user = (User) session.getAttribute("user");
-        System.out.println("ADMIN FILTER");
 
         if (user == null || user.getRole() != Role.ADMIN) {
             session.setAttribute(WARNING_MESSAGE, LOG_IN_AS_ADMIN);

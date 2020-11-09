@@ -10,8 +10,8 @@ import java.text.SimpleDateFormat;
 
 public class CardTag extends TagSupport {
 
-    private final static String VISA_IMG = "../../img/visaClassic.jpg";
-    private final static String MASTERCARD_IMG = "../../img/masterWorld.jpg";
+    private final static String VISA_IMG = "img/visaClassic.jpg";
+    private final static String MASTERCARD_IMG = "img/masterWorld.jpg";
     private final static String VISA_NAME = "VISA";
     private final static String MASTERCARD_NAME = "MASTERCARD";
     private Card card;

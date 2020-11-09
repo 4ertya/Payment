@@ -29,7 +29,7 @@ public class GoToAllUsersPageCommand implements Command {
         List<UserDetail> users;
 
         try {
-            users = userService.getAllUsers();
+            users = userService.getAllUserDetails();
             request.setAttribute(USERS_PARAMETER, users);
             request.getRequestDispatcher(USERS_PAGE).forward(request, response);
         } catch (ServiceException e) {

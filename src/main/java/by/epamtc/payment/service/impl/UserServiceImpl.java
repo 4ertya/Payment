@@ -68,11 +68,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDetail> getAllUsers() throws ServiceException {
+    public List<UserDetail> getAllUserDetails() throws ServiceException {
         List<UserDetail> users;
 
         try {
-            users = userDAO.getAllUsers();
+            users = userDAO.getAllUserDetails();
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -81,9 +81,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserDetails(UserDetail userDetail) throws ServiceException {
-        try{
+        try {
             userDAO.updateUserDetails(userDetail);
-        }catch (DAOException e){
+        } catch (DAOException e) {
             throw new ServiceException(e);
         }
     }

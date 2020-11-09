@@ -17,7 +17,7 @@ public interface UserDAO {
 
     UserDetail getUserDetail(Long id) throws DAOException;
 
-    List<UserDetail> getAllUsers() throws DAOException;
+    List<UserDetail> getAllUserDetails() throws DAOException;
 
     void updateUserDetails(UserDetail userDetail) throws DAOException;
 }

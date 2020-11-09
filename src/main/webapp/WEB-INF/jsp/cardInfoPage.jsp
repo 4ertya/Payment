@@ -35,10 +35,10 @@
 
             <c:choose>
                 <c:when test="${card.paymentSystem.name() eq 'VISA'}">
-                    <img src="../../img/visaClassic.jpg" width="250px" height="150px" alt="VISA">
+                    <img src="img/visaClassic.jpg" width="250px" height="150px" alt="VISA">
                 </c:when>
                 <c:when test="${card.paymentSystem.name() eq 'MASTERCARD'}">
-                    <img src="../../img/masterWorld.jpg" width="250px" height="150px" alt="MASTERCARD">
+                    <img src="img/masterWorld.jpg" width="250px" height="150px" alt="MASTERCARD">
                 </c:when>
             </c:choose>
 

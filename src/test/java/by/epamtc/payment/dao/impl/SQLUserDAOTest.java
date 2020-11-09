@@ -44,7 +44,6 @@ class SQLUserDAOTest {
         statement.executeUpdate(sql1);
         statement.executeUpdate(sql2);
         connectionPool.closeConnection(connection, statement);
-        System.out.println("бефор");
     }
 
     @Test
@@ -172,7 +171,7 @@ class SQLUserDAOTest {
     }
 
     @Test
-    void getAllUsers() throws DAOException {
+    void getAllUserDetails() throws DAOException {
         SQLUserDAO sqlUserDAO = new SQLUserDAO();
         List<UserDetail> expected = new ArrayList<>();
         UserDetail userDetail = new UserDetail();
@@ -191,7 +190,7 @@ class SQLUserDAOTest {
 
         expected.add(userDetail);
 
-        List<UserDetail> actual = sqlUserDAO.getAllUsers();
+        List<UserDetail> actual = sqlUserDAO.getAllUserDetails();
 
         assertEquals(expected, actual);
     }
