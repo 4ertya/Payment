@@ -6,8 +6,6 @@ import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.exception.ServiceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GoToCardTransferPageCommand implements Command {
-    private final static Logger log = LogManager.getLogger();
+
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static CardService cardService = serviceFactory.getCardService();
 
@@ -36,8 +34,7 @@ public class GoToCardTransferPageCommand implements Command {
             request.setAttribute(CARDS_PARAMETER, cards);
             request.getRequestDispatcher(CARD_TRANSFER_PAGE).forward(request, response);
         } catch (ServiceException e) {
-            log.error("Something wrong", e);
-            // TODO: 04.10.2020 Redirect to Error Page.
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

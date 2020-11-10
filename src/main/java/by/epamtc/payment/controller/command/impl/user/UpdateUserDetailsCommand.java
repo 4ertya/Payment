@@ -112,7 +112,7 @@ public class UpdateUserDetailsCommand implements Command {
 
                 session.setAttribute(WARNING_MESSAGE, STORED_SUCCESSFUL);
 
-                log.info("Data is saved");
+                log.info("Data is saved.\n"+userDetail);
                 response.sendRedirect(GO_TO_SETTING_PAGE);
 
             } catch (ServiceException e) {

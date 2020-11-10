@@ -5,7 +5,7 @@ public class UserData {
     private String login;
     private String email;
     private Role role;
-
+    private Status status;
 
     public UserData() {
     }
@@ -42,6 +42,14 @@ public class UserData {
         this.role = role;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -50,7 +58,8 @@ public class UserData {
         return id == userData.id &&
                 login.equals(userData.login) &&
                 email.equals(userData.email) &&
-                role == userData.role;
+                role == userData.role &&
+                status == userData.status;
     }
 
     @Override
@@ -62,6 +71,7 @@ public class UserData {
         result = result * PRIME + login.hashCode();
         result = result * PRIME + email.hashCode();
         result = result * PRIME + role.hashCode();
+        result = result * PRIME + status.hashCode();
         return result;
     }
 
@@ -71,6 +81,7 @@ public class UserData {
                 "id= " + id +
                 ", login= " + login +
                 ", email= " + email +
-                ", role= " + role;
+                ", role= " + role +
+                ", status= " + status;
     }
 }

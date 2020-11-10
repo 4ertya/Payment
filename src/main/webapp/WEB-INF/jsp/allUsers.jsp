@@ -37,6 +37,11 @@
                     <td>${user.phoneNumber}</td>
                     <td>${user.role}</td>
                     <td>${user.status}</td>
+                    <td>
+                        <form action="UserController?command=to_settings_page&user_id=${user.id}" method="post">
+                        <input type="submit" value="Редактировать">
+                    </form>
+                    </td>
                 </tr>
             </c:forEach>
         </table>

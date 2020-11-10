@@ -44,17 +44,27 @@
         <div class="block-text">Personal data</div>
         <c:if test="${sessionScope.warning_message !=null}">
 
-            <c:choose>
-                <c:when test="${sessionScope.warning_message eq 'incorrect_data'}">
-                    <div class="error-text">${incorrect_data}</div>
-                </c:when>
-                <c:when test="${sessionScope.warning_message eq 'error'}">
-                    <div class="error-text">${error}</div>
-                </c:when>
-                <c:when test="${sessionScope.warning_message eq 'data_stored'}">
-                    <div class="good-text">${stored}.<a href="MainController?command=to_main_page">${home}</a></div>
-                </c:when>
-            </c:choose>
+
+            <div id="openModal" class="modalDialog">
+                <div>
+                    <a href="#openModal" title="Закрыть" class="close">X</a>
+                    <h2>Системное сообщение</h2>
+                    <c:choose>
+                        <c:when test="${sessionScope.warning_message eq 'incorrect_data'}">
+                            <div class="error-text">${incorrect_data}.</div>
+                        </c:when>
+                        <c:when test="${sessionScope.warning_message eq 'error'}">
+                            <div class="error-text">${error}.</div>
+                        </c:when>
+                        <c:when test="${sessionScope.warning_message eq 'data_successful_stored'}">
+                            <div class="good-text">${stored}.</div>
+                        </c:when>
+                    </c:choose>
+                </div>
+
+            </div>
+
+
 
         </c:if>
 
@@ -92,7 +102,7 @@
             ${gender}:
             <label>
                 <input class="inputD" type="text" name="gender" pattern="^[МЖ]{1}$" value="${userDetail.gender}"
-                       title="M | Ж" required>
+                       title="M | Ж" >
             </label>
             ${passport_series}:
             <label>
@@ -113,6 +123,24 @@
             <label>
                 <input class="inputD" type="text" name="location" value="${userDetail.location}" required>
             </label>
+                <c:if test="${sessionScope.user.role eq 'ADMIN'}">
+                <hr>
+                    Role:
+                    <label>
+                        <select name="user_role" class="select">
+                            <option value="ADMIN" ${userData.role eq 'ADMIN' ? 'selected' : ''}>ADMIN</option>
+                            <option value="USER" ${userData.role eq 'USER' ? 'selected' : ''}>USER</option>
+                        </select>
+                    </label>
+                    Status:
+                    <label>
+                        <select name="user_status" class="select">
+                            <option value="NEW" ${userData.status eq 'NEW' ? 'selected' : ''}>NEW</option>
+                            <option value="WAITING" ${userData.status eq 'WAITING' ? 'selected' : ''}>WAITING</option>
+                            <option value="VERIFIED" ${userData.status eq 'VERIFIED' ? 'selected' : ''}>VERIFIED</option>
+                        </select>
+                    </label>
+                </c:if>
             <input type="hidden" name="user_id" value="${userData.id}">
 
             <input class="button" type="submit" value="${save}">

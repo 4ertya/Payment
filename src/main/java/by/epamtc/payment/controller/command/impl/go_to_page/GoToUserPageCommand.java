@@ -6,8 +6,6 @@ import by.epamtc.payment.entity.UserDetail;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.UserService;
 import by.epamtc.payment.service.exception.ServiceException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GoToUserPageCommand implements Command {
-    private final static Logger log = LogManager.getLogger();
+
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static UserService userService = serviceFactory.getUserService();
 
@@ -40,8 +38,7 @@ public class GoToUserPageCommand implements Command {
             request.getRequestDispatcher(USER_PAGE)
                     .forward(request, response);
         } catch (ServiceException e) {
-            log.error("Something wrong", e);
-            // TODO: 03.10.2020 Redirect to Error Page.
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 }

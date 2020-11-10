@@ -33,11 +33,16 @@ public class SQLUserDAO implements UserDAO {
             "WHERE login=? " +
             "AND password=?;";
     //language=MySQL
-    private final static String SELECT_USER_DETAIL_BY_ID = "SELECT * FROM user_details WHERE user_id=?;";
+    private final static String SELECT_USER_DETAIL_BY_ID = "SELECT ud.*, u.role_id, u.user_status_id, rol.role, us.user_status " +
+            "FROM user_details ud " +
+            "JOIN users u USING (user_id)" +
+            "JOIN roles rol USING (role_id)" +
+            "JOIN user_statuses us USING (user_status_id) WHERE user_id=?;";
     //language=MySQL
-    private final static String SELECT_USER_DATA_BY_ID = "SELECT u.user_id, u.login, u.email, rol.role " +
+    private final static String SELECT_USER_DATA_BY_ID = "SELECT u.user_id, u.login, u.email, rol.role, us.user_status " +
             "FROM users u " +
             "JOIN roles rol USING (role_id) " +
+            "JOIN user_statuses us USING (user_status_id) " +
             "WHERE u.user_id=?;";
     //language=MySQL
     private final static String SELECT_ALL_USERS = "SELECT ud.*, u.role_id, u.user_status_id, rol.role, us.user_status " +
@@ -199,11 +204,13 @@ public class SQLUserDAO implements UserDAO {
             String login = resultSet.getString(SQLParameter.LOGIN);
             String email = resultSet.getString(SQLParameter.EMAIL);
             Role role = Role.valueOf(resultSet.getString(SQLParameter.ROLE));
+            Status status = Status.valueOf(resultSet.getString(SQLParameter.STATUS));
 
             userData.setId(id);
             userData.setLogin(login);
             userData.setEmail(email);
             userData.setRole(role);
+            userData.setStatus(status);
 
         } catch (SQLException e) {
             throw new DAOException("Exception in SQLUserDAO: getUser()", e);
