@@ -39,14 +39,15 @@ public class UpdateUserDetailsCommand implements Command {
     private final static String STATUS = "user_status";
     private final static String ROLE = "user_role";
 
+
     private final static String GO_TO_SETTING_PAGE = "UserController?command=to_settings_page";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        Role role;
-        Status status;
+        Role role=null;
+        Status status=null;
 
         long id = 0;
 
@@ -59,14 +60,22 @@ public class UpdateUserDetailsCommand implements Command {
             id = 0;
         }
 
+
         String ruName = request.getParameter(RU_NAME_PARAMETER);
         String ruSurname = request.getParameter(RU_SURNAME_PARAMETER);
         String enName = request.getParameter(EN_NAME_PARAMETER);
         String enSurname = request.getParameter(EN_SURNAME_PARAMETER);
         String gender = request.getParameter(GENDER_PARAMETER);
         String passportSeries = request.getParameter(PASSPORT_SERIES_PARAMETER);
-        status= Status.valueOf(request.getParameter(STATUS));
-        role= Role.valueOf(request.getParameter(ROLE));
+        String statusStr = request.getParameter(STATUS);
+        String roleStr = request.getParameter(STATUS);
+
+        if (statusStr!=null) {
+            status = Status.valueOf(request.getParameter(STATUS));
+        }
+        if (roleStr!=null) {
+            role = Role.valueOf(request.getParameter(ROLE));
+        }
 
 
         int passportNumber = 0;
@@ -80,7 +89,7 @@ public class UpdateUserDetailsCommand implements Command {
             passportNumber = 0;
         }
 
-        if (user.getRole()!=Role.ADMIN){
+        if (user.getRole() != Role.ADMIN) {
             role = user.getRole();
             status = Status.WAITING;
         }
@@ -104,15 +113,15 @@ public class UpdateUserDetailsCommand implements Command {
         userDetail.setStatus(status);
 
         if (UserTechnicalValidator.userDetailValidation(userDetail)) {
-            ServiceFactory factory = ServiceFactory.getInstance();
-            UserService service = factory.getUserService();
+            ServiceFactory serviceFactory = ServiceFactory.getInstance();
+            UserService service = serviceFactory.getUserService();
 
             try {
                 service.updateUserDetails(userDetail);
 
                 session.setAttribute(WARNING_MESSAGE, STORED_SUCCESSFUL);
 
-                log.info("Data is saved.\n"+userDetail);
+                log.info("Data is saved.\n" + userDetail);
                 response.sendRedirect(GO_TO_SETTING_PAGE);
 
             } catch (ServiceException e) {

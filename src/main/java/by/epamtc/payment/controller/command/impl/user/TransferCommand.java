@@ -4,6 +4,8 @@ import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.controller.validator.AccountTechnicalValidator;
 import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.ServiceFactory;
+import by.epamtc.payment.service.exception.AccountBlockedServiceException;
+import by.epamtc.payment.service.exception.InsufficientFundsServiceException;
 import by.epamtc.payment.service.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,9 +22,12 @@ public class TransferCommand implements Command {
     private final static AccountService accountService = serviceFactory.getAccountService();
 
     private final static String WARNING_MESSAGE = "warning_message";
-    private final static String MESSAGE = "Transfer is made!";
+    private final static String MESSAGE = "transfer_made";
     private final static String INVALID_DATA = "invalid_data";
     private final static String ERROR = "error";
+    private final static String ACCOUNT_BLOCKED = "account_blocked";
+    private final static String INSUFFICIENT_FUNDS = "insufficient_funds";
+
 
     private final static String PREVIOUS_REQUEST = "previous_request";
 
@@ -48,6 +53,10 @@ public class TransferCommand implements Command {
                 accountService.transfer(cardIdFrom, cardIdTo, amount);
                 request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
                 response.sendRedirect(previousRequest);
+            } catch (AccountBlockedServiceException ab) {
+                request.getSession().setAttribute(WARNING_MESSAGE, ACCOUNT_BLOCKED);
+            } catch (InsufficientFundsServiceException ife) {
+                request.getSession().setAttribute(WARNING_MESSAGE, INSUFFICIENT_FUNDS);
             } catch (ServiceException e) {
                 log.error("Exception in PaymentCommand", e);
                 request.getSession().setAttribute(WARNING_MESSAGE, ERROR);

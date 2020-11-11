@@ -33,6 +33,18 @@
         </attribute>
     </tag>
 
+    <tag>
+        <name>infoMessage</name>
+        <tag-class>by.epamtc.payment.view.tag.InfoMessageTag</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <name>message</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
 </taglib>
 
 

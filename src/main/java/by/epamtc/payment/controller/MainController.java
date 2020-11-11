@@ -32,13 +32,13 @@ public class MainController extends HttpServlet {
         currentCommand = req.getParameter(COMMAND_NAME);
         command = provider.getCommand(currentCommand);
 
-        if (command==null){
+        if (command == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }else {
+        } else {
             command.execute(req, resp);
         }
 
-        previousRequest = CONTROLLER_NAME +"?"+ req.getQueryString();
+        previousRequest = CONTROLLER_NAME + "?" + req.getQueryString();
         req.getSession().setAttribute(PREVIOUS_REQUEST, previousRequest);
     }
 }

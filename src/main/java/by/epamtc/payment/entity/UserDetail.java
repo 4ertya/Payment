@@ -1,5 +1,7 @@
 package by.epamtc.payment.entity;
 
+import java.io.InputStream;
+
 /**
  * This class describes users details with properties
  * <b>ruName</b>,
@@ -31,6 +33,7 @@ public class UserDetail {
     private String email;
     private Role role;
     private Status status;
+    private InputStream passportScan;
 
     public UserDetail() {
     }
@@ -137,6 +140,14 @@ public class UserDetail {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public InputStream getPassportScan() {
+        return passportScan;
+    }
+
+    public void setPassportScan(InputStream passportScan) {
+        this.passportScan = passportScan;
     }
 
     @Override

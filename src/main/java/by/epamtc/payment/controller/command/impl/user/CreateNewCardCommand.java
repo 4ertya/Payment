@@ -4,6 +4,7 @@ import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.controller.command.impl.admin.UnblockCardCommand;
 import by.epamtc.payment.controller.validator.CardTechnicalValidator;
 import by.epamtc.payment.entity.PaymentSystem;
+import by.epamtc.payment.entity.Status;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.ServiceFactory;
@@ -28,10 +29,11 @@ public class CreateNewCardCommand implements Command {
 
     private final static String PREVIOUS_REQUEST = "previous_request";
     private final static String WARNING_MESSAGE = "warning_message";
-    private final static String MESSAGE = "Card is created!";
-    private final static String INVALID_DATA = "invalid_data";
+    private final static String MESSAGE = "card_created";
+    private final static String INVALID_DATA = "incorrect_data";
     private final static String ERROR = "error";
-
+    private final static String ADD_PERSONAL_DATA = "add_data";
+    private final static String WAIT_VERIFICATION = "wait";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,38 +47,53 @@ public class CreateNewCardCommand implements Command {
         String paymentSystemName;
 
         user = (User) request.getSession().getAttribute("user");
-        accountNumber = request.getParameter("account");
-        paymentSystemName = request.getParameter("system");
 
-        try {
-            term = Integer.parseInt(request.getParameter("term"));
-        } catch (NumberFormatException ignored) {
+        if (user.getStatus() == Status.NEW) {
+            request.getSession().setAttribute(WARNING_MESSAGE, ADD_PERSONAL_DATA);
+            response.sendRedirect("UserController?command=to_settings_page");
         }
 
-        if (paymentSystemName != null) {
-            try {
-                paymentSystem = PaymentSystem.valueOf(paymentSystemName);
-            } catch (IllegalArgumentException ignored) {
-            }
-        }
-
-        if (CardTechnicalValidator.crateNewCardValidation(user, accountNumber, term, paymentSystem)) {
-
-            try {
-
-                cardService.createNewCard(user, accountNumber, term, paymentSystem);
-                request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
-                response.sendRedirect(previousRequest);
-
-            } catch (ServiceException e) {
-                log.error("Exception in CreateNewCardCommand", e);
-                request.getSession().setAttribute(WARNING_MESSAGE, ERROR);
-                response.sendRedirect(previousRequest);
-            }
-
-        } else {
-            request.getSession().setAttribute(WARNING_MESSAGE, INVALID_DATA);
+        if (user.getStatus() == Status.WAITING) {
+            request.getSession().setAttribute(WARNING_MESSAGE, WAIT_VERIFICATION);
             response.sendRedirect(previousRequest);
+        }
+
+        if (user.getStatus() == Status.VERIFIED) {
+
+
+            accountNumber = request.getParameter("account");
+            paymentSystemName = request.getParameter("system");
+
+            try {
+                term = Integer.parseInt(request.getParameter("term"));
+            } catch (NumberFormatException ignored) {
+            }
+
+            if (paymentSystemName != null) {
+                try {
+                    paymentSystem = PaymentSystem.valueOf(paymentSystemName);
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+
+            if (CardTechnicalValidator.crateNewCardValidation(user, accountNumber, term, paymentSystem)) {
+
+                try {
+
+                    cardService.createNewCard(user, accountNumber, term, paymentSystem);
+                    request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
+                    response.sendRedirect(previousRequest);
+
+                } catch (ServiceException e) {
+                    log.error("Exception in CreateNewCardCommand", e);
+                    request.getSession().setAttribute(WARNING_MESSAGE, ERROR);
+                    response.sendRedirect(previousRequest);
+                }
+
+            } else {
+                request.getSession().setAttribute(WARNING_MESSAGE, INVALID_DATA);
+                response.sendRedirect(previousRequest);
+            }
         }
     }
 }

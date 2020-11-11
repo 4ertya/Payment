@@ -18,7 +18,7 @@
     <div class="form main">
         <h3><b>Пользователи</b></h3>
         <hr>
-        <table cellpadding="5" cellspacing="0" border="1">
+        <table cellpadding="5" cellspacing="0" border="1" class="table_sort">
             <tr>
                 <th>id</th>
                 <th>name</th>

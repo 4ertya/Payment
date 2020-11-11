@@ -83,4 +83,18 @@ public class Transaction {
 //    public void setTransaction_types(TransactionType transaction_types) {
 //        this.transaction_types = transaction_types;
 //    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", date=" + date +
+                ", amount=" + amount +
+                ", currency=" + currency +
+                ", destination='" + destination + '\'' +
+                ", cardNumber=" + cardNumber +
+                ", cardId=" + cardId +
+                ", transactionType=" + transactionType +
+                '}';
+    }
 }

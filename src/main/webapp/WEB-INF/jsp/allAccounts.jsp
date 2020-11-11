@@ -8,6 +8,12 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="local" var="loc"/>
+
+<fmt:message bundle="${loc}" key="local.card.block" var="block"/>
+<fmt:message bundle="${loc}" key="local.card.unblock" var="unblock"/>
 <html>
 <head>
     <title>Title</title>
@@ -18,8 +24,8 @@
     <div class="form main">
         <h3><b>Счета</b></h3>
         <hr>
+
         <table cellpadding="5" cellspacing="0" border="1" class="table_sort">
-            <caption>Счета</caption>
             <thead>
             <tr>
                 <th>id</th>
@@ -44,14 +50,14 @@
                     <c:if test="${account.status.name() eq 'ACTIVE'}">
                         <td>
                             <form action="AdminController?command=block_account&account_id=${account.id}" method="post">
-                                <input type="submit" value="Заблокировать">
+                                <input type="submit" value="${block}">
                             </form>
                         </td>
                     </c:if>
                     <c:if test="${account.status.name() eq 'BLOCKED'}">
                         <td>
                             <form action="AdminController?command=unblock_account&account_id=${account.id}" method="post">
-                                <input type="submit" value="Разблокировать">
+                                <input type="submit" value="${unblock}">
                             </form>
                         </td>
                     </c:if>

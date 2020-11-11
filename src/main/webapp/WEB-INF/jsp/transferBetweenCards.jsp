@@ -9,6 +9,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://localhost:8080/mytag" prefix="mytag" %>
+
+<fmt:setLocale value="${sessionScope.local}"/>
+<fmt:setBundle basename="local" var="loc"/>
+
+<fmt:message bundle="${loc}" key="local.auth.error" var="error"/>
+<fmt:message bundle="${loc}" key="local.auth.incorrect_data" var="incorrect_data"/>
+<fmt:message bundle="${loc}" key="local.transactions.transfer_made" var="transfer_made"/>
+<fmt:message bundle="${loc}" key="local.transactions.account_blocked" var="account_blocked"/>
+<fmt:message bundle="${loc}" key="local.transactions.insufficient_funds" var="insufficient_funds"/>
 <html>
 <head>
     <title>Title</title>
@@ -19,29 +28,46 @@
     <div class="form main">
         <h3><b>Переводы</b></h3>
         <hr>
+        <c:if test="${sessionScope.warning_message!=null}">
+            <c:choose>
+                <c:when test="${sessionScope.warning_message eq 'incorrect_data'}">
+                    <mytag:infoMessage message="${incorrect_data}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'error'}">
+                    <mytag:infoMessage message="${error}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'transfer_made'}">
+                    <mytag:infoMessage message="${transfer_made}"/>
+                </c:when>
+            </c:choose>
+        </c:if>
         <form action="UserController">
             <input type="hidden" name="command" value="transfer">
-            <select name="from" class="select">
-                <option selected disabled>с карты...</option>
-                <c:forEach items="${requestScope.cards}" var="card">
-                    <c:if test="${card.status eq 'ACTIVE'}">
+            <label>
+                <select name="from" class="select">
+                    <option selected disabled>с карты...</option>
+                    <c:forEach items="${requestScope.cards}" var="card">
+                        <c:if test="${card.status eq 'ACTIVE'}">
+                            <option value="${card.id}">
+                                <mytag:cardNumber cardNumber="${card.number}"/> | ${card.balance} ${card.currency}
+                            </option>
+                        </c:if>
+                    </c:forEach>
+                </select>
+            </label>
+            <label>
+                <select name="to" class="select">
+                    <option selected disabled>на карту...</option>
+                    <c:forEach items="${requestScope.cards}" var="card">
                         <option value="${card.id}">
                             <mytag:cardNumber cardNumber="${card.number}"/> | ${card.balance} ${card.currency}
                         </option>
-                    </c:if>
-                </c:forEach>
-            </select>
-            <select name="to" class="select">
-                <option selected disabled>на карту...</option>
-                <c:forEach items="${requestScope.cards}" var="card">
-                    <c:if test="${card.status eq 'ACTIVE'}">
-                        <option value="${card.id}">
-                            <mytag:cardNumber cardNumber="${card.number}"/> | ${card.balance} ${card.currency}
-                        </option>
-                    </c:if>
-                </c:forEach>
-            </select>
-            <input class="select_temp" type="number" name="amount" placeholder="Сумма" required>
+                    </c:forEach>
+                </select>
+            </label>
+            <label>
+                <input class="select_temp" type="number" name="amount" placeholder="Сумма" required>
+            </label>
             <input class="select_temp" type="submit" value="перевести">
         </form>
     </div>

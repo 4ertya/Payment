@@ -8,6 +8,8 @@ import by.epamtc.payment.entity.Transaction;
 import by.epamtc.payment.entity.TransactionType;
 import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.ServiceFactory;
+import by.epamtc.payment.service.exception.AccountBlockedServiceException;
+import by.epamtc.payment.service.exception.InsufficientFundsServiceException;
 import by.epamtc.payment.service.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,9 +26,11 @@ public class PaymentCommand implements Command {
     private final static AccountService accountService = serviceFactory.getAccountService();
 
     private final static String WARNING_MESSAGE = "warning_message";
-    private final static String MESSAGE = "Payment is made!";
-    private final static String INVALID_DATA = "invalid_data";
+    private final static String MESSAGE = "payment_made";
+    private final static String INVALID_DATA = "incorrect_data";
     private final static String ERROR = "error";
+    private final static String ACCOUNT_BLOCKED = "account_blocked";
+    private final static String INSUFFICIENT_FUNDS = "insufficient_funds";
 
     private final static String PREVIOUS_REQUEST = "previous_request";
 
@@ -36,6 +40,7 @@ public class PaymentCommand implements Command {
         String previousRequest = (String) request.getSession().getAttribute(PREVIOUS_REQUEST);
 
         String category = request.getParameter("category");
+        String type = request.getParameter("type");
         String destination = request.getParameter("destination");
         long cardId = 0;
         BigDecimal amount = null;
@@ -52,7 +57,7 @@ public class PaymentCommand implements Command {
         transaction.setCardId(cardId);
         transaction.setCurrency(Currency.BYN);
         transaction.setAmount(amount);
-        transaction.setDestination(category + " | " + destination);
+        transaction.setDestination(category+" : "+type+ " | " + destination);
         transaction.setTransactionType(TransactionType.PAYMENT);
 
 
@@ -62,6 +67,10 @@ public class PaymentCommand implements Command {
                 accountService.pay(transaction);
                 request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
                 response.sendRedirect(previousRequest);
+            }catch (AccountBlockedServiceException ab) {
+                request.getSession().setAttribute(WARNING_MESSAGE, ACCOUNT_BLOCKED);
+            }catch (InsufficientFundsServiceException ife){
+                request.getSession().setAttribute(WARNING_MESSAGE, INSUFFICIENT_FUNDS);
             } catch (ServiceException e) {
                 log.error("Exception in PaymentCommand", e);
                 request.getSession().setAttribute(WARNING_MESSAGE, ERROR);
@@ -69,7 +78,7 @@ public class PaymentCommand implements Command {
             }
 
         } else {
-            log.info("payment with invalid data");
+            log.info("payment with invalid data" +transaction);
             request.getSession().setAttribute(WARNING_MESSAGE, INVALID_DATA);
             response.sendRedirect(previousRequest);
         }

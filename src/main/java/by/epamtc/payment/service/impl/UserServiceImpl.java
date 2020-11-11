@@ -11,6 +11,7 @@ import by.epamtc.payment.service.exception.ServiceException;
 import by.epamtc.payment.service.exception.ServiceUserExistException;
 import by.epamtc.payment.service.exception.ServiceUserNotFoundException;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -86,5 +87,25 @@ public class UserServiceImpl implements UserService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public void uploadPassportScan(InputStream inputStream, Long userId) throws ServiceException {
+        try {
+            userDAO.uploadPassportScan(inputStream, userId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public InputStream downloadPassportScan(Long userId) throws ServiceException {
+        InputStream scan=null;
+        try {
+             scan = userDAO.downloadPassportScan(userId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return  scan;
     }
 }

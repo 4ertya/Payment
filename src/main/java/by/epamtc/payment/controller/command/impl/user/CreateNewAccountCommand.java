@@ -59,7 +59,7 @@ public class CreateNewAccountCommand implements Command {
             response.sendRedirect(previousRequest);
         }
 
-        if (user.getStatus() == Status.ACTIVE) {
+        if (user.getStatus() == Status.VERIFIED) {
 
             if (currencyName != null) {
 

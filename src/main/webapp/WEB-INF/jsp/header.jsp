@@ -10,7 +10,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <script type="text/javascript" src="script/script.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>

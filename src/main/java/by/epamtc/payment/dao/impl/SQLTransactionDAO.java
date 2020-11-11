@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SQLTransactionDAO implements TransactionDAO {
@@ -20,14 +21,14 @@ public class SQLTransactionDAO implements TransactionDAO {
     private final ConnectionPool connectionPool = ConnectionPool.getInstance();
 
     //language=MySQL
-    private final static String SELECT_FIVE_LAST_PAYMENTS="SELECT tr.date, tr.amount, tr.destination, c.currency, " +
+    private final static String SELECT_FIVE_LAST_PAYMENTS = "SELECT tr.date, tr.amount, tr.destination, c.currency, " +
             "cards.card_number FROM transactions tr " +
             "JOIN transaction_types ON tr.transaction_types_id=transaction_types.id " +
             "JOIN currencies c USING (currency_id) JOIN cards USING (card_id) " +
             "JOIN accounts " +
             "USING (account_id) " +
             "WHERE accounts.user_id=? " +
-            "AND (transaction_types.type=? OR transaction_types.type=NULL);";
+            "AND (transaction_types.type=? OR transaction_types.type=NULL) ORDER BY tr.id DESC LIMIT 5;";
 
     @Override
     public List<Transaction> getFiveLastPayments(Long userId) throws DAOException {
@@ -36,16 +37,16 @@ public class SQLTransactionDAO implements TransactionDAO {
         ResultSet resultSet = null;
         Transaction transaction;
         List<Transaction> transactions = new ArrayList<>();
-        try{
+        try {
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(SELECT_FIVE_LAST_PAYMENTS);
-            preparedStatement.setLong(1,userId);
-            preparedStatement.setString(2,"PAYMENT");
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setString(2, "PAYMENT");
             resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 transaction = new Transaction();
-                transaction.setDate(resultSet.getDate("date"));
+                transaction.setDate(resultSet.getTimestamp("date"));
                 transaction.setCardNumber(resultSet.getLong("card_number"));
                 transaction.setAmount(resultSet.getBigDecimal("amount"));
                 transaction.setCurrency(Currency.valueOf(resultSet.getString("currency")));
@@ -54,9 +55,9 @@ public class SQLTransactionDAO implements TransactionDAO {
                 transactions.add(transaction);
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
-        }finally {
-            connectionPool.closeConnection(connection,preparedStatement,resultSet);
+            log.error(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
         return transactions;
     }

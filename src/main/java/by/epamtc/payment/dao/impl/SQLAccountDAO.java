@@ -41,7 +41,7 @@ public class SQLAccountDAO implements AccountDAO {
             "WHERE a.user_id=?;";
     //language=MySQL
     private final static String CREATE_NEW_ACCOUNT = "INSERT INTO accounts " +
-            "SET account_number=?, opening_date=?, user_id=?, " +
+            "SET account_number=?, opening_date=?, user_id=?, balance=500, "+
             "currency_id=(SELECT currency_id FROM currencies WHERE currency=?);";
     //language=MySQL
     private final static String SELECT_ACCOUNT_BY_CARD_ID = "SELECT a.account_id, a.account_number, a.balance, " +

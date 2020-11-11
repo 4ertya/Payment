@@ -9,6 +9,7 @@ import by.epamtc.payment.entity.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,10 @@ public class SQLUserDAO implements UserDAO {
             "user_status_id=(SELECT user_status_id FROM user_statuses WHERE user_status=?), " +
             "role_id=(SELECT role_id FROM roles WHERE role=?) " +
             "WHERE user_id=?;";
+    //language=MySQL
+    private final static String UPLOAD_PASSPORT_SCAN = "UPDATE user_details SET passport_scan=? WHERE user_id=?;";
+    //language=MySQL
+    private final static String DOWNLOAD_PASSPORT_SCAN = "SELECT passport_scan FROM user_details WHERE user_id=?;";
 
     /**
      * Returns {@code User} from the database.
@@ -89,29 +94,31 @@ public class SQLUserDAO implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.next()) {
+                log.info("User not found");
                 throw new DAOUserNotFoundException();
             }
 
             long id = Long.parseLong(resultSet.getString(SQLParameter.USER_ID));
-            String name = resultSet.getString(SQLParameter.EN_NAME);
-            String surname = resultSet.getString(SQLParameter.EN_SURNAME);
+            String enName = resultSet.getString(SQLParameter.EN_NAME);
+            String enSurname = resultSet.getString(SQLParameter.EN_SURNAME);
             Role role = Role.valueOf(resultSet.getString(SQLParameter.ROLE));
             Status status = Status.valueOf(resultSet.getString(SQLParameter.STATUS));
 
-            if (name == null) {
-                name = "User";
+            if (enName == null) {
+                enName = "User";
             }
 
             user = new User();
 
             user.setId(id);
-            user.setName(name);
-            user.setSurname(surname);
+            user.setName(enName);
+            user.setSurname(enSurname);
             user.setRole(role);
             user.setStatus(status);
 
         } catch (SQLException e) {
-            throw new DAOException(e);
+            log.error("Couldn't login", e);
+            throw new DAOException("Couldn't login", e);
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
@@ -161,16 +168,16 @@ public class SQLUserDAO implements UserDAO {
 
 
         } catch (SQLIntegrityConstraintViolationException ex) {
-            throw new DAOUserExistException();
+            log.info("Couldn't register", ex);
+            throw new DAOUserExistException("Couldn't register", ex);
         } catch (SQLException e) {
-
             try {
                 connection.rollback();
             } catch (SQLException roll) {
-                log.error("Couldn't roll back connection");
+                log.error("Couldn't roll back connection", roll);
             }
-
-            throw new DAOException("Exception in SQLUserDAO: registration(RegistrationData registrationData)", e);
+            log.error("Couldn't register", e);
+            throw new DAOException("Couldn't register", e);
 
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
@@ -213,6 +220,7 @@ public class SQLUserDAO implements UserDAO {
             userData.setStatus(status);
 
         } catch (SQLException e) {
+            log.error("Exception in SQLUserDAO: getUser()", e);
             throw new DAOException("Exception in SQLUserDAO: getUser()", e);
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
@@ -326,14 +334,55 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException e) {
             try {
                 connection.rollback();
-                throw new DAOException(e);
             } catch (SQLException ex) {
-                log.info("Couldn't roll back connection");
-                throw new DAOException(e);
+                log.error("Couldn't roll back connection", ex);
             }
+            throw new DAOException("Couldn't update user details! ", e);
         } finally {
             connectionPool.closeConnection(connection, preparedStatement);
         }
+    }
+
+    @Override
+    public void uploadPassportScan(InputStream inputStream, long userId) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(UPLOAD_PASSPORT_SCAN);
+            preparedStatement.setBinaryStream(1, inputStream);
+            preparedStatement.setLong(2, userId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            log.error("Couldn't upload file", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement);
+        }
+    }
+
+    @Override
+    public InputStream downloadPassportScan(Long userId) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+InputStream scan = null;
+        try {
+            connection = connectionPool.takeConnection();
+            preparedStatement = connection.prepareStatement(DOWNLOAD_PASSPORT_SCAN);
+            preparedStatement.setLong(1, userId);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()){
+                scan=resultSet.getBinaryStream("passport_scan");
+            }
+        } catch (SQLException e) {
+            log.error("Couldn't download file", e);
+            throw new DAOException(e);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement,resultSet);
+        }
+        return scan;
     }
 
     private UserDetail fillInUserDetail(ResultSet resultSet) throws SQLException {

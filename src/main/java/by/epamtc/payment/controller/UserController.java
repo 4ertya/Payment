@@ -13,6 +13,7 @@ public class UserController extends HttpServlet {
     private final static String COMMAND_NAME = "command";
     private final static String CONTROLLER_NAME = "UserController";
     private final static String PREVIOUS_REQUEST = "previous_request";
+    private final static String WARNING_MESSAGE = "warning_message";
 
     private final UserCommandProvider provider = UserCommandProvider.getInstance();
 
@@ -30,14 +31,15 @@ public class UserController extends HttpServlet {
         String previousRequest;
         Command command;
         currentCommand = req.getParameter(COMMAND_NAME);
+
         command = provider.getCommand(currentCommand);
 
-        if (command==null){
+        if (command == null) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }else {
+        } else {
             command.execute(req, resp);
         }
-        previousRequest = CONTROLLER_NAME +"?"+ req.getQueryString();
+        previousRequest = CONTROLLER_NAME + "?" + req.getQueryString();
         req.getSession().setAttribute(PREVIOUS_REQUEST, previousRequest);
     }
 }

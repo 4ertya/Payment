@@ -208,7 +208,7 @@ header {
 
 
 .form {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 10px;
     border-radius: 0 30px;
 }
@@ -830,3 +830,30 @@ table > input {
 }
 
 .close:hover { background: #00d9ff; }
+
+.main_text{
+    position: absolute;
+    right: 20%;
+    top: 30%;
+    text-align: left;
+    font-family: Handwriting, serif;
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.table_sort tr[visible='false'],
+.no-result {
+    display: none;
+}
+.table_sort tr[visible='true'] {
+    display: table-row;
+}
+.searchCount {
+    padding: 8px;
+    color: #ccc;
+}
+
+.main .searchKey{
+    width: 250px;
+}

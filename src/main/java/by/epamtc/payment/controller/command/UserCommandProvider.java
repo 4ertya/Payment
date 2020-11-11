@@ -29,6 +29,8 @@ public class UserCommandProvider {
         commands.put(CommandName.BLOCK_CARD, new BlockCardCommand());
         commands.put(CommandName.UPDATE_USER_DETAILS, new UpdateUserDetailsCommand());
         commands.put(CommandName.PAYMENT, new PaymentCommand());
+        commands.put(CommandName.UPLOAD_PASSPORT_SCAN, new UploadPassportScanCommand());
+        commands.put(CommandName.DOWNLOAD_PASSPORT_SCAN, new DownloadPassportScanCommand());
     }
 
     public Command getCommand(String commandName) {

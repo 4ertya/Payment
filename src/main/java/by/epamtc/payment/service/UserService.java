@@ -5,6 +5,7 @@ import by.epamtc.payment.service.exception.ServiceException;
 import by.epamtc.payment.service.exception.ServiceUserExistException;
 import by.epamtc.payment.service.exception.ServiceUserNotFoundException;
 
+import java.io.InputStream;
 import java.util.List;
 
 public interface UserService {
@@ -19,4 +20,8 @@ public interface UserService {
     List<UserDetail> getAllUserDetails() throws ServiceException;
 
     void updateUserDetails(UserDetail userDetail) throws ServiceException;
+
+    void uploadPassportScan(InputStream inputStream, Long userId) throws ServiceException;
+
+    InputStream downloadPassportScan(Long userId) throws ServiceException;
 }

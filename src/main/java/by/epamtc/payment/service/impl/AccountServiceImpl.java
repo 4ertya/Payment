@@ -8,6 +8,8 @@ import by.epamtc.payment.dao.exception.DAOException;
 import by.epamtc.payment.dao.exception.InsufficientFundsDAOException;
 import by.epamtc.payment.entity.*;
 import by.epamtc.payment.service.AccountService;
+import by.epamtc.payment.service.exception.AccountBlockedServiceException;
+import by.epamtc.payment.service.exception.InsufficientFundsServiceException;
 import by.epamtc.payment.service.exception.ServiceException;
 
 import java.math.BigDecimal;
@@ -29,6 +31,10 @@ public class AccountServiceImpl implements AccountService {
             Card fromCard= cardDAO.getCardById(fromCardId);
             Card toCard = cardDAO.getCardById(toCardId);
             accountDAO.transfer(fromCard,toCard,amount);
+        }catch (AccountBlockedDAOException be) {
+            throw new AccountBlockedServiceException(be);
+        }catch (InsufficientFundsDAOException ie){
+            throw new InsufficientFundsServiceException(ie);
         } catch (DAOException e) {
            throw new ServiceException(e);
         }
@@ -101,9 +107,9 @@ public class AccountServiceImpl implements AccountService {
         try {
             accountDAO.pay(transaction);
         }catch (AccountBlockedDAOException be) {
-            be.printStackTrace();
+            throw new AccountBlockedServiceException(be);
         }catch (InsufficientFundsDAOException ie){
-            ie.printStackTrace();
+            throw new InsufficientFundsServiceException(ie);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

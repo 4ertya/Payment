@@ -17,6 +17,7 @@ public class GoToCreateNewCardPageCommand implements Command {
 
     private final static ServiceFactory serviceFactory = ServiceFactory.getInstance();
     private final static AccountService accountService = serviceFactory.getAccountService();
+    private final static String WARNING_MESSAGE = "warning_message";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,6 +32,7 @@ public class GoToCreateNewCardPageCommand implements Command {
             }
             request.getRequestDispatcher("WEB-INF/jsp/createNewCardPAge.jsp").forward(request, response);
 
+            request.getSession().removeAttribute(WARNING_MESSAGE);
         } catch (ServiceException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

@@ -8,6 +8,7 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://localhost:8080/mytag" prefix="mytag" %>
 
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
@@ -28,6 +29,9 @@
 <fmt:message bundle="${loc}" key="local.auth.incorrect_data" var="incorrect_data"/>
 <fmt:message bundle="${loc}" key="local.set.stored_successful" var="stored"/>
 <fmt:message bundle="${loc}" key="local.set.home" var="home"/>
+<fmt:message bundle="${loc}" key="local.account.add_data" var="add_data"/>
+<fmt:message bundle="${loc}" key="local.account.wait" var="wait"/>
+
 
 <jsp:useBean id="userData" class="by.epamtc.payment.entity.UserData" scope="request"/>
 <jsp:useBean id="userDetail" class="by.epamtc.payment.entity.UserDetail" scope="request"/>
@@ -43,29 +47,23 @@
     <div class="form detail">
         <div class="block-text">Personal data</div>
         <c:if test="${sessionScope.warning_message !=null}">
-
-
-            <div id="openModal" class="modalDialog">
-                <div>
-                    <a href="#openModal" title="Закрыть" class="close">X</a>
-                    <h2>Системное сообщение</h2>
-                    <c:choose>
-                        <c:when test="${sessionScope.warning_message eq 'incorrect_data'}">
-                            <div class="error-text">${incorrect_data}.</div>
-                        </c:when>
-                        <c:when test="${sessionScope.warning_message eq 'error'}">
-                            <div class="error-text">${error}.</div>
-                        </c:when>
-                        <c:when test="${sessionScope.warning_message eq 'data_successful_stored'}">
-                            <div class="good-text">${stored}.</div>
-                        </c:when>
-                    </c:choose>
-                </div>
-
-            </div>
-
-
-
+            <c:choose>
+                <c:when test="${sessionScope.warning_message eq 'incorrect_data'}">
+                    <mytag:infoMessage message="${incorrect_data}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'error'}">
+                    <mytag:infoMessage message="${error}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'data_successful_stored'}">
+                    <mytag:infoMessage message="${stored}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'add_data'}">
+                    <mytag:infoMessage message="${add_data}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'wait'}">
+                    <mytag:infoMessage message="${wait}"/>
+                </c:when>
+            </c:choose>
         </c:if>
 
         <form action="UserController?command=update_user_details" method="post">
@@ -102,7 +100,7 @@
             ${gender}:
             <label>
                 <input class="inputD" type="text" name="gender" pattern="^[МЖ]{1}$" value="${userDetail.gender}"
-                       title="M | Ж" >
+                       title="M | Ж">
             </label>
             ${passport_series}:
             <label>
@@ -123,28 +121,42 @@
             <label>
                 <input class="inputD" type="text" name="location" value="${userDetail.location}" required>
             </label>
-                <c:if test="${sessionScope.user.role eq 'ADMIN'}">
-                <hr>
-                    Role:
-                    <label>
-                        <select name="user_role" class="select">
-                            <option value="ADMIN" ${userData.role eq 'ADMIN' ? 'selected' : ''}>ADMIN</option>
-                            <option value="USER" ${userData.role eq 'USER' ? 'selected' : ''}>USER</option>
-                        </select>
-                    </label>
-                    Status:
-                    <label>
-                        <select name="user_status" class="select">
-                            <option value="NEW" ${userData.status eq 'NEW' ? 'selected' : ''}>NEW</option>
-                            <option value="WAITING" ${userData.status eq 'WAITING' ? 'selected' : ''}>WAITING</option>
-                            <option value="VERIFIED" ${userData.status eq 'VERIFIED' ? 'selected' : ''}>VERIFIED</option>
-                        </select>
-                    </label>
-                </c:if>
-            <input type="hidden" name="user_id" value="${userData.id}">
 
+
+            <c:if test="${sessionScope.user.role eq 'ADMIN'}">
+                <hr>
+                Role:
+                <label>
+                    <select name="user_role" class="select">
+                        <option value="ADMIN" ${userData.role eq 'ADMIN' ? 'selected' : ''}>ADMIN</option>
+                        <option value="USER" ${userData.role eq 'USER' ? 'selected' : ''}>USER</option>
+                    </select>
+                </label>
+                Status:
+                <label>
+                    <select name="user_status" class="select">
+                        <option value="NEW" ${userData.status eq 'NEW' ? 'selected' : ''}>NEW</option>
+                        <option value="WAITING" ${userData.status eq 'WAITING' ? 'selected' : ''}>WAITING</option>
+                        <option value="VERIFIED" ${userData.status eq 'VERIFIED' ? 'selected' : ''}>VERIFIED</option>
+                    </select>
+                </label>
+            </c:if>
+            <input type="hidden" name="user_id" value="${userData.id}">
             <input class="button" type="submit" value="${save}">
         </form>
+
+
+        <a href="UserController?command=download_passport_scan&user_id=${userDetail.id}" target="_blank">
+            <img style="border: 0px solid ; width: 100px; height: 100px;" alt=""
+                 src="UserController?command=download_passport_scan&user_id=${userDetail.id}"></a>
+
+
+        <form id="upload" action="UserController?command=upload_passport_scan" method="post"
+              enctype="multipart/form-data">
+            <input form="upload" type="file" name="scan">
+            <input form="upload" type="submit" value="upload"/>
+        </form>
+
     </div>
 </div>
 <%@include file="footer.jsp" %>

@@ -13,6 +13,9 @@
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
 
+<fmt:message bundle="${loc}" key="local.transactions.last_payments" var="last_payments"/>
+
+
 <html>
 <head>
     <title>Title</title>
@@ -27,9 +30,9 @@
             <ul>
                 <li><a>Мобильная связь</a>
                     <ul>
-                        <li><a href="UserController?command=to_payment_page&category=mobile:mts">MTS</a></li>
-                        <li><a href="UserController?command=to_payment_page&category=mobile:a1">A1</a></li>
-                        <li><a href="UserController?command=to_payment_page&category=mobile:life">Life</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=mobile&type=mts">MTS</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=mobile&type=a1">A1</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=mobile&type=life">Life</a></li>
                     </ul>
                 </li>
 
@@ -43,14 +46,16 @@
                 </li>
                 <li><a href="#m3">Коммунальные платежи</a>
                     <ul>
-                        <li><a href="#m3_1">Электроэнергия</a></li>
-                        <li><a href="#m3_2">Газоснабжение</a></li>
-                        <li><a href="#m3_3">Жилищно-коммунальные услуги</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=utility&type=electricity">Электроэнергия</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=utility&type=gas">Газоснабжение</a></li>
+                        <li><a href="UserController?command=to_payment_page&category=utility&type=communal">Жилищно-коммунальные услуги</a></li>
                     </ul>
                 </li>
             </ul>
         </nav>
+            <c:if test="${not empty requestScope.transactions}">
         </div>
+        <p>${last_payments}</p>
         <div>
             <table cellpadding="5" cellspacing="0" border="1">
             <tr>
@@ -68,6 +73,7 @@
                 </tr>
             </c:forEach>
             </table>
+            </c:if>
         </div>
     </div>
 </div>
