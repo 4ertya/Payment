@@ -67,5 +67,6 @@
     </c:if>
 
 </div>
+<%@include file="footer.jsp"%>
 </body>
 </html>

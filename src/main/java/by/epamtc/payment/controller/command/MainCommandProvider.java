@@ -15,6 +15,7 @@ public class MainCommandProvider {
         commands.put(CommandName.TO_MAIN_PAGE, new GoToMainPageCommand());
         commands.put(CommandName.TO_LOGIN_PAGE, new GoToLoginPageCommand());
         commands.put(CommandName.TO_REGISTRATION_PAGE, new GoToRegistrationPageCommand());
+        commands.put(CommandName.TO_ABOUT_PAGE, new GoToAboutPageCommand());
 
         commands.put(CommandName.LOGIN, new LoginCommand());
         commands.put(CommandName.REGISTRATION, new RegistrationCommand());

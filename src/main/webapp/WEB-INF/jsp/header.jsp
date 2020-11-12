@@ -33,13 +33,7 @@
 <header>
     <div class="navbar">
         <div class="logo">
-            <a href="<c:url value=" / " />">ClumsyPay</a>
-        </div>
-        <div class="navbar-menu">
-            <ul>
-                <li><a href="<c:url value=" / " />">${home}</a></li>
-                <li><a href="<c:url value=" / " />">${about}</a></li>
-            </ul>
+            <a href="<c:url value="MainController?command=to_main_page"/>">ClumsyPay</a>
         </div>
         <div class="language">
             <form action="MainController">

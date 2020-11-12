@@ -13,6 +13,9 @@
 <fmt:setLocale value="${sessionScope.local}"/>
 <fmt:setBundle basename="local" var="loc"/>
 
+<fmt:message bundle="${loc}" key="local.main.text1" var="text1"/>
+<fmt:message bundle="${loc}" key="local.main.text2" var="text2"/>
+<fmt:message bundle="${loc}" key="local.main.text3" var="text3"/>
 
 <html>
 <head>
@@ -22,9 +25,9 @@
 <%@include file="header.jsp" %>
 <div class="content">
     <div class="main_text">
-        <p>Больше чем платежная система.</p>
-        <p>Меньше чем банк.</p>
-        <p>Рискни.</p>
+        <p>${text1}</p>
+        <p>${text2}</p>
+        <p>${text3}</p>
     </div>
 </div>
 

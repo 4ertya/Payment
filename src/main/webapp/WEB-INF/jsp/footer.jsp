@@ -14,7 +14,7 @@
     <div class="navbar">
         <div class="footer-info">
             <div class="footer-block">
-                <a href="#">${about}</a>
+                <a href="MainController?command=to_about_page">${about}</a>
             </div>
 
             <div class="footer-block">
