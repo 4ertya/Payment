@@ -31,9 +31,9 @@
 
         <hr>
         <div class="nav-menu">
-            <div class="link"><a href="UserController?command=to_user_cards_page">${my_cards}</a></div>
-            <div class="link"><a href="UserController?command=to_user_accounts_page">${my_accounts}</a></div>
-            <div class="link"><a href="UserController?command=to_payment_categories_page">${payments}</a></div>
+            <div class="link"><a href="AdminController?command=to_all_cards_page">Cards</a></div>
+            <div class="link"><a href="AdminController?command=to_all_accounts_page">Accounts</a></div>
+            <div class="link"><a href="AdminController?command=to_all_users_page">Payments</a></div>
         </div>
 
     </div>

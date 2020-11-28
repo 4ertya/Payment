@@ -19,6 +19,7 @@ public class AdminCommandProvider {
         commands.put(CommandName.UNBLOCK_CARD, new UnblockCardCommand());
         commands.put(CommandName.BLOCK_ACCOUNT, new BlockAccountCommand());
         commands.put(CommandName.UNBLOCK_ACCOUNT, new UnblockAccountCommand());
+        commands.put(CommandName.TO_ADMIN_PAGE, new GoToAdminPageCommand());
     }
 
     public Command getCommand(String commandName) {

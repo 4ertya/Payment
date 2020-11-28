@@ -16,7 +16,7 @@ public final class ConnectionPool {
         return instance;
     }
 
-    private final static Logger log = LogManager.getLogger();
+    private final static Logger log = LogManager.getLogger(ConnectionPool.class);
     private final static ConnectionPool instance = new ConnectionPool();
 
     private final static String DB_DRIVER = "com.mysql.cj.jdbc.Driver";

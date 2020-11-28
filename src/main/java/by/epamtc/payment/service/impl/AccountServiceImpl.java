@@ -18,25 +18,28 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class AccountServiceImpl implements AccountService {
-    private final DAOFactory instance = DAOFactory.getInstance();
-    private final AccountDAO accountDAO = instance.getAccountDAO();
-    private final CardDAO cardDAO = instance.getCardDAO();
+    private final DAOFactory daoFactory = DAOFactory.getInstance();
+    private final AccountDAO accountDAO = daoFactory.getAccountDAO();
+    private final CardDAO cardDAO = daoFactory.getCardDAO();
 
 
     @Override
-    public void transfer(long fromCardId, long toCardId, BigDecimal amount) throws ServiceException {
-
-
+    public void transfer(long fromCardId, long toCardId, BigDecimal amount, User user) throws ServiceException {
         try {
-            Card fromCard= cardDAO.getCardById(fromCardId);
+
+            Card fromCard = cardDAO.getCardById(fromCardId);
+            if (fromCard.getOwnerName().equalsIgnoreCase(user.getName())){
+                throw new UnsupportedOperationException();
+            }
             Card toCard = cardDAO.getCardById(toCardId);
-            accountDAO.transfer(fromCard,toCard,amount);
-        }catch (AccountBlockedDAOException be) {
+            accountDAO.transfer(fromCard, toCard, amount);
+        } catch (AccountBlockedDAOException be) {
             throw new AccountBlockedServiceException(be);
-        }catch (InsufficientFundsDAOException ie){
+        } catch (InsufficientFundsDAOException ie) {
+            System.out.println("ОШИБКА SERVICE");
             throw new InsufficientFundsServiceException(ie);
         } catch (DAOException e) {
-           throw new ServiceException(e);
+            throw new ServiceException(e);
         }
     }
 
@@ -106,9 +109,9 @@ public class AccountServiceImpl implements AccountService {
     public void pay(Transaction transaction) throws ServiceException {
         try {
             accountDAO.pay(transaction);
-        }catch (AccountBlockedDAOException be) {
+        } catch (AccountBlockedDAOException be) {
             throw new AccountBlockedServiceException(be);
-        }catch (InsufficientFundsDAOException ie){
+        } catch (InsufficientFundsDAOException ie) {
             throw new InsufficientFundsServiceException(ie);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -117,7 +120,6 @@ public class AccountServiceImpl implements AccountService {
 
     private String createAccountNumber(Currency currency) throws ServiceException {
         List<String> accountsNumbers;
-        String accountNumber;
 
         try {
             accountsNumbers = accountDAO.getAccountsNumbers();
@@ -126,9 +128,9 @@ public class AccountServiceImpl implements AccountService {
         }
         String result;
         do {
-            int  generateInt = ThreadLocalRandom.current().nextInt(100000,1000000);
-            long generateLong = ThreadLocalRandom.current().nextLong(1000000000L,10000000000L);
-            result = generateInt+currency.name()+generateLong;
+            int generateInt = ThreadLocalRandom.current().nextInt(100000, 1000000);
+            long generateLong = ThreadLocalRandom.current().nextLong(1000000000L, 10000000000L);
+            result = generateInt + currency.name() + generateLong;
         } while (accountsNumbers.contains(result));
         return result;
     }

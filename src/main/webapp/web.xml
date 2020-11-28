@@ -36,7 +36,7 @@
 
     <servlet>
         <servlet-name>MainController</servlet-name>
-        <servlet-class>by.epamtc.payment.controller.MainController</servlet-class>
+        <servlet-class>by.epamtc.payment.controller.Controller</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
@@ -61,6 +61,24 @@
         <url-pattern>/AdminController</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>PassportScanLoading</servlet-name>
+        <servlet-class>by.epamtc.payment.controller.DownloadPassportScan</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PassportScanLoading</servlet-name>
+        <url-pattern>/ScanLoading</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ExceptionHandler</servlet-name>
+        <servlet-class>by.epamtc.payment.controller.ExceptionHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExceptionHandler</servlet-name>
+        <url-pattern>/exception</url-pattern>
+    </servlet-mapping>
+
     <error-page>
         <error-code>404</error-code>
         <location>/WEB-INF/jsp/404.jsp</location>
@@ -69,6 +87,11 @@
     <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/jsp/500.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/exception</location>
     </error-page>
 
     <jsp-config>

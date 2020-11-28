@@ -18,6 +18,7 @@
 <fmt:message bundle="${loc}" key="local.transactions.transfer_made" var="transfer_made"/>
 <fmt:message bundle="${loc}" key="local.transactions.account_blocked" var="account_blocked"/>
 <fmt:message bundle="${loc}" key="local.transactions.insufficient_funds" var="insufficient_funds"/>
+<fmt:message bundle="${loc}" key="local.etc.unsupported_operation" var="unsupported_operation"/>
 <html>
 <head>
     <title>Title</title>
@@ -38,6 +39,15 @@
                 </c:when>
                 <c:when test="${sessionScope.warning_message eq 'transfer_made'}">
                     <mytag:infoMessage message="${transfer_made}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'insufficient_funds'}">
+                    <mytag:infoMessage message="${insufficient_funds}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'account_blocked'}">
+                    <mytag:infoMessage message="${account_blocked}"/>
+                </c:when>
+                <c:when test="${sessionScope.warning_message eq 'unsupported_operation'}">
+                    <mytag:infoMessage message="${unsupported_operation}"/>
                 </c:when>
             </c:choose>
         </c:if>

@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class GoToUserPageCommand implements Command {
+public class GoToAdminPageCommand implements Command {
+
 
     private final static String ATTRIBUTE_USER = "user";
 
-
-    private final static String USER_PAGE = "/WEB-INF/jsp/userPage.jsp";
+    private final static String ADMIN_PAGE = "/WEB-INF/jsp/adminPage.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,8 +26,7 @@ public class GoToUserPageCommand implements Command {
         user = (User) request.getSession().getAttribute(ATTRIBUTE_USER);
 
         request.setAttribute(ATTRIBUTE_USER, user);
-        request.getRequestDispatcher(USER_PAGE)
+        request.getRequestDispatcher(ADMIN_PAGE)
                 .forward(request, response);
-
     }
 }

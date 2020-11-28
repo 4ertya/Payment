@@ -68,7 +68,7 @@ public class UpdateUserDetailsCommand implements Command {
         String gender = request.getParameter(GENDER_PARAMETER);
         String passportSeries = request.getParameter(PASSPORT_SERIES_PARAMETER);
         String statusStr = request.getParameter(STATUS);
-        String roleStr = request.getParameter(STATUS);
+        String roleStr = request.getParameter(ROLE);
 
         if (statusStr!=null) {
             status = Status.valueOf(request.getParameter(STATUS));

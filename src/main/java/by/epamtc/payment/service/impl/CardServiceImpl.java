@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class CardServiceImpl implements CardService {
-    private final DAOFactory instance = DAOFactory.getInstance();
-    private final CardDAO cardDAO = instance.getCardDAO();
+    private final DAOFactory daoFactory = DAOFactory.getInstance();
+    private final CardDAO cardDAO = daoFactory.getCardDAO();
 
     @Override
     public List<Card> getUsersCards(User user) throws ServiceException {

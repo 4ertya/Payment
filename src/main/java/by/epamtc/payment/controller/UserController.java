@@ -13,7 +13,6 @@ public class UserController extends HttpServlet {
     private final static String COMMAND_NAME = "command";
     private final static String CONTROLLER_NAME = "UserController";
     private final static String PREVIOUS_REQUEST = "previous_request";
-    private final static String WARNING_MESSAGE = "warning_message";
 
     private final UserCommandProvider provider = UserCommandProvider.getInstance();
 

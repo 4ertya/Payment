@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 public class AccountTechnicalValidator {
 
-    private static final String DESTINATION_REGEXP = "^[a-zA-Zа-яА-Я:]+\\s[|]\\s[a-zA-Zа-яА-Я]+$";
+
 
     public static boolean accountIdValidation(long accountId) {
         return accountId > 0;

@@ -6,6 +6,7 @@ import by.epamtc.payment.dao.exception.AccountBlockedDAOException;
 import by.epamtc.payment.dao.exception.DAOException;
 import by.epamtc.payment.dao.exception.InsufficientFundsDAOException;
 import by.epamtc.payment.entity.*;
+import com.mysql.cj.jdbc.exceptions.MysqlDataTruncation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -144,9 +145,6 @@ public class SQLAccountDAO implements AccountDAO {
                 toAccount = getAccount(resultSet);
             }
 
-            System.out.println(fromAccount.getStatus());
-            System.out.println(toAccount.getStatus());
-
             if (fromAccount.getStatus()!=Status.ACTIVE || toAccount.getStatus()!=Status.ACTIVE) {
                 throw new AccountBlockedDAOException();
             }
@@ -160,7 +158,7 @@ public class SQLAccountDAO implements AccountDAO {
             }
 
             BigDecimal result = amount.multiply(rate);
-            BigDecimal withdraw = fromAccount.getBalance().subtract(result);
+            BigDecimal withdraw = fromAccount.getBalance().subtract(amount);
             BigDecimal deposit = toAccount.getBalance().add(result);
 
             if (fromAccount.getBalance().compareTo(withdraw) < 0) {
@@ -189,14 +187,22 @@ public class SQLAccountDAO implements AccountDAO {
             addTransaction(connection,transaction);
 
             connection.commit();
-        } catch (SQLException e) {
+        } catch (MysqlDataTruncation e) {
             try {
                 connection.rollback();
-
             } catch (SQLException ex) {
                 log.error("couldn't roll back", ex);
             }
-            throw new DAOException(e);
+            System.out.println("ОШИБКА DAO");
+            throw new InsufficientFundsDAOException(e);
+
+        } catch (SQLException exc) {
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                log.error("couldn't roll back", ex);
+            }
+            throw new DAOException(exc);
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }

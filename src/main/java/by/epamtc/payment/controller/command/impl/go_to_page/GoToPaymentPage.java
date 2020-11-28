@@ -2,6 +2,7 @@ package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.entity.Card;
+import by.epamtc.payment.entity.PaymentCategories;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.CardService;
 import by.epamtc.payment.service.ServiceFactory;
@@ -29,17 +30,31 @@ public class GoToPaymentPage implements Command {
         User user;
         List<Card> cards;
         user = (User) request.getSession().getAttribute(USER_PARAMETER);
+        String category = request.getParameter("category");
+        String type = request.getParameter("type");
 
-        try {
-            cards = cardService.getUsersCards(user);
-            request.setAttribute(CARDS_PARAMETER, cards);
-            request.setAttribute("category", request.getParameter("category"));
-            request.setAttribute("type", request.getParameter("type"));
-            request.getRequestDispatcher(PAYMENT_PAGE)
-                    .forward(request, response);
-            request.getSession().removeAttribute(WARNING_MESSAGE);
-        } catch (ServiceException e) {
+        if (checkPaymentDestination(category,type)) {
+            try {
+                cards = cardService.getUsersCards(user);
+                request.setAttribute(CARDS_PARAMETER, cards);
+                request.setAttribute("category", request.getParameter("category"));
+                request.setAttribute("type", request.getParameter("type"));
+                request.getRequestDispatcher(PAYMENT_PAGE)
+                        .forward(request, response);
+                request.getSession().removeAttribute(WARNING_MESSAGE);
+            } catch (ServiceException e) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private boolean checkPaymentDestination(String category, String type){
+        try {
+            return PaymentCategories.valueOf(category.toUpperCase()).getTypes().contains(type);
+        }catch (IllegalArgumentException ignore){
+        }
+        return false;
     }
 }

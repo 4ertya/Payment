@@ -52,8 +52,8 @@
             <input type="hidden" name="category" value="${requestScope.category}">
             <input type="hidden" name="type" value="${requestScope.type}">
             <label>
-                <select name="card_id" class="select">
-                    <option selected disabled>с карты...</option>
+                <select name="card_id" class="select" required>
+                    <option selected disabled value=''>с карты...</option>
                     <c:forEach items="${requestScope.cards}" var="card">
                         <c:if test="${card.status eq 'ACTIVE'}">
                             <option value="${card.id}">
@@ -69,7 +69,7 @@
                        (requestScope.category eq 'internet'? contract_number:personal_account)}" required>
             </label>
             <label>
-                <input class="select_temp" type="number" name="amount" placeholder="Сумма" required>
+                <input class="select_temp" type="text" name="amount" placeholder="Сумма" pattern="^[0-9]+\.?[0-9]*$" title="0.0" required>
             </label>
             <input class="select_temp" type="submit" value="Оплатить">
         </form>

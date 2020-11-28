@@ -80,22 +80,22 @@
             ${ru_name}:
             <label>
                 <input class="inputD" type="text" pattern="^[а-яА-Я]+$" name="ru_name" value="${userDetail.ruName}"
-                       required>
+                      title="а-я А-Я" required>
             </label>
             ${ru_surname}:
             <label>
                 <input class="inputD" type="text" pattern="^[а-яА-Я]+$" name="ru_surname"
-                       value="${userDetail.ruSurname}" required>
+                       value="${userDetail.ruSurname}"  title="а-я А-Я" required>
             </label>
             ${latin_name}:
             <label>
                 <input class="inputD" type="text" pattern="^[a-zA-Z]+$" name="en_name" value="${userDetail.enName}"
-                       required>
+                       title="a-z A-Z" required>
             </label>
             ${latin_surname}:
             <label>
                 <input class="inputD" type="text" pattern="^[a-zA-Z]+$" name="en_surname"
-                       value="${userDetail.enSurname}" required>
+                       value="${userDetail.enSurname}"  title="a-z A-Z" required>
             </label>
             ${gender}:
             <label>
@@ -105,12 +105,12 @@
             ${passport_series}:
             <label>
                 <input class="inputD" type="text" name="passport_series" pattern="^[А-Я]{2}$"
-                       value="${userDetail.passportSeries}" required>
+                       value="${userDetail.passportSeries}" title="А-Я" required>
             </label>
             ${passport_number}:
             <label>
                 <input class="inputD" type="number" name="passport_number" pattern="^[0-9]{7}$"
-                       value="${userDetail.passportNumber}" required>
+                       value="${userDetail.passportNumber}" title="1234567" required>
             </label>
             ${phone_number}:
             <label>
@@ -145,16 +145,17 @@
             <input class="button" type="submit" value="${save}">
         </form>
 
+        <c:if test="${not empty userDetail.passportScan}">
+            <a href="ScanLoading?user_id=${userDetail.id}" target="_blank">
+                <img style="border: 0 solid ; width: 100px; height: 100px;" alt=""
+                     src="ScanLoading?user_id=${userDetail.id}"></a>
+        </c:if>
 
-        <a href="UserController?command=download_passport_scan&user_id=${userDetail.id}" target="_blank">
-            <img style="border: 0px solid ; width: 100px; height: 100px;" alt=""
-                 src="UserController?command=download_passport_scan&user_id=${userDetail.id}"></a>
 
-
-        <form id="upload" action="UserController?command=upload_passport_scan" method="post"
+        <form id="upload" action="ScanLoading" method="post"
               enctype="multipart/form-data">
-            <input form="upload" type="file" name="scan">
-            <input form="upload" type="submit" value="upload"/>
+            <input form="upload" type="file" name="scan" >
+            <input class="button" form="upload" type="submit" value="upload"/>
         </form>
 
     </div>

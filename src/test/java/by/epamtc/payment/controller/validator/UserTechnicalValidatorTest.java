@@ -9,8 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserTechnicalValidatorTest {
 
@@ -27,10 +26,8 @@ class UserTechnicalValidatorTest {
 
     @ParameterizedTest
     @MethodSource("dataForNegativeLoginValidationTest")
-    void negativeLoginValidation() {
+    void negativeLoginValidation(String login, String password) {
         AuthorizationData authorizationData = new AuthorizationData();
-        String login = "ram1";
-        String password = "123ab*_123";
         authorizationData.setLogin(login);
         authorizationData.setPassword(password);
         boolean actual = UserTechnicalValidator.loginValidation(authorizationData);
@@ -40,11 +37,13 @@ class UserTechnicalValidatorTest {
     @Disabled("registrationValidation has not been implemented yet")
     @Test
     void registrationValidation() {
+        fail();
     }
 
     @Disabled("userDetailValidation has not been implemented yet")
     @Test
     void userDetailValidation() {
+        fail();
     }
 
     private static Stream<Arguments> dataForPositiveLoginValidationTest() {

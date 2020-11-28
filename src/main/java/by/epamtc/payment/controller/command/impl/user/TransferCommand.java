@@ -2,6 +2,8 @@ package by.epamtc.payment.controller.command.impl.user;
 
 import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.controller.validator.AccountTechnicalValidator;
+import by.epamtc.payment.entity.Card;
+import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.ServiceFactory;
 import by.epamtc.payment.service.exception.AccountBlockedServiceException;
@@ -23,10 +25,11 @@ public class TransferCommand implements Command {
 
     private final static String WARNING_MESSAGE = "warning_message";
     private final static String MESSAGE = "transfer_made";
-    private final static String INVALID_DATA = "invalid_data";
+    private final static String INCORRECT_DATA = "incorrect_data";
     private final static String ERROR = "error";
     private final static String ACCOUNT_BLOCKED = "account_blocked";
     private final static String INSUFFICIENT_FUNDS = "insufficient_funds";
+    private final static String UNSUPPORTED_OPERATION = "unsupported_operation";
 
 
     private final static String PREVIOUS_REQUEST = "previous_request";
@@ -36,7 +39,7 @@ public class TransferCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String previousRequest = (String) request.getSession().getAttribute(PREVIOUS_REQUEST);
-
+User user = (User) request.getSession().getAttribute("user");
         long cardIdFrom = 0;
         long cardIdTo = 0;
         BigDecimal amount = null;
@@ -50,13 +53,18 @@ public class TransferCommand implements Command {
 
         if (AccountTechnicalValidator.transferValidation(cardIdFrom, cardIdTo, amount)) {
             try {
-                accountService.transfer(cardIdFrom, cardIdTo, amount);
+                accountService.transfer(cardIdFrom, cardIdTo, amount,user);
                 request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
                 response.sendRedirect(previousRequest);
             } catch (AccountBlockedServiceException ab) {
                 request.getSession().setAttribute(WARNING_MESSAGE, ACCOUNT_BLOCKED);
+                response.sendRedirect(previousRequest);
             } catch (InsufficientFundsServiceException ife) {
                 request.getSession().setAttribute(WARNING_MESSAGE, INSUFFICIENT_FUNDS);
+                response.sendRedirect(previousRequest);
+            }catch (UnsupportedOperationException un){
+                request.getSession().setAttribute(WARNING_MESSAGE, UNSUPPORTED_OPERATION);
+                response.sendRedirect(previousRequest);
             } catch (ServiceException e) {
                 log.error("Exception in PaymentCommand", e);
                 request.getSession().setAttribute(WARNING_MESSAGE, ERROR);
@@ -64,7 +72,7 @@ public class TransferCommand implements Command {
             }
         } else {
             log.info("Transfer with invalid data");
-            request.getSession().setAttribute(WARNING_MESSAGE, INVALID_DATA);
+            request.getSession().setAttribute(WARNING_MESSAGE, INCORRECT_DATA);
             response.sendRedirect(previousRequest);
         }
 

@@ -18,19 +18,19 @@ public class DAOFactory {
         return instance;
     }
 
-    public SQLUserDAO getUserDAO() {
+    public UserDAO getUserDAO() {
         return sqlUserDAO;
     }
 
-    public SQLCardDAO getCardDAO() {
+    public CardDAO getCardDAO() {
         return sqlCardDAO;
     }
 
-    public SQLAccountDAO getAccountDAO() {
+    public AccountDAO getAccountDAO() {
         return sqlAccountDAO;
     }
 
-    public SQLTransactionDAO getTransactionDAO() {
+    public TransactionDAO getTransactionDAO() {
         return sqlTransactionDAO;
     }
 }

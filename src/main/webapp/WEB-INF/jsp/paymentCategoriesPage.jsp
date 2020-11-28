@@ -44,7 +44,7 @@
                         <li><a href="UserController?command=to_payment_page&category=internet&type=unet">Unet</a></li>
                     </ul>
                 </li>
-                <li><a href="#m3">Коммунальные платежи</a>
+                <li><a>Коммунальные платежи</a>
                     <ul>
                         <li><a href="UserController?command=to_payment_page&category=utility&type=electricity">Электроэнергия</a></li>
                         <li><a href="UserController?command=to_payment_page&category=utility&type=gas">Газоснабжение</a></li>

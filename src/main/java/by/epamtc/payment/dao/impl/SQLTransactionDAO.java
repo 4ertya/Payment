@@ -13,7 +13,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class SQLTransactionDAO implements TransactionDAO {
@@ -28,7 +27,7 @@ public class SQLTransactionDAO implements TransactionDAO {
             "JOIN accounts " +
             "USING (account_id) " +
             "WHERE accounts.user_id=? " +
-            "AND (transaction_types.type=? OR transaction_types.type=NULL) ORDER BY tr.id DESC LIMIT 5;";
+            "AND (transaction_types.type=? OR transaction_types.type IS NULL) ORDER BY tr.id DESC LIMIT 5;";
 
     @Override
     public List<Transaction> getFiveLastPayments(Long userId) throws DAOException {
@@ -41,24 +40,35 @@ public class SQLTransactionDAO implements TransactionDAO {
             connection = connectionPool.takeConnection();
             preparedStatement = connection.prepareStatement(SELECT_FIVE_LAST_PAYMENTS);
             preparedStatement.setLong(1, userId);
-            preparedStatement.setString(2, "PAYMENT");
+            preparedStatement.setString(2, SQLParameter.PAYMENT);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 transaction = new Transaction();
-                transaction.setDate(resultSet.getTimestamp("date"));
-                transaction.setCardNumber(resultSet.getLong("card_number"));
-                transaction.setAmount(resultSet.getBigDecimal("amount"));
-                transaction.setCurrency(Currency.valueOf(resultSet.getString("currency")));
-                transaction.setDestination(resultSet.getString("destination"));
+                transaction.setDate(resultSet.getTimestamp(SQLParameter.DATE));
+                transaction.setCardNumber(resultSet.getLong(SQLParameter.CARD_NUMBER));
+                transaction.setAmount(resultSet.getBigDecimal(SQLParameter.AMOUNT));
+                transaction.setCurrency(Currency.valueOf(resultSet.getString(SQLParameter.CURRENCY)));
+                transaction.setDestination(resultSet.getString(SQLParameter.DESTINATION));
 
                 transactions.add(transaction);
             }
         } catch (SQLException e) {
-            log.error(e);
+            log.error("Couldn't get five last payments", e);
+            throw new DAOException(e);
         } finally {
             connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
         return transactions;
+    }
+
+    private static class SQLParameter {
+
+        private final static String DATE = "date";
+        private final static String CARD_NUMBER = "card_number";
+        private final static String AMOUNT = "amount";
+        private final static String CURRENCY = "currency";
+        private final static String DESTINATION = "destination";
+        private final static String PAYMENT = "PAYMENT";
     }
 }

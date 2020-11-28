@@ -5,7 +5,9 @@ import by.epamtc.payment.dao.exception.DAOException;
 import by.epamtc.payment.dao.exception.DAOUserExistException;
 import by.epamtc.payment.dao.exception.DAOUserNotFoundException;
 import by.epamtc.payment.entity.*;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -82,6 +84,8 @@ class SQLUserDAOTest {
         SQLUserDAO sqlUserDAO = new SQLUserDAO();
         ConnectionPool connectionPool = ConnectionPool.getInstance();
         Connection connection = connectionPool.takeConnection();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
 
         RegistrationData registrationData = new RegistrationData();
         registrationData.setLogin("user");
@@ -98,30 +102,35 @@ class SQLUserDAOTest {
                 "JOIN roles USING(role_id) " +
                 "JOIN user_statuses USING (user_status_id) " +
                 "WHERE login=? AND password=?;";
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, registrationData.getLogin());
+            preparedStatement.setString(2, registrationData.getPassword());
+            resultSet = preparedStatement.executeQuery();
+            String login = null;
+            String password = null;
+            String email = null;
+            Role role = null;
+            Status status = null;
 
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, registrationData.getLogin());
-        preparedStatement.setString(2, registrationData.getPassword());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        String login = null;
-        String password = null;
-        String email = null;
-        Role role = null;
-        Status status = null;
+            if (resultSet.next()) {
+                login = resultSet.getString("login");
+                password = resultSet.getString("password");
+                email = resultSet.getString("email");
+                role = Role.valueOf(resultSet.getString("role"));
+                status = Status.valueOf(resultSet.getString("user_status"));
+            }
 
-        if (resultSet.next()) {
-            login = resultSet.getString("login");
-            password = resultSet.getString("password");
-            email = resultSet.getString("email");
-            role = Role.valueOf(resultSet.getString("role"));
-            status = Status.valueOf(resultSet.getString("user_status"));
+            assertEquals(registrationData.getLogin(), login);
+            assertEquals(registrationData.getPassword(), password);
+            assertEquals(registrationData.getEmail(), email);
+            assertEquals(registrationData.getRole(), role);
+            assertEquals(registrationData.getStatus(), status);
+        } finally {
+            connectionPool.closeConnection(connection, preparedStatement, resultSet);
         }
-        connectionPool.closeConnection(connection, preparedStatement, resultSet);
-        assertEquals(registrationData.getLogin(), login);
-        assertEquals(registrationData.getPassword(), password);
-        assertEquals(registrationData.getEmail(), email);
-        assertEquals(registrationData.getRole(), role);
-        assertEquals(registrationData.getStatus(), status);
+
+
     }
 
     @Test
@@ -147,6 +156,7 @@ class SQLUserDAOTest {
         expected.setEmail("palchmail@gmail.com");
         expected.setLogin("admin");
         expected.setRole(Role.ADMIN);
+        expected.setStatus(Status.VERIFIED);
         assertEquals(expected, actual);
     }
 

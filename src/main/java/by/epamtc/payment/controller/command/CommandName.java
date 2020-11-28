@@ -31,5 +31,6 @@ public enum CommandName {
     PAYMENT,
     UPLOAD_PASSPORT_SCAN,
     DOWNLOAD_PASSPORT_SCAN,
-    TO_ABOUT_PAGE
+    TO_ABOUT_PAGE,
+    TO_ADMIN_PAGE
 }

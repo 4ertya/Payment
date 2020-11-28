@@ -20,6 +20,7 @@ public class GoToCardTransferPageCommand implements Command {
 
     private final static String USER_PARAMETER = "user";
     private final static String CARDS_PARAMETER = "cards";
+    private final static String WARNING_MESSAGE = "warning_message";
 
     private final static String CARD_TRANSFER_PAGE = "WEB-INF/jsp/transferBetweenCards.jsp";
 
@@ -33,6 +34,7 @@ public class GoToCardTransferPageCommand implements Command {
             cards = cardService.getUsersCards(user);
             request.setAttribute(CARDS_PARAMETER, cards);
             request.getRequestDispatcher(CARD_TRANSFER_PAGE).forward(request, response);
+            request.getSession().removeAttribute(WARNING_MESSAGE);
         } catch (ServiceException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

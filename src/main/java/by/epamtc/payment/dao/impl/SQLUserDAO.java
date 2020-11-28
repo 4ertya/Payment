@@ -374,7 +374,7 @@ InputStream scan = null;
             preparedStatement.setLong(1, userId);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()){
-                scan=resultSet.getBinaryStream("passport_scan");
+                scan=resultSet.getBinaryStream(SQLParameter.PASSPORT_SCAN);
             }
         } catch (SQLException e) {
             log.error("Couldn't download file", e);
@@ -398,6 +398,7 @@ InputStream scan = null;
         String location = resultSet.getString(SQLParameter.LOCATION);
         String role = resultSet.getString(SQLParameter.ROLE);
         String status = resultSet.getString(SQLParameter.STATUS);
+        InputStream passportScan = resultSet.getBinaryStream(SQLParameter.PASSPORT_SCAN);
 
 
         UserDetail userDetail = new UserDetail();
@@ -414,6 +415,7 @@ InputStream scan = null;
         userDetail.setLocation(location);
         userDetail.setRole(Role.valueOf(role));
         userDetail.setStatus(Status.valueOf(status));
+        userDetail.setPassportScan(passportScan);
 
         return userDetail;
     }
@@ -433,6 +435,7 @@ InputStream scan = null;
         private final static String PHONE_NUMBER = "phone_number";
         private final static String LOCATION = "location";
         private final static String STATUS = "user_status";
+        private final static String PASSPORT_SCAN = "passport_scan";
     }
 }
 

@@ -1,6 +1,7 @@
 package by.epamtc.payment.controller.command.impl.go_to_page;
 
 import by.epamtc.payment.controller.command.Command;
+import by.epamtc.payment.entity.PaymentCategories;
 import by.epamtc.payment.entity.Transaction;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.ServiceFactory;
@@ -26,14 +27,14 @@ public class GoToPaymentCategoriesPage implements Command {
 
         User user = (User) request.getSession().getAttribute("user");
         long userId = user.getId();
-        try {
-            List<Transaction> transactions = transactionService.getFiveLastPayments(userId);
-            request.setAttribute("transactions", transactions);
-            request.getRequestDispatcher(PAYMENT_CATEGORIES_PAGE)
-                    .forward(request, response);
-        } catch (ServiceException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
 
+            try {
+                List<Transaction> transactions = transactionService.getFiveLastPayments(userId);
+                request.setAttribute("transactions", transactions);
+                request.getRequestDispatcher(PAYMENT_CATEGORIES_PAGE)
+                        .forward(request, response);
+            } catch (ServiceException e) {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
     }
 }

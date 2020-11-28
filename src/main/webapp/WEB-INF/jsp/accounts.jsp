@@ -117,7 +117,7 @@
                             <c:otherwise>
                                 <td>
                                     <form action="AdminController?command=unblock_account" method="post">
-                                        <input type="hidden" name="card_id" value="${account.id}">
+                                        <input type="hidden" name="account_id" value="${account.id}">
                                         <input type="submit" value="${unblock}">
                                     </form>
                                 </td>

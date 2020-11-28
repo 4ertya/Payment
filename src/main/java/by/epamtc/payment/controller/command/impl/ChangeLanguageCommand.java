@@ -9,7 +9,6 @@ import java.io.IOException;
 public class ChangeLanguageCommand implements Command {
 
     private final static String PARAMETER_LOCAL = "local";
-    private final static String CONTROLLER_COMMAND = "MainController?command=";
     private final static String PREVIOUS_REQUEST = "previous_request";
 
     @Override

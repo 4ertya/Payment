@@ -16,8 +16,8 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final DAOFactory instance = DAOFactory.getInstance();
-    private final UserDAO userDAO = instance.getUserDAO();
+    private final DAOFactory daoFactory = DAOFactory.getInstance();
+    private final UserDAO userDAO = daoFactory.getUserDAO();
 
     @Override
     public void registration(RegistrationData registrationData) throws ServiceException, ServiceUserExistException {

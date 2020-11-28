@@ -25,6 +25,14 @@
         <h3><b>Счета</b></h3>
         <hr>
 
+        <c:if test="${requestScope.accounts!=null}">
+            <label>
+                <input class="searchKey" type="text" placeholder="Поиск">
+            </label>
+            <span class="searchCount"></span>
+            <hr>
+        </c:if>
+
         <table cellpadding="5" cellspacing="0" border="1" class="table_sort">
             <thead>
             <tr>
