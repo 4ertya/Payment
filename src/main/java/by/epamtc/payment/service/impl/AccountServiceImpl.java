@@ -28,7 +28,7 @@ public class AccountServiceImpl implements AccountService {
         try {
 
             Card fromCard = cardDAO.getCardById(fromCardId);
-            if (fromCard.getOwnerName().equalsIgnoreCase(user.getName())){
+            if (!fromCard.getOwnerName().equalsIgnoreCase(user.getName())){
                 throw new UnsupportedOperationException();
             }
             Card toCard = cardDAO.getCardById(toCardId);
@@ -36,7 +36,6 @@ public class AccountServiceImpl implements AccountService {
         } catch (AccountBlockedDAOException be) {
             throw new AccountBlockedServiceException(be);
         } catch (InsufficientFundsDAOException ie) {
-            System.out.println("ОШИБКА SERVICE");
             throw new InsufficientFundsServiceException(ie);
         } catch (DAOException e) {
             throw new ServiceException(e);

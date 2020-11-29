@@ -29,7 +29,7 @@
 <div class="form auth">
     <div class="block-text">${registration}</div>
 
-    <form action="Controller" method="post">
+    <form action="MainController" method="post">
         <label>
             <input class="input" type="text" pattern="^[0-9a-zA-Z_-]{3,15}$" name="login" placeholder="${login}" autofocus required>
         </label>

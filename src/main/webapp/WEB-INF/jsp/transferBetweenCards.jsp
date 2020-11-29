@@ -19,6 +19,11 @@
 <fmt:message bundle="${loc}" key="local.transactions.account_blocked" var="account_blocked"/>
 <fmt:message bundle="${loc}" key="local.transactions.insufficient_funds" var="insufficient_funds"/>
 <fmt:message bundle="${loc}" key="local.etc.unsupported_operation" var="unsupported_operation"/>
+<fmt:message bundle="${loc}" key="local.transfers" var="transfers"/>
+<fmt:message bundle="${loc}" key="local.etc.amount" var="amount"/>
+<fmt:message bundle="${loc}" key="local.etc.fromCard" var="from_card"/>
+<fmt:message bundle="${loc}" key="local.etc.toCard" var="to_card"/>
+
 <html>
 <head>
     <title>Title</title>
@@ -27,7 +32,7 @@
 <%@include file="header.jsp" %>
 <div class="content">
     <div class="form main">
-        <h3><b>Переводы</b></h3>
+        <h3><b>${transfers}</b></h3>
         <hr>
         <c:if test="${sessionScope.warning_message!=null}">
             <c:choose>
@@ -55,7 +60,7 @@
             <input type="hidden" name="command" value="transfer">
             <label>
                 <select name="from" class="select">
-                    <option selected disabled>с карты...</option>
+                    <option selected disabled>${from_card}</option>
                     <c:forEach items="${requestScope.cards}" var="card">
                         <c:if test="${card.status eq 'ACTIVE'}">
                             <option value="${card.id}">
@@ -67,7 +72,7 @@
             </label>
             <label>
                 <select name="to" class="select">
-                    <option selected disabled>на карту...</option>
+                    <option selected disabled>${to_card}</option>
                     <c:forEach items="${requestScope.cards}" var="card">
                         <option value="${card.id}">
                             <mytag:cardNumber cardNumber="${card.number}"/> | ${card.balance} ${card.currency}
@@ -76,7 +81,7 @@
                 </select>
             </label>
             <label>
-                <input class="select_temp" type="number" name="amount" placeholder="Сумма" required>
+                <input class="select_temp" type="number" name="amount" placeholder="${amount}" required>
             </label>
             <input class="select_temp" type="submit" value="перевести">
         </form>
