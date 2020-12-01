@@ -24,8 +24,16 @@
     <div class="form main">
         <h3><b>Карты</b></h3>
         <hr>
+        <c:if test="${requestScope.cards!=null}">
+            <label>
+                <input class="searchKey" type="text" placeholder="Поиск">
+            </label>
+            <span class="searchCount"></span>
+            <hr>
+        </c:if>
         <table cellpadding="5" cellspacing="0" border="1" class="table_sort">
             <caption>Счета</caption>
+            <thead>
             <tr>
                 <th>id</th>
                 <th>number</th>
@@ -35,6 +43,8 @@
                 <th>status</th>
                 <th>system</th>
             </tr>
+            </thead>
+            <tbody>
             <c:forEach items="${requestScope.cards}" var="card">
                 <tr>
                     <td>${card.id}</td>
@@ -65,6 +75,7 @@
 
                 </tr>
             </c:forEach>
+            </tbody>
         </table>
     </div>
 </div>

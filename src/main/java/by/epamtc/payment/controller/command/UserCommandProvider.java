@@ -21,6 +21,7 @@ public class UserCommandProvider {
         commands.put(CommandName.TO_CREATE_NEW_CARD_PAGE, new GoToCreateNewCardPageCommand());
         commands.put(CommandName.TO_PAYMENT_CATEGORIES_PAGE, new GoToPaymentCategoriesPage());
         commands.put(CommandName.TO_PAYMENT_PAGE, new GoToPaymentPage());
+        commands.put(CommandName.TO_USER_TRANSACTIONS, new GoToUserTransactionsPageCommand());
 
         commands.put(CommandName.LOGOUT, new LogoutCommand());
         commands.put(CommandName.TRANSFER, new TransferCommand());

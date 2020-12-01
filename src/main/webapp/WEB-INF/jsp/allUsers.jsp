@@ -18,8 +18,16 @@
     <div class="form main">
         <h3><b>Пользователи</b></h3>
         <hr>
+        <c:if test="${requestScope.users!=null}">
+            <label>
+                <input class="searchKey" type="text" placeholder="Поиск">
+            </label>
+            <span class="searchCount"></span>
+            <hr>
+        </c:if>
         <table cellpadding="5" cellspacing="0" border="1" class="table_sort">
-            <tr>
+            <thead>
+                        <tr>
                 <th>id</th>
                 <th>name</th>
                 <th>surname</th>
@@ -28,6 +36,8 @@
                 <th>role</th>
                 <th>status</th>
             </tr>
+            </thead>
+            <tbody>
             <c:forEach items="${requestScope.users}" var="user">
                 <tr>
                     <td>${user.id}</td>
@@ -44,6 +54,7 @@
                     </td>
                 </tr>
             </c:forEach>
+            </tbody>
         </table>
     </div>
 </div>

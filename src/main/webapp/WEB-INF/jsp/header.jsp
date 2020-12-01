@@ -29,6 +29,7 @@
 <fmt:message bundle="${loc}" key="local.cards" var="cards"/>
 <fmt:message bundle="${loc}" key="local.accounts" var="accounts"/>
 <fmt:message bundle="${loc}" key="local.users" var="users"/>
+<fmt:message bundle="${loc}" key="local.transactions.transactions_history" var="transactions_history"/>
 
 <header>
     <div class="navbar">
@@ -67,6 +68,7 @@
                             <li><a href="UserController?command=to_user_accounts_page">${my_accounts}</a></li>
                             <li><a href="UserController?command=to_card_transfer_page">${transfers}</a></li>
                             <li><a href="UserController?command=to_payment_categories_page">${payments}</a></li>
+                            <li><a href="UserController?command=to_user_transactions">${transactions_history}</a></li>
                             <li><a href="UserController?command=to_settings_page">${settings}</a></li>
                             <li><a href="UserController?command=logout">${logout}</a></li>
                         </ul>
@@ -82,6 +84,7 @@
                                 <li><a href="AdminController?command=to_all_cards_page">${cards}</a></li>
                                 <li><a href="AdminController?command=to_all_accounts_page">${accounts}</a></li>
                                 <li><a href="AdminController?command=to_all_users_page">${users}</a></li>
+                                <li><a href="AdminController?command=to_all_transactions">${transactions_history}</a></li>
                             </ul>
                         </li>
                     </ul>

@@ -20,6 +20,7 @@ public class AdminCommandProvider {
         commands.put(CommandName.BLOCK_ACCOUNT, new BlockAccountCommand());
         commands.put(CommandName.UNBLOCK_ACCOUNT, new UnblockAccountCommand());
         commands.put(CommandName.TO_ADMIN_PAGE, new GoToAdminPageCommand());
+        commands.put(CommandName.TO_ALL_TRANSACTIONS, new GoToAllTransactionsPageCommand());
     }
 
     public Command getCommand(String commandName) {

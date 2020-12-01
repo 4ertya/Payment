@@ -5,6 +5,7 @@ import by.epamtc.payment.dao.connection.ConnectionPool;
 import by.epamtc.payment.dao.exception.DAOException;
 import by.epamtc.payment.entity.Currency;
 import by.epamtc.payment.entity.Transaction;
+import by.epamtc.payment.entity.TransactionType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +31,7 @@ public class SQLTransactionDAO implements TransactionDAO {
             "AND (transaction_types.type=? OR transaction_types.type IS NULL) ORDER BY tr.id DESC LIMIT 5;";
     //language=MySQL
     private final static String SELECT_USER_TRANSACTIONS = "SELECT tr.date, tr.amount, tr.destination, c.currency, " +
-            "cards.card_number FROM transactions tr " +
+            "cards.card_number, transaction_types.type FROM transactions tr " +
             "JOIN transaction_types ON tr.transaction_types_id=transaction_types.id " +
             "JOIN currencies c USING (currency_id) JOIN cards USING (card_id) " +
             "JOIN accounts " +
@@ -38,7 +39,7 @@ public class SQLTransactionDAO implements TransactionDAO {
             "WHERE accounts.user_id=?;";
     //language=MySQL
     private final static String SELECT_ALL_TRANSACTIONS = "SELECT tr.date, tr.amount, tr.destination, c.currency, " +
-            "cards.card_number FROM transactions tr " +
+            "cards.card_number, transaction_types.type FROM transactions tr " +
             "JOIN transaction_types ON tr.transaction_types_id=transaction_types.id " +
             "JOIN currencies c USING (currency_id) JOIN cards USING (card_id) " +
             "JOIN accounts " +
@@ -113,6 +114,7 @@ public class SQLTransactionDAO implements TransactionDAO {
 
             while (resultSet.next()) {
                 transaction = createTransaction(resultSet);
+                transaction.setTransactionType(TransactionType.valueOf(resultSet.getString(SQLParameter.TRANSACTION_TYPE)));
                 transactions.add(transaction);
             }
         } catch (SQLException e) {
@@ -138,6 +140,7 @@ public class SQLTransactionDAO implements TransactionDAO {
 
             while (resultSet.next()) {
                 transaction = createTransaction(resultSet);
+                transaction.setTransactionType(TransactionType.valueOf(resultSet.getString(SQLParameter.TRANSACTION_TYPE)));
                 transactions.add(transaction);
             }
         } catch (SQLException e) {
@@ -168,5 +171,6 @@ public class SQLTransactionDAO implements TransactionDAO {
         private final static String DESTINATION = "destination";
         private final static String PAYMENT = "PAYMENT";
         private final static String TRANSFER = "TRANSFER";
+        private final static String TRANSACTION_TYPE = "type";
     }
 }

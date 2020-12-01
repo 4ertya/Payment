@@ -30,7 +30,7 @@ public class UserController extends HttpServlet {
         String previousRequest;
         Command command;
         currentCommand = req.getParameter(COMMAND_NAME);
-
+        System.out.println(currentCommand);
         command = provider.getCommand(currentCommand);
 
         if (command == null) {

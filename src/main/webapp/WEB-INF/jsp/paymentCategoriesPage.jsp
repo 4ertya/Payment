@@ -20,6 +20,7 @@
 <fmt:message bundle="${loc}" key="local.payment.mobile" var="mobile"/>
 <fmt:message bundle="${loc}" key="local.payment.utility" var="utility"/>
 <fmt:message bundle="${loc}" key="local.payment.utilityBills" var="utilityBills"/>
+<fmt:message bundle="${loc}" key="local.transactions.transactions_history" var="transactions_history"/>
 
 
 <html>
@@ -88,6 +89,10 @@
                     </tr>
                 </c:forEach>
             </table>
+            <form action="UserController">
+                <input type="hidden" name="command" value="to_user_transactions">
+                <input class="select_temp" type="submit" value="${transactions_history}"/>
+            </form>
             </c:if>
         </div>
     </div>

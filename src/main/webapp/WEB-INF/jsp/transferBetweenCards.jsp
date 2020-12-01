@@ -24,6 +24,7 @@
 <fmt:message bundle="${loc}" key="local.etc.fromCard" var="from_card"/>
 <fmt:message bundle="${loc}" key="local.etc.toCard" var="to_card"/>
 <fmt:message bundle="${loc}" key="local.transactions.recent_transfers" var="last_transfers"/>
+<fmt:message bundle="${loc}" key="local.transactions.transactions_history" var="transactions_history"/>
 
 <html>
 <head>
@@ -109,6 +110,10 @@
                 </tr>
             </c:forEach>
         </table>
+        <form action="UserController">
+            <input type="hidden" name="command" value="to_user_transactions">
+            <input class="select_temp" type="submit" value="${transactions_history}"/>
+        </form>
         </c:if>
     </div>
 </div>

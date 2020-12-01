@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         var searchCount = $('.table_sort tbody tr[visible="true"]').length;
 
-        $('.searchCount').text('найдено ' + searchCount + ' человек');
+        $('.searchCount').text('Найдено: ' + searchCount);
         if (searchCount == '0') {
             $('.no-result').show();
         } else {
