@@ -46,8 +46,8 @@ public class UpdateUserDetailsCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        Role role=null;
-        Status status=null;
+        Role role = null;
+        Status status = null;
 
         long id = 0;
 
@@ -70,10 +70,10 @@ public class UpdateUserDetailsCommand implements Command {
         String statusStr = request.getParameter(STATUS);
         String roleStr = request.getParameter(ROLE);
 
-        if (statusStr!=null) {
+        if (statusStr != null) {
             status = Status.valueOf(request.getParameter(STATUS));
         }
-        if (roleStr!=null) {
+        if (roleStr != null) {
             role = Role.valueOf(request.getParameter(ROLE));
         }
 
@@ -118,7 +118,6 @@ public class UpdateUserDetailsCommand implements Command {
 
             try {
                 service.updateUserDetails(userDetail);
-
                 session.setAttribute(WARNING_MESSAGE, STORED_SUCCESSFUL);
 
                 log.info("Data is saved.\n" + userDetail);

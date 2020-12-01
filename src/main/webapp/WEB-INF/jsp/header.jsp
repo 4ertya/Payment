@@ -61,7 +61,7 @@
             <div class="login">
                 <ul class="nav">
                     <li>
-                        <a href="UserController?command=to_user_page">${sessionScope.user.name}</a>
+                        <a href="UserController?command=to_user_page">${sessionScope.user.name!=null?sessionScope.user.name: "User"}</a>
                         <ul>
                             <li><a href="UserController?command=to_user_cards_page">${my_cards}</a></li>
                             <li><a href="UserController?command=to_user_accounts_page">${my_accounts}</a></li>

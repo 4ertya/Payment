@@ -9,4 +9,10 @@ public interface TransactionDAO {
 
     List<Transaction> getFiveLastPayments(Long userId) throws DAOException;
 
+    List<Transaction> getFiveLastTransfers(Long userId) throws DAOException;
+
+    List<Transaction> getUserTransactions(Long userId) throws DAOException;
+
+    List<Transaction> getAllTransactions() throws DAOException;
+
 }

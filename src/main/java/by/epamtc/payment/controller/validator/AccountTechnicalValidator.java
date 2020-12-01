@@ -28,6 +28,7 @@ public class AccountTechnicalValidator {
     public static boolean transferValidation(long cardIdFrom, long cardIdTo, BigDecimal amount){
         return cardIdFrom>0
                 && cardIdTo>0
+                && cardIdFrom!=cardIdTo
                 && amount.compareTo(BigDecimal.ZERO)>0;
     }
 }

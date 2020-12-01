@@ -23,6 +23,7 @@
 <fmt:message bundle="${loc}" key="local.etc.amount" var="amount"/>
 <fmt:message bundle="${loc}" key="local.etc.fromCard" var="from_card"/>
 <fmt:message bundle="${loc}" key="local.etc.toCard" var="to_card"/>
+<fmt:message bundle="${loc}" key="local.transactions.recent_transfers" var="last_transfers"/>
 
 <html>
 <head>
@@ -56,6 +57,7 @@
                 </c:when>
             </c:choose>
         </c:if>
+        <div>
         <form action="UserController">
             <input type="hidden" name="command" value="transfer">
             <label>
@@ -81,10 +83,33 @@
                 </select>
             </label>
             <label>
-                <input class="select_temp" type="number" name="amount" placeholder="${amount}" required>
+                <input class="select_temp" type="text" name="amount" pattern="^[0-9]+\.?[0-9]*$" title="0.0" placeholder="${amount}" required>
             </label>
             <input class="select_temp" type="submit" value="перевести">
         </form>
+        <div>
+        <c:if test="${not empty requestScope.transactions}">
+
+    </div>
+    <p>${last_transfers}</p>
+    <div>
+        <table cellpadding="5" cellspacing="0" border="1">
+            <tr>
+                <th>Date</th>
+                <th>Card</th>
+                <th>Amount</th>
+                <th>Destination</th>
+            </tr>
+            <c:forEach items="${requestScope.transactions}" var="transaction">
+                <tr>
+                    <td>${transaction.date}</td>
+                    <td><mytag:cardNumber cardNumber="${transaction.cardNumber}"/></td>
+                    <td>${transaction.amount} ${transaction.currency}</td>
+                    <td>${transaction.destination}</td>
+                </tr>
+            </c:forEach>
+        </table>
+        </c:if>
     </div>
 </div>
 <%@include file="footer.jsp" %>

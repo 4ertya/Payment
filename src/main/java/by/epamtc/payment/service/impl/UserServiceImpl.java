@@ -10,6 +10,7 @@ import by.epamtc.payment.service.UserService;
 import by.epamtc.payment.service.exception.ServiceException;
 import by.epamtc.payment.service.exception.ServiceUserExistException;
 import by.epamtc.payment.service.exception.ServiceUserNotFoundException;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.InputStream;
 import java.util.List;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     public void registration(RegistrationData registrationData) throws ServiceException, ServiceUserExistException {
 
         try {
+            registrationData.setPassword(DigestUtils.md5Hex(registrationData.getPassword()));
             userDAO.registration(registrationData);
         } catch (DAOUserExistException e) {
             throw new ServiceUserExistException();
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
         User user;
 
         try {
+            authorizationData.setPassword(DigestUtils.md5Hex(authorizationData.getPassword()));
             user = userDAO.login(authorizationData);
         } catch (DAOUserNotFoundException e) {
             throw new ServiceUserNotFoundException();
@@ -100,12 +103,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public InputStream downloadPassportScan(Long userId) throws ServiceException {
-        InputStream scan=null;
+        InputStream scan;
         try {
-             scan = userDAO.downloadPassportScan(userId);
+            scan = userDAO.downloadPassportScan(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return  scan;
+        return scan;
     }
 }

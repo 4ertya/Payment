@@ -18,6 +18,11 @@ public class DAOFactory {
         return instance;
     }
 
+    private DAOFactory() {
+    }
+
+    ;
+
     public UserDAO getUserDAO() {
         return sqlUserDAO;
     }

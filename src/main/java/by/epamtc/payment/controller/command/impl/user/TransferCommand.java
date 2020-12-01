@@ -2,7 +2,6 @@ package by.epamtc.payment.controller.command.impl.user;
 
 import by.epamtc.payment.controller.command.Command;
 import by.epamtc.payment.controller.validator.AccountTechnicalValidator;
-import by.epamtc.payment.entity.Card;
 import by.epamtc.payment.entity.User;
 import by.epamtc.payment.service.AccountService;
 import by.epamtc.payment.service.ServiceFactory;
@@ -39,7 +38,7 @@ public class TransferCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         String previousRequest = (String) request.getSession().getAttribute(PREVIOUS_REQUEST);
-User user = (User) request.getSession().getAttribute("user");
+        User user = (User) request.getSession().getAttribute("user");
         long cardIdFrom = 0;
         long cardIdTo = 0;
         BigDecimal amount = null;
@@ -53,7 +52,7 @@ User user = (User) request.getSession().getAttribute("user");
 
         if (AccountTechnicalValidator.transferValidation(cardIdFrom, cardIdTo, amount)) {
             try {
-                accountService.transfer(cardIdFrom, cardIdTo, amount,user);
+                accountService.transfer(cardIdFrom, cardIdTo, amount, user);
                 request.getSession().setAttribute(WARNING_MESSAGE, MESSAGE);
                 response.sendRedirect(previousRequest);
             } catch (AccountBlockedServiceException ab) {
@@ -62,7 +61,7 @@ User user = (User) request.getSession().getAttribute("user");
             } catch (InsufficientFundsServiceException ife) {
                 request.getSession().setAttribute(WARNING_MESSAGE, INSUFFICIENT_FUNDS);
                 response.sendRedirect(previousRequest);
-            }catch (UnsupportedOperationException un){
+            } catch (UnsupportedOperationException un) {
                 request.getSession().setAttribute(WARNING_MESSAGE, UNSUPPORTED_OPERATION);
                 response.sendRedirect(previousRequest);
             } catch (ServiceException e) {
@@ -71,7 +70,7 @@ User user = (User) request.getSession().getAttribute("user");
                 response.sendRedirect(previousRequest);
             }
         } else {
-            log.info("Transfer with invalid data");
+            log.info("Transfer with invalid data: from card " + cardIdFrom + " to " + cardIdTo + " amount " + amount);
             request.getSession().setAttribute(WARNING_MESSAGE, INCORRECT_DATA);
             response.sendRedirect(previousRequest);
         }

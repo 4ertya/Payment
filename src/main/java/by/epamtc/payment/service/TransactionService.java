@@ -7,4 +7,10 @@ import java.util.List;
 
 public interface TransactionService {
     List<Transaction> getFiveLastPayments(Long userId) throws ServiceException;
+
+    List<Transaction> getFiveLastTransfers(Long userId) throws ServiceException;
+
+    List<Transaction> getUserTransactions(Long userId) throws ServiceException;
+
+    List<Transaction> getAllTransactions() throws ServiceException;
 }

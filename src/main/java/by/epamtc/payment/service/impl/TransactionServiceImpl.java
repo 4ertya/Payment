@@ -25,4 +25,40 @@ public class TransactionServiceImpl implements TransactionService {
         }
         return transactions;
     }
+
+    @Override
+    public List<Transaction> getFiveLastTransfers(Long userId) throws ServiceException {
+        List<Transaction> transactions;
+
+        try {
+            transactions = transactionDAO.getFiveLastTransfers(userId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return transactions;
+    }
+
+    @Override
+    public List<Transaction> getUserTransactions(Long userId) throws ServiceException {
+        List<Transaction> transactions;
+
+        try {
+            transactions = transactionDAO.getUserTransactions(userId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return transactions;
+    }
+
+    @Override
+    public List<Transaction> getAllTransactions() throws ServiceException {
+        List<Transaction> transactions;
+
+        try {
+            transactions = transactionDAO.getAllTransactions();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return transactions;
+    }
 }
